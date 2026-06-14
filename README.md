@@ -56,6 +56,17 @@ Please review the drafts and identify:
 - what should trigger no-go conditions;
 - what would make this credible before industry or infrastructure actors are invited in.
 
+## How To Review
+
+- Read [Review Process](REVIEW_PROCESS.md)
+- Read [Contributing](CONTRIBUTING.md)
+- Open a structured issue using one of the templates:
+  - Standard feedback
+  - Anti-capture risk
+  - Campus Compact feedback
+  - AI Benefit Clause feedback
+  - Evidence requirement
+
 ## Notice
 
 Reviewing this repository does not create endorsement, partnership, certification, ownership transfer, data access, model-training rights, or permission to use marks.

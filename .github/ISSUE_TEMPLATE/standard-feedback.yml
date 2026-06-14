@@ -1,0 +1,66 @@
+name: Standard feedback
+description: Suggest a change to the Common Ground Standard.
+title: "[Standard] "
+labels: ["standard", "review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for feedback on the Common Ground Standard for Responsible AI Infrastructure.
+  - type: input
+    id: section
+    attributes:
+      label: Section or clause
+      description: Which section, requirement, or phrase are you responding to?
+      placeholder: "Example: Minimum Requirements / Water"
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern
+      description: What is weak, missing, vague, or risky?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: Suggest wording, a new requirement, or a structural fix.
+    validations:
+      required: true
+  - type: dropdown
+    id: risk_area
+    attributes:
+      label: Primary risk area
+      options:
+        - Community governance
+        - Energy / grid
+        - Water
+        - Retail bills
+        - Workforce
+        - Student impact
+        - Data rights
+        - Ecology
+        - Audit / evidence
+        - Certification / public claims
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or examples
+      description: Optional links, references, lived experience, or implementation examples.
+    validations:
+      required: false
+  - type: checkboxes
+    id: notice
+    attributes:
+      label: Contribution notice
+      options:
+        - label: I am not submitting confidential, private, restricted, or personal data.
+          required: true
+        - label: My review does not imply endorsement, certification, partnership, or approval.
+          required: true
+

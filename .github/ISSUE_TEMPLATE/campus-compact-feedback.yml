@@ -1,0 +1,58 @@
+name: Campus Compact feedback
+description: Review the Campus Common Ground Compact.
+title: "[Campus Compact] "
+labels: ["campus-compact", "student-rights", "review"]
+body:
+  - type: input
+    id: section
+    attributes:
+      label: Section or commitment
+      placeholder: "Example: Student data trust"
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern
+      description: What is missing, weak, unclear, or risky for students, faculty, or campus workers?
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_group
+    attributes:
+      label: Most affected group
+      options:
+        - Students
+        - Graduate workers
+        - Faculty
+        - Campus staff
+        - Student government
+        - Accessibility communities
+        - Privacy / data governance teams
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: Suggest wording, a new right, a governance requirement, or a no-go condition.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or examples
+      description: Optional links, examples, policies, or lived experience.
+    validations:
+      required: false
+  - type: checkboxes
+    id: notice
+    attributes:
+      label: Contribution notice
+      options:
+        - label: I am not submitting confidential, private, restricted, or personal data.
+          required: true
+        - label: My review does not imply endorsement, certification, partnership, or approval.
+          required: true
+

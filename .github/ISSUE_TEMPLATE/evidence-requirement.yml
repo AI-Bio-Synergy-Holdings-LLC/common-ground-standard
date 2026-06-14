@@ -1,0 +1,51 @@
+name: Evidence requirement
+description: Propose a required metric, receipt, audit item, or public evidence threshold.
+title: "[Evidence] "
+labels: ["evidence", "review"]
+body:
+  - type: input
+    id: claim
+    attributes:
+      label: Claim or requirement
+      description: What claim should require evidence?
+      placeholder: "Example: No net retail-bill harm"
+    validations:
+      required: true
+  - type: textarea
+    id: required_evidence
+    attributes:
+      label: Required evidence
+      description: What metric, baseline, document, dashboard item, audit, or receipt should be required?
+    validations:
+      required: true
+  - type: dropdown
+    id: proof_stage
+    attributes:
+      label: Required before
+      options:
+        - Public alignment claim
+        - Pilot launch
+        - Foundation or agency submission
+        - Industry outreach
+        - Certification
+        - Public dashboard
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Why is this evidence necessary?
+    validations:
+      required: true
+  - type: checkboxes
+    id: notice
+    attributes:
+      label: Contribution notice
+      options:
+        - label: I am not submitting confidential, private, restricted, or personal data.
+          required: true
+        - label: My review does not imply endorsement, certification, partnership, or approval.
+          required: true
+

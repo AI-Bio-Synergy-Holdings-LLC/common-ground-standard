@@ -1,0 +1,52 @@
+name: AI Benefit Clause feedback
+description: Review the AI Dividend / Benefit Clause.
+title: "[AI Benefit Clause] "
+labels: ["ai-benefit-clause", "review"]
+body:
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern
+      description: What is weak, missing, vague, or risky in the AI Dividend / Benefit Clause?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Surplus measurement
+        - Benefit-routing governance
+        - Worker protection
+        - Student benefit
+        - Community benefit
+        - Data rights
+        - Public receipt
+        - Audit / evidence
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: Suggest a clause, safeguard, metric, or no-go condition.
+    validations:
+      required: true
+  - type: textarea
+    id: public_receipt
+    attributes:
+      label: Public receipt requirement
+      description: What must be published before someone can claim AI-created benefit?
+    validations:
+      required: false
+  - type: checkboxes
+    id: notice
+    attributes:
+      label: Contribution notice
+      options:
+        - label: I am not submitting confidential, private, restricted, or personal data.
+          required: true
+        - label: My review does not imply endorsement, certification, partnership, or approval.
+          required: true
+

@@ -1,0 +1,56 @@
+name: Anti-capture risk
+description: Flag a way the standard could be captured, diluted, or misused.
+title: "[Anti-capture] "
+labels: ["anti-capture", "review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to identify risks that could turn public-interest language into reputation cover.
+  - type: textarea
+    id: risk
+    attributes:
+      label: Capture risk
+      description: How could a powerful actor use, dilute, or bypass this standard?
+    validations:
+      required: true
+  - type: dropdown
+    id: actor_type
+    attributes:
+      label: Actor type most likely to exploit this risk
+      options:
+        - AI company
+        - Infrastructure operator
+        - Data-center developer
+        - University
+        - Public agency
+        - Foundation
+        - Vendor
+        - Internal governance
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: consequence
+    attributes:
+      label: Likely consequence
+      description: What harm, confusion, or public-benefit overclaim could result?
+    validations:
+      required: true
+  - type: textarea
+    id: safeguard
+    attributes:
+      label: Proposed safeguard
+      description: What no-go condition, evidence rule, governance right, or language change would reduce the risk?
+    validations:
+      required: true
+  - type: checkboxes
+    id: notice
+    attributes:
+      label: Contribution notice
+      options:
+        - label: I am not submitting confidential, private, restricted, or personal data.
+          required: true
+        - label: My review does not imply endorsement, certification, partnership, or approval.
+          required: true
+
