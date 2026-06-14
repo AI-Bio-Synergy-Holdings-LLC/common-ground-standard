@@ -60,5 +60,7 @@ Please review the drafts and identify:
 
 Reviewing this repository does not create endorsement, partnership, certification, ownership transfer, data access, model-training rights, or permission to use marks.
 
-See [Public Review Notice](NOTICE.md).
+See:
 
+- [Public Review Notice](NOTICE.md)
+- [License and Trademark Notice](LICENSE-NOTICE.md)
