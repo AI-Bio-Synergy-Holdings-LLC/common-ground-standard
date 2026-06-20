@@ -2,6 +2,8 @@
 
 Public review drafts for responsible AI infrastructure, campus AI governance, AI benefit clauses, evidence methods, and anti-capture safeguards.
 
+Public site: https://common-ground-standard.org
+
 ## Purpose
 
 The Common Ground Standard is a public-interest standards effort for making AI deployment and AI-enabling infrastructure prove measurable human, community, worker, student, and ecological benefit.
