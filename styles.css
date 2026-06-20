@@ -685,3 +685,247 @@ h3 {
     padding: 24px;
   }
 }
+/* Layout correction: public site fidelity and styled review brief. */
+#drafts,
+#review-brief,
+#review-guide {
+  scroll-margin-top: 104px;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(86vh - 72px);
+  overflow: hidden;
+  background: #f5faf8;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: url("assets/common-ground-system-map.png") center right / cover no-repeat;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 40%, rgba(255,255,255,0.48) 68%, rgba(255,255,255,0.16) 100%),
+    linear-gradient(0deg, rgba(0,98,119,0.10), rgba(255,255,255,0) 48%);
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.hero-kicker {
+  margin-bottom: 18px;
+  color: var(--teal-dark);
+  font-size: 14px;
+  font-weight: 820;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 820px;
+  margin-bottom: 24px;
+  font-size: clamp(54px, 6vw, 82px);
+}
+
+.hero-facts,
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.hero-facts {
+  max-width: 720px;
+  margin: 44px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid rgba(7, 21, 34, 0.16);
+}
+
+.hero-facts div {
+  min-width: 150px;
+}
+
+.hero-facts dt {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.hero-facts dd {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.review-page-hero {
+  align-items: center;
+  padding-top: 82px;
+}
+
+.page-actions {
+  justify-content: flex-end;
+  min-width: min(360px, 100%);
+}
+
+.brief-section {
+  padding-top: 58px;
+}
+
+.brief-lede {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  max-width: 980px;
+  margin-bottom: 42px;
+}
+
+.brief-lede p {
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1.45;
+}
+
+.brief-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.brief-panel {
+  min-height: 198px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(7, 21, 34, 0.05);
+}
+
+.brief-panel span {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.brief-panel p,
+.brief-panel li {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.52;
+}
+
+.brief-panel p,
+.brief-panel ul {
+  margin-bottom: 0;
+}
+
+.brief-panel ul {
+  padding-left: 20px;
+}
+
+.brief-panel li + li {
+  margin-top: 8px;
+}
+
+.wide-panel,
+.doctrine-panel {
+  grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .hero::after {
+    background:
+      linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.90) 58%, rgba(255,255,255,0.30) 100%),
+      linear-gradient(0deg, rgba(0,98,119,0.10), rgba(255,255,255,0) 48%);
+  }
+
+  .hero h1 {
+    font-size: 52px;
+  }
+
+  .page-actions {
+    justify-content: flex-start;
+  }
+
+  .brief-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wide-panel,
+  .doctrine-panel {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-bottom: 260px;
+    background: #f5faf8;
+  }
+
+  .hero::before {
+    inset: auto 0 0;
+    height: 230px;
+    background-position: center bottom;
+    border-top: 1px solid var(--line);
+  }
+
+  .hero::after {
+    display: block;
+    height: auto;
+    margin: 0;
+    border-top: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.98) calc(100% - 230px), rgba(255,255,255,0.10) 100%);
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .hero-facts,
+  .page-actions {
+    gap: 14px;
+  }
+
+  .hero-facts div,
+  .page-actions .button {
+    width: 100%;
+  }
+
+  .brief-lede {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .brief-lede p {
+    font-size: 19px;
+  }
+
+  .brief-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wide-panel,
+  .doctrine-panel {
+    grid-column: span 1;
+  }
+}
+/* End layout correction. */
