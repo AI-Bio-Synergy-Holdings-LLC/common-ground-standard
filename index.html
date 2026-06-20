@@ -16,14 +16,16 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://common-ground-standard.org/" />
-    <link rel="stylesheet" href="styles.css?v=20260620-clean-rebuild" />
+    <link rel="stylesheet" href="styles.css?v=20260620-observatory" />
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
 
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="Common Ground Standard home">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-mark" aria-hidden="true">
+          <span></span>
+        </span>
         <span>Common Ground Standard</span>
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
@@ -35,14 +37,14 @@
     </header>
 
     <main id="content">
-      <section class="home-hero" aria-labelledby="hero-title">
+      <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1 id="hero-title">Common Ground Standard</h1>
+          <h1 id="hero-title"><span>Common Ground</span> <span>Standard</span></h1>
           <p class="hero-lede">
             A public-review draft for responsible AI infrastructure, campus AI governance,
             and AI benefit-sharing safeguards.
           </p>
-          <p>
+          <p class="hero-note">
             This is a working draft. We are seeking detailed critique before broader outreach.
           </p>
           <div class="hero-actions" aria-label="Primary actions">
@@ -56,135 +58,131 @@
             </a>
           </div>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <img src="assets/cgs-system-visual.svg" alt="" />
-        </div>
+
+        <figure class="hero-map">
+          <img src="assets/cgs-evidence-loop.svg" alt="Evidence loop connecting infrastructure, governance, benefit sharing, assurance, implementation, and public feedback." />
+        </figure>
       </section>
 
-      <section class="site-section status-section" aria-labelledby="status-title">
-        <div class="section-icon" aria-hidden="true">
-          <svg viewBox="0 0 96 96">
-            <path d="M22 12h38l18 18v52H22z" />
-            <path d="M60 12v20h18" />
-            <path d="M34 46h28M34 59h22" />
-            <path d="m58 74 21-21 8 8-21 21-12 4z" />
-          </svg>
-        </div>
-        <div class="section-copy">
+      <section class="status-strip" aria-labelledby="status-title">
+        <div>
           <h2 id="status-title">Current Status</h2>
-          <p>This is a public-review draft, not a final standard. It is incomplete and will change.</p>
-          <p>Your feedback now will shape what we carry forward.</p>
+          <p>Public-review draft, not final. Incomplete by design and open for critique.</p>
         </div>
-        <dl class="status-list">
+        <dl class="status-facts" aria-label="Review status facts">
           <div><dt>Status</dt><dd>Public-review draft</dd></div>
           <div><dt>Last updated</dt><dd>June 20, 2026</dd></div>
-          <div><dt>Next step</dt><dd>Incorporate feedback and prepare for broader outreach</dd></div>
+          <div><dt>Next step</dt><dd>Incorporate feedback before broader outreach</dd></div>
           <div><dt>How to participate</dt><dd>Read, comment, open issues, suggest edits</dd></div>
         </dl>
       </section>
 
-      <section class="site-section draft-section" id="drafts" aria-labelledby="drafts-title">
-        <div class="section-icon" aria-hidden="true">
-          <svg viewBox="0 0 96 96">
-            <path d="M28 10c14 0 24 10 24 23 0 19-24 43-24 43S4 52 4 33C4 20 14 10 28 10z" />
-            <circle cx="28" cy="32" r="8" />
-            <path d="M34 68 58 54l22 16M58 54 48 30M58 54l10-24M80 70V48" />
-            <circle cx="48" cy="30" r="6" />
-            <circle cx="68" cy="30" r="6" />
-            <circle cx="80" cy="48" r="6" />
-            <circle cx="80" cy="70" r="6" />
-            <circle cx="58" cy="54" r="6" />
-          </svg>
+      <section class="evidence-section" aria-labelledby="evidence-title">
+        <div class="section-heading">
+          <h2 id="evidence-title">The Standard Is An Evidence Loop</h2>
+          <p>
+            Common Ground Standard is organized around a practical test: public-interest AI claims
+            should be bounded by governance, proof, benefit routing, and auditability.
+          </p>
         </div>
-        <div class="section-copy">
-          <h2 id="drafts-title">Draft Map</h2>
-          <p>Explore the structure of the Standard and how the parts fit together.</p>
-          <a class="text-link" href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/common-ground-standard.md">
-            View the draft map
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
-          </a>
-        </div>
-        <div class="draft-diagram" aria-label="Draft map diagram">
-          <svg viewBox="0 0 620 230" role="img" aria-label="Draft map from purpose and principles to safeguards, governance, benefit sharing, audit, and implementation guidance">
-            <g class="diagram-lines">
-              <path d="M120 68h150M350 68h150M310 96v44M170 96v44M445 96v44M310 170v30M170 170v30M445 170v30M530 170v30" />
-              <path d="M80 140h490M60 200h510" />
-            </g>
-            <g class="diagram-boxes">
-              <rect x="40" y="28" width="130" height="58" />
-              <text x="105" y="53">1. Purpose</text><text x="105" y="70">and Scope</text>
-              <rect x="250" y="28" width="130" height="58" />
-              <text x="315" y="61">2. Principles</text>
-              <rect x="460" y="28" width="130" height="58" />
-              <text x="525" y="53">3. Infrastructure</text><text x="525" y="70">Safeguards</text>
-              <rect x="40" y="120" width="130" height="58" />
-              <text x="105" y="145">4. Campus</text><text x="105" y="162">AI Governance</text>
-              <rect x="220" y="120" width="130" height="58" />
-              <text x="285" y="145">5. Benefit-</text><text x="285" y="162">Sharing</text>
-              <rect x="380" y="120" width="130" height="58" />
-              <text x="445" y="145">6. Assurance</text><text x="445" y="162">and Audit</text>
-              <rect x="520" y="120" width="90" height="58" />
-              <text x="565" y="145">7. Implementation</text><text x="565" y="162">Guidance</text>
-              <rect x="90" y="190" width="440" height="32" />
-              <text x="310" y="211">Appendices and Definitions</text>
-            </g>
-          </svg>
+        <div class="loop-grid" aria-label="Evidence loop stages">
+          <article class="loop-step">
+            <span>01</span>
+            <h3>Infrastructure Safeguards</h3>
+            <p>Ask what an AI-enabling project consumes, exposes, and owes to affected places.</p>
+          </article>
+          <article class="loop-step">
+            <span>02</span>
+            <h3>Campus Governance</h3>
+            <p>Define student, worker, faculty, and institutional rights before deployment pressure hardens.</p>
+          </article>
+          <article class="loop-step">
+            <span>03</span>
+            <h3>Benefit Sharing</h3>
+            <p>Route productivity, data, infrastructure, or economic gains into visible public benefit.</p>
+          </article>
+          <article class="loop-step">
+            <span>04</span>
+            <h3>Assurance And Audit</h3>
+            <p>Turn claims into reviewable receipts, no-go conditions, and correction paths.</p>
+          </article>
         </div>
       </section>
 
-      <section class="site-section guide-section" aria-labelledby="review-title">
-        <div class="section-icon" aria-hidden="true">
-          <svg viewBox="0 0 96 96">
-            <path d="M14 18c16 0 25 2 34 9v54c-9-7-18-9-34-9z" />
-            <path d="M82 18c-16 0-25 2-34 9v54c9-7 18-9 34-9z" />
-            <path d="M26 34c7 0 12 1 16 3M26 48c7 0 12 1 16 3M26 62c7 0 12 1 16 3M58 34c7-2 12-3 16-3M58 48c7-2 12-3 16-3M58 62c7-2 12-3 16-3" />
-          </svg>
+      <section class="drafts-section" id="drafts" aria-labelledby="drafts-title">
+        <div class="section-heading compact-heading">
+          <h2 id="drafts-title">Draft Library</h2>
+          <p>Start with the review brief, then move into the draft clauses and critique tools.</p>
         </div>
-        <div class="section-copy">
-          <h2 id="review-title">Review Guide</h2>
-          <p>A short guide to help reviewers provide the most useful feedback.</p>
-          <a class="text-link" href="review.html#review-guide">
-            Read the review guide
+        <div class="draft-list" aria-label="Draft and review materials">
+          <a href="review.html#review-brief">
+            <span>Review Brief</span>
+            <strong>Read the public review frame</strong>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/common-ground-standard.md">
+            <span>Core Draft</span>
+            <strong>Common Ground Standard</strong>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/campus-common-ground-compact.md">
+            <span>Campus Draft</span>
+            <strong>Campus Common Ground Compact</strong>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/ai-dividend-benefit-clause.md">
+            <span>Benefit Draft</span>
+            <strong>AI Dividend / Benefit Clause</strong>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/review/reviewer-questions.md">
+            <span>Critique Tool</span>
+            <strong>Reviewer Questions</strong>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/review/anti-capture-checklist.md">
+            <span>Critique Tool</span>
+            <strong>Anti-Capture Checklist</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
         </div>
-        <ul class="guide-points">
-          <li>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5" /><path d="m15 15 4.5 4.5" /></svg>
-            Read with a critical and constructive lens
-          </li>
-          <li>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.7 8.7 0 0 1-4.1-1.2L3 20l1.4-4.4A8.2 8.2 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z" /></svg>
-            Focus on clarity, completeness, and feasibility
-          </li>
-          <li>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 22 20H2L12 3z" /><path d="M12 9v5" /><circle cx="12" cy="17" r=".8" /></svg>
-            Flag risks, gaps, and unintended consequences
-          </li>
-          <li>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 20 4.2-1 10.9-10.9a2.1 2.1 0 0 0 0-3l-.2-.2a2.1 2.1 0 0 0-3 0L5 15.8 4 20z" /><path d="m14.5 6.3 3.2 3.2" /></svg>
-            Suggest specific edits or alternatives
-          </li>
+      </section>
+
+      <section class="review-section" aria-labelledby="review-title">
+        <div class="review-copy">
+          <h2 id="review-title">Review The Draft As A Stress Test</h2>
+          <p>
+            The most useful feedback identifies where the draft can be captured, overstated,
+            under-specified, or made impractical in real institutions and infrastructure contexts.
+          </p>
+          <a class="text-link" href="review.html#review-guide">
+            Open the review guide
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
+          </a>
+        </div>
+        <ul class="review-checks">
+          <li><span></span>Check the public claims against the evidence threshold.</li>
+          <li><span></span>Flag terms that are too vague to enforce.</li>
+          <li><span></span>Identify missing affected-party governance rights.</li>
+          <li><span></span>Suggest no-go conditions and correction paths.</li>
         </ul>
       </section>
 
-      <section class="site-section notice-section" aria-labelledby="notice-title">
-        <div class="section-icon notice-icon" aria-hidden="true">
-          <svg viewBox="0 0 96 96">
-            <path d="M48 10c12 10 26 13 36 14v24c0 19-11 32-36 42C23 80 12 67 12 48V24c10-1 24-4 36-14z" />
-            <path d="M48 30v26" />
-            <circle cx="48" cy="68" r="3" />
-          </svg>
-        </div>
-        <div class="section-copy notice-copy">
+      <section class="notice-section" aria-labelledby="notice-title">
+        <div class="notice-mark" aria-hidden="true">!</div>
+        <div>
           <h2 id="notice-title">No Endorsement</h2>
           <p>
             Use of the Common Ground Standard name or draft materials does not imply endorsement
-            by any organization, institution, or individual.
+            by any organization, institution, or individual. This draft is provided for public review only.
           </p>
-          <p>This draft is provided for public review only.</p>
         </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <p>Common Ground Standard is a public-review draft, not a certification or endorsement process.</p>
+      <a href="LICENSE-NOTICE.md">License and trademark notice</a>
+    </footer>
   </body>
 </html>
