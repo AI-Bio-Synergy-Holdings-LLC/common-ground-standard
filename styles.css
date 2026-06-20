@@ -122,7 +122,7 @@ a {
 
 .hero-copy {
   width: min(640px, 100%);
-  margin-left: max(0px, calc((100vw - 1180px) / 2));
+  margin-left: 0;
 }
 
 h1,
@@ -757,7 +757,7 @@ h3 {
 
 .hero-facts dt {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 820;
   text-transform: uppercase;
 }
@@ -929,3 +929,371 @@ h3 {
   }
 }
 /* End layout correction. */
+/* Mockup fidelity pass. */
+:root {
+  --ink: #071522;
+  --text: #1f2c36;
+  --muted: #4c5964;
+  --line: #d6dde1;
+  --teal: #006277;
+  --teal-dark: #004c5b;
+  --amber: #d38b14;
+}
+
+body {
+  background: #fff;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.site-header {
+  position: relative;
+  min-height: 70px;
+  padding: 0 38px;
+  background: #fff;
+  border-bottom: 1px solid #d9dee2;
+  backdrop-filter: none;
+}
+
+.brand {
+  gap: 0;
+  font-size: 20px;
+  font-weight: 520;
+}
+
+.brand-mark {
+  display: none;
+}
+
+.site-nav {
+  gap: 28px;
+  font-size: 14px;
+}
+
+.site-nav a {
+  color: #071522;
+}
+
+.mock-hero {
+  min-height: 690px;
+  align-items: center;
+  padding: 0 54px 46px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+
+.mock-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: url("assets/common-ground-hero-mockup.png") center right / cover no-repeat;
+}
+
+.mock-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.90) 31%, rgba(255,255,255,0.46) 48%, rgba(255,255,255,0.06) 68%, rgba(255,255,255,0) 100%);
+}
+
+.mock-hero .hero-copy {
+  width: min(760px, 100%);
+  max-width: 760px;
+  margin-left: 0;
+}
+
+.mock-hero h1 {
+  margin-bottom: 34px;
+  font-size: clamp(52px, 5.6vw, 76px);
+  font-weight: 820;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.mock-hero p {
+  max-width: 550px;
+  margin-bottom: 26px;
+  color: #111c25;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.mock-hero .hero-lede {
+  font-size: 20px;
+}
+
+.mock-hero .hero-actions {
+  margin-top: 36px;
+  gap: 26px;
+}
+
+.button {
+  min-width: 204px;
+  min-height: 64px;
+  border-radius: 1px;
+  font-size: 17px;
+  font-weight: 760;
+}
+
+.button-secondary {
+  background: rgba(255,255,255,0.78);
+}
+
+.mock-section {
+  width: min(1180px, calc(100% - 68px));
+  margin: 0 auto;
+  padding: 52px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.status-section,
+.draft-map-section,
+.review-guide-section,
+.notice-section {
+  display: grid;
+  grid-template-columns: 132px minmax(300px, 410px) minmax(340px, 1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.status-section {
+  padding-top: 58px;
+  padding-bottom: 58px;
+}
+
+.status-section .status-list {
+  padding-left: 48px;
+  border-left: 1px solid var(--line);
+}
+
+.status-list div {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.status-list dt,
+.status-list dd {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.status-list dt {
+  font-weight: 800;
+}
+
+.section-copy h2 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  font-weight: 770;
+}
+
+.section-copy p {
+  max-width: 475px;
+  color: #111c25;
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+.mock-icon svg {
+  width: 98px;
+  height: 98px;
+  color: var(--teal);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.shield-mock-icon svg {
+  color: var(--amber);
+}
+
+.draft-map-section,
+.review-guide-section {
+  grid-template-columns: 132px minmax(250px, 330px) minmax(460px, 1fr);
+}
+
+.draft-flow svg {
+  width: 100%;
+  min-height: 230px;
+}
+
+.flow-lines path {
+  fill: none;
+  stroke: #668893;
+  stroke-width: 1.3;
+}
+
+.flow-boxes rect {
+  fill: rgba(255,255,255,0.72);
+  stroke: var(--teal);
+  stroke-width: 1.5;
+}
+
+.flow-boxes text {
+  fill: #071522;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 720;
+  text-anchor: middle;
+}
+
+.guide-points {
+  margin: 0;
+  padding: 0 0 0 46px;
+  border-left: 1px solid var(--line);
+  list-style: none;
+}
+
+.guide-points li {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-height: 44px;
+  color: #111c25;
+  font-size: 17px;
+}
+
+.guide-points svg {
+  width: 34px;
+  height: 34px;
+  color: var(--teal);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 34px;
+  stroke-width: 1.8;
+}
+
+.notice-section {
+  grid-template-columns: 132px minmax(0, 1fr);
+  padding-top: 38px;
+  border-top: 2px solid var(--amber);
+  border-bottom: 0;
+}
+
+.notice-section .section-copy p {
+  max-width: 870px;
+}
+
+.site-footer {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 24px;
+  }
+
+  .site-nav {
+    width: 100%;
+    gap: 22px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+  }
+
+  .mock-hero {
+    min-height: 620px;
+    padding: 70px 28px 42px;
+  }
+
+  .mock-hero .hero-copy {
+  width: min(760px, 100%);
+  max-width: 760px;
+  margin-left: 0;
+}
+
+  .mock-section,
+  .status-section,
+  .draft-map-section,
+  .review-guide-section,
+  .notice-section {
+    width: min(100% - 48px, 1180px);
+    grid-template-columns: 92px 1fr;
+    gap: 28px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .status-section .status-list,
+  .draft-flow,
+  .guide-points {
+    grid-column: 2;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .mock-hero {
+    min-height: auto;
+    padding: 48px 24px 250px;
+  }
+
+  .mock-hero::before {
+    inset: auto 0 0;
+    height: 250px;
+    background-position: 70% bottom;
+    background-size: auto 100%;
+  }
+
+  .mock-hero::after {
+    background: linear-gradient(180deg, #fff 0%, #fff calc(100% - 250px), rgba(255,255,255,0.16) 100%);
+  }
+
+  .mock-hero h1 {
+    font-size: 44px;
+  }
+
+  .mock-hero p,
+  .mock-hero .hero-lede {
+    font-size: 18px;
+  }
+
+  .mock-hero .hero-actions,
+  .button {
+    width: 100%;
+  }
+
+  .mock-section,
+  .status-section,
+  .draft-map-section,
+  .review-guide-section,
+  .notice-section {
+    grid-template-columns: 1fr;
+    width: min(100% - 48px, 1180px);
+    padding: 40px 0;
+  }
+
+  .mock-icon svg {
+    width: 76px;
+    height: 76px;
+  }
+
+  .status-section .status-list,
+  .draft-flow,
+  .guide-points {
+    grid-column: auto;
+  }
+
+  .draft-flow svg {
+    min-height: 190px;
+  }
+
+  .guide-points li {
+    align-items: flex-start;
+    font-size: 16px;
+  }
+}
+/* End mockup fidelity pass. */
