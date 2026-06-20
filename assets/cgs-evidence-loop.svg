@@ -1,92 +1,85 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="640" viewBox="0 0 900 640" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
   <title id="title">Common Ground Standard evidence loop</title>
-  <desc id="desc">A schematic map connecting AI infrastructure, campus governance, benefit sharing, assurance, implementation, and public feedback around a public benefit evidence core.</desc>
+  <desc id="desc">A clean schematic showing public benefit evidence at the center of infrastructure safeguards, campus governance, benefit sharing, assurance, and implementation.</desc>
   <defs>
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#092331" flood-opacity="0.08"/>
+    <filter id="panelShadow" x="-12%" y="-18%" width="124%" height="136%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#071522" flood-opacity="0.08"/>
     </filter>
-    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
-      <path d="M36 0H0V36" fill="none" stroke="#dbe7ea" stroke-width="1" opacity="0.7"/>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#0b7184"/>
+    </marker>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0V44" fill="none" stroke="#dbe8eb" stroke-width="1"/>
     </pattern>
   </defs>
 
-  <rect width="900" height="640" rx="0" fill="#ffffff"/>
-  <rect x="28" y="28" width="844" height="584" rx="6" fill="#f8fbfb" stroke="#d8e4e7"/>
-  <rect x="58" y="58" width="784" height="524" fill="url(#grid)" opacity="0.58"/>
+  <rect width="1200" height="760" fill="#ffffff"/>
+  <rect x="36" y="36" width="1128" height="688" rx="10" fill="#f8fbfb" stroke="#d8e5e8"/>
+  <rect x="72" y="82" width="1056" height="584" fill="url(#grid)" opacity="0.62"/>
 
-  <g fill="none" stroke="#6d98a0" stroke-width="2" opacity="0.65">
-    <path d="M160 144C270 66 408 58 520 105"/>
-    <path d="M642 152c72 76 86 186 38 282"/>
-    <path d="M598 508c-102 73-248 79-360 12"/>
-    <path d="M182 442c-58-88-58-197 0-290"/>
-    <path d="M241 198 358 284"/>
-    <path d="M530 218 454 284"/>
-    <path d="M548 421 454 354"/>
-    <path d="M318 424 394 354"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="92" y="94" font-size="18" font-weight="800" fill="#005e70">PUBLIC REVIEW ONLY</text>
+    <text x="92" y="122" font-size="15" font-weight="650" fill="#52616d">claims stay bounded until evidence is reviewable</text>
   </g>
 
-  <g filter="url(#softShadow)">
-    <rect x="316" y="240" width="268" height="158" rx="6" fill="#ffffff" stroke="#005e70" stroke-width="2"/>
-    <text x="450" y="292" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#071522">PUBLIC BENEFIT</text>
-    <text x="450" y="319" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#071522">EVIDENCE</text>
-    <path d="M374 348h152" stroke="#d6e2e6" stroke-width="2"/>
-    <text x="450" y="374" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#4c5d68">claims stay bounded until proven</text>
+  <g fill="none" stroke="#0b7184" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)" opacity="0.88">
+    <path d="M365 191C447 126 557 103 660 129"/>
+    <path d="M820 204c88 82 120 203 85 318"/>
+    <path d="M771 593c-99 71-234 85-346 38"/>
+    <path d="M281 542c-71-96-81-222-30-331"/>
   </g>
 
-  <g font-family="Inter, Arial, sans-serif" filter="url(#softShadow)">
+  <g filter="url(#panelShadow)" font-family="Inter, Arial, sans-serif">
+    <rect x="430" y="278" width="340" height="170" rx="10" fill="#ffffff" stroke="#005e70" stroke-width="3"/>
+    <circle cx="600" cy="318" r="16" fill="#e8f5f7" stroke="#0b7184" stroke-width="3"/>
+    <path d="M592 318h16M600 310v16" stroke="#0b7184" stroke-width="3" stroke-linecap="round"/>
+    <text x="600" y="366" text-anchor="middle" font-size="26" font-weight="850" fill="#071522">Public Benefit</text>
+    <text x="600" y="400" text-anchor="middle" font-size="26" font-weight="850" fill="#071522">Evidence</text>
+    <path d="M506 421h188" stroke="#d7e3e6" stroke-width="3"/>
+  </g>
+
+  <g filter="url(#panelShadow)" font-family="Inter, Arial, sans-serif">
     <g>
-      <rect x="120" y="106" width="220" height="86" rx="6" fill="#ffffff" stroke="#0b7184" stroke-width="2"/>
-      <circle cx="152" cy="148" r="13" fill="#e7f4f6" stroke="#0b7184" stroke-width="2"/>
-      <path d="M146 148h12M152 142v12" stroke="#0b7184" stroke-width="2" stroke-linecap="round"/>
-      <text x="183" y="139" font-size="16" font-weight="800" fill="#071522">AI infrastructure</text>
-      <text x="183" y="163" font-size="12" font-weight="650" fill="#52616d">siting, energy, water, compute</text>
+      <rect x="130" y="156" width="300" height="112" rx="10" fill="#ffffff" stroke="#0b7184" stroke-width="3"/>
+      <text x="164" y="204" font-size="24" font-weight="850" fill="#071522">Infrastructure</text>
+      <text x="164" y="236" font-size="16" font-weight="650" fill="#52616d">energy, water, compute, siting</text>
     </g>
 
     <g>
-      <rect x="548" y="112" width="232" height="88" rx="6" fill="#ffffff" stroke="#0b7184" stroke-width="2"/>
-      <circle cx="580" cy="156" r="13" fill="#e7f4f6" stroke="#0b7184" stroke-width="2"/>
-      <path d="M572 158h16M576 151h8" stroke="#0b7184" stroke-width="2" stroke-linecap="round"/>
-      <text x="610" y="146" font-size="16" font-weight="800" fill="#071522">Campus governance</text>
-      <text x="610" y="170" font-size="12" font-weight="650" fill="#52616d">students, workers, institutions</text>
+      <rect x="770" y="154" width="300" height="112" rx="10" fill="#ffffff" stroke="#0b7184" stroke-width="3"/>
+      <text x="804" y="202" font-size="24" font-weight="850" fill="#071522">Campus Governance</text>
+      <text x="804" y="234" font-size="16" font-weight="650" fill="#52616d">students, workers, institutions</text>
     </g>
 
     <g>
-      <rect x="626" y="388" width="218" height="90" rx="6" fill="#ffffff" stroke="#0b7184" stroke-width="2"/>
-      <circle cx="658" cy="433" r="13" fill="#e7f4f6" stroke="#0b7184" stroke-width="2"/>
-      <path d="M650 433h16M658 425v16" stroke="#0b7184" stroke-width="2" stroke-linecap="round"/>
-      <text x="688" y="423" font-size="16" font-weight="800" fill="#071522">Benefit sharing</text>
-      <text x="688" y="447" font-size="12" font-weight="650" fill="#52616d">community value and dividends</text>
+      <rect x="820" y="472" width="300" height="112" rx="10" fill="#ffffff" stroke="#0b7184" stroke-width="3"/>
+      <text x="854" y="520" font-size="24" font-weight="850" fill="#071522">Benefit Sharing</text>
+      <text x="854" y="552" font-size="16" font-weight="650" fill="#52616d">verified value routed visibly</text>
     </g>
 
     <g>
-      <rect x="318" y="500" width="264" height="84" rx="6" fill="#ffffff" stroke="#0b7184" stroke-width="2"/>
-      <circle cx="350" cy="542" r="13" fill="#e7f4f6" stroke="#0b7184" stroke-width="2"/>
-      <path d="M344 542h12l6-8" stroke="#0b7184" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="380" y="533" font-size="16" font-weight="800" fill="#071522">Assurance and audit</text>
-      <text x="380" y="557" font-size="12" font-weight="650" fill="#52616d">receipts, no-go terms, review</text>
+      <rect x="450" y="584" width="300" height="112" rx="10" fill="#ffffff" stroke="#0b7184" stroke-width="3"/>
+      <text x="484" y="632" font-size="24" font-weight="850" fill="#071522">Assurance</text>
+      <text x="484" y="664" font-size="16" font-weight="650" fill="#52616d">audit, receipts, no-go terms</text>
     </g>
 
     <g>
-      <rect x="56" y="358" width="238" height="92" rx="6" fill="#ffffff" stroke="#0b7184" stroke-width="2"/>
-      <circle cx="88" cy="404" r="13" fill="#e7f4f6" stroke="#0b7184" stroke-width="2"/>
-      <path d="M82 404h12M88 398v12" stroke="#0b7184" stroke-width="2" stroke-linecap="round"/>
-      <text x="118" y="394" font-size="16" font-weight="800" fill="#071522">Implementation</text>
-      <text x="118" y="418" font-size="12" font-weight="650" fill="#52616d">pilot conditions and scale gates</text>
+      <rect x="92" y="452" width="300" height="112" rx="10" fill="#ffffff" stroke="#0b7184" stroke-width="3"/>
+      <text x="126" y="500" font-size="24" font-weight="850" fill="#071522">Implementation</text>
+      <text x="126" y="532" font-size="16" font-weight="650" fill="#52616d">pilot gates before scaling</text>
     </g>
+  </g>
+
+  <g fill="none" stroke="#6d98a0" stroke-width="3" stroke-dasharray="8 10" opacity="0.78">
+    <path d="M430 230 506 300"/>
+    <path d="M770 232 694 302"/>
+    <path d="M858 500 735 421"/>
+    <path d="M565 584 600 448"/>
+    <path d="M392 504 466 421"/>
   </g>
 
   <g font-family="Inter, Arial, sans-serif">
-    <rect x="72" y="536" width="176" height="34" rx="17" fill="#fff8eb" stroke="#d98a00"/>
-    <text x="160" y="558" text-anchor="middle" font-size="12" font-weight="800" fill="#865600">NO ENDORSEMENT CLAIM</text>
-    <rect x="658" y="54" width="166" height="34" rx="17" fill="#eef7f8" stroke="#b9d5da"/>
-    <text x="741" y="76" text-anchor="middle" font-size="12" font-weight="800" fill="#005e70">PUBLIC REVIEW ONLY</text>
-  </g>
-
-  <g fill="#0b7184" opacity="0.9">
-    <circle cx="160" cy="144" r="4"/>
-    <circle cx="664" cy="156" r="4"/>
-    <circle cx="735" cy="434" r="4"/>
-    <circle cx="450" cy="542" r="4"/>
-    <circle cx="176" cy="404" r="4"/>
+    <rect x="88" y="642" width="238" height="42" rx="21" fill="#fff8eb" stroke="#d98a00" stroke-width="2"/>
+    <text x="207" y="669" text-anchor="middle" font-size="15" font-weight="850" fill="#865600">NO ENDORSEMENT CLAIM</text>
   </g>
 </svg>

@@ -16,7 +16,8 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://common-ground-standard.org/" />
-    <link rel="stylesheet" href="styles.css?v=20260620-observatory" />
+    <link rel="stylesheet" href="styles.css?v=20260620-public-pages" />
+    <script defer src="site.js?v=20260620-public-pages"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -30,7 +31,7 @@
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="review.html#review-brief">Review Brief</a>
-        <a href="#drafts">Drafts</a>
+        <a href="drafts.html">Drafts</a>
         <a href="review.html#review-guide">Review Guide</a>
         <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard">GitHub</a>
       </nav>
@@ -48,7 +49,7 @@
             This is a working draft. We are seeking detailed critique before broader outreach.
           </p>
           <div class="hero-actions" aria-label="Primary actions">
-            <a class="button button-primary" href="#drafts">
+            <a class="button button-primary" href="drafts.html">
               Review the Drafts
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
             </a>
@@ -60,7 +61,12 @@
         </div>
 
         <figure class="hero-map">
-          <img src="assets/cgs-evidence-loop.svg" alt="Evidence loop connecting infrastructure, governance, benefit sharing, assurance, implementation, and public feedback." />
+          <img
+            src="assets/cgs-evidence-loop.svg"
+            alt="Evidence loop connecting infrastructure, governance, benefit sharing, assurance, implementation, and public feedback."
+            decoding="async"
+            fetchpriority="high"
+          />
         </figure>
       </section>
 
@@ -120,27 +126,27 @@
             <strong>Read the public review frame</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
-          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/common-ground-standard.md">
+          <a href="drafts.html#common-ground-standard">
             <span>Core Draft</span>
             <strong>Common Ground Standard</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
-          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/campus-common-ground-compact.md">
+          <a href="drafts.html#campus-compact">
             <span>Campus Draft</span>
             <strong>Campus Common Ground Compact</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
-          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/standards/ai-dividend-benefit-clause.md">
+          <a href="drafts.html#benefit-clause">
             <span>Benefit Draft</span>
             <strong>AI Dividend / Benefit Clause</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
-          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/review/reviewer-questions.md">
+          <a href="drafts.html#reviewer-questions">
             <span>Critique Tool</span>
             <strong>Reviewer Questions</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
-          <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/blob/main/review/anti-capture-checklist.md">
+          <a href="drafts.html#anti-capture-checklist">
             <span>Critique Tool</span>
             <strong>Anti-Capture Checklist</strong>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
@@ -182,7 +188,7 @@
 
     <footer class="site-footer">
       <p>Common Ground Standard is a public-review draft, not a certification or endorsement process.</p>
-      <a href="LICENSE-NOTICE.md">License and trademark notice</a>
+      <a href="license-notice.html">License and trademark notice</a>
     </footer>
   </body>
 </html>
