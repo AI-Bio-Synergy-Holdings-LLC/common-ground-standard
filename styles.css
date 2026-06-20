@@ -576,7 +576,7 @@ h3 {
   .hero {
     min-height: auto;
     padding: 56px 24px 72px;
-    background-position: center bottom;
+    background-position: right 30% bottom;
   }
 
   .hero-copy {
@@ -705,7 +705,7 @@ h3 {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: url("assets/common-ground-system-map.png") center right / cover no-repeat;
+  background: url("assets/common-ground-system-map.png") calc(100% + 245px) center / auto 100% no-repeat;
 }
 
 .hero::after {
@@ -714,7 +714,7 @@ h3 {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 40%, rgba(255,255,255,0.48) 68%, rgba(255,255,255,0.16) 100%),
+    linear-gradient(90deg, rgba(255,255,255,0.99) 0%, rgba(255,255,255,0.94) 38%, rgba(255,255,255,0.58) 56%, rgba(255,255,255,0.10) 78%, rgba(255,255,255,0.00) 100%),
     linear-gradient(0deg, rgba(0,98,119,0.10), rgba(255,255,255,0) 48%);
 }
 
@@ -853,7 +853,7 @@ h3 {
 
   .hero::after {
     background:
-      linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.90) 58%, rgba(255,255,255,0.30) 100%),
+      linear-gradient(90deg, rgba(255,255,255,0.99) 0%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.26) 100%),
       linear-gradient(0deg, rgba(0,98,119,0.10), rgba(255,255,255,0) 48%);
   }
 
@@ -884,7 +884,7 @@ h3 {
   .hero::before {
     inset: auto 0 0;
     height: 230px;
-    background-position: center bottom;
+    background-position: right 30% bottom;
     border-top: 1px solid var(--line);
   }
 
