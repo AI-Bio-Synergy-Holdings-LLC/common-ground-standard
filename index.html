@@ -16,7 +16,7 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://common-ground-standard.org/" />
-    <link rel="stylesheet" href="styles.css?v=20260620-hero-right-clear" />
+    <link rel="stylesheet" href="styles.css?v=20260620-clean-rebuild" />
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -35,9 +35,9 @@
     </header>
 
     <main id="content">
-      <section class="hero mock-hero">
+      <section class="home-hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1>Common<br />Ground Standard</h1>
+          <h1 id="hero-title">Common Ground Standard</h1>
           <p class="hero-lede">
             A public-review draft for responsible AI infrastructure, campus AI governance,
             and AI benefit-sharing safeguards.
@@ -48,49 +48,52 @@
           <div class="hero-actions" aria-label="Primary actions">
             <a class="button button-primary" href="#drafts">
               Review the Drafts
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M5 12h12m-5-5 5 5-5 5" />
-              </svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
             </a>
             <a class="button button-secondary" href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard">
               Open GitHub
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M7 17 17 7m0 0H9m8 0v8" />
-              </svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg>
             </a>
           </div>
         </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img src="assets/cgs-system-visual.svg" alt="" />
+        </div>
       </section>
 
-      <section class="mock-section status-section" aria-labelledby="status-title">
-        <div class="mock-icon" aria-hidden="true">
+      <section class="site-section status-section" aria-labelledby="status-title">
+        <div class="section-icon" aria-hidden="true">
           <svg viewBox="0 0 96 96">
-            <path d="M20 12h40l18 18v52H20z" />
+            <path d="M22 12h38l18 18v52H22z" />
             <path d="M60 12v20h18" />
-            <path d="M34 45h28M34 58h22" />
-            <path d="m59 73 21-21 8 8-21 21-12 4z" />
+            <path d="M34 46h28M34 59h22" />
+            <path d="m58 74 21-21 8 8-21 21-12 4z" />
           </svg>
         </div>
         <div class="section-copy">
           <h2 id="status-title">Current Status</h2>
-          <p>This is a public-review draft (not final). It is incomplete and will change.</p>
+          <p>This is a public-review draft, not a final standard. It is incomplete and will change.</p>
           <p>Your feedback now will shape what we carry forward.</p>
         </div>
         <dl class="status-list">
-          <div><dt>Status:</dt><dd>Public-Review Draft</dd></div>
-          <div><dt>Last Updated:</dt><dd>June 19, 2026</dd></div>
-          <div><dt>Next Step:</dt><dd>Incorporate feedback and prepare for broader outreach</dd></div>
-          <div><dt>How to Participate:</dt><dd>Read, comment, open issues, suggest edits</dd></div>
+          <div><dt>Status</dt><dd>Public-review draft</dd></div>
+          <div><dt>Last updated</dt><dd>June 20, 2026</dd></div>
+          <div><dt>Next step</dt><dd>Incorporate feedback and prepare for broader outreach</dd></div>
+          <div><dt>How to participate</dt><dd>Read, comment, open issues, suggest edits</dd></div>
         </dl>
       </section>
 
-      <section class="mock-section draft-map-section" id="drafts" aria-labelledby="drafts-title">
-        <div class="mock-icon" aria-hidden="true">
+      <section class="site-section draft-section" id="drafts" aria-labelledby="drafts-title">
+        <div class="section-icon" aria-hidden="true">
           <svg viewBox="0 0 96 96">
             <path d="M28 10c14 0 24 10 24 23 0 19-24 43-24 43S4 52 4 33C4 20 14 10 28 10z" />
             <circle cx="28" cy="32" r="8" />
             <path d="M34 68 58 54l22 16M58 54 48 30M58 54l10-24M80 70V48" />
-            <circle cx="48" cy="30" r="6" /><circle cx="68" cy="30" r="6" /><circle cx="80" cy="48" r="6" /><circle cx="80" cy="70" r="6" /><circle cx="58" cy="54" r="6" />
+            <circle cx="48" cy="30" r="6" />
+            <circle cx="68" cy="30" r="6" />
+            <circle cx="80" cy="48" r="6" />
+            <circle cx="80" cy="70" r="6" />
+            <circle cx="58" cy="54" r="6" />
           </svg>
         </div>
         <div class="section-copy">
@@ -101,28 +104,36 @@
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
           </a>
         </div>
-        <div class="draft-flow" aria-label="Draft map diagram">
+        <div class="draft-diagram" aria-label="Draft map diagram">
           <svg viewBox="0 0 620 230" role="img" aria-label="Draft map from purpose and principles to safeguards, governance, benefit sharing, audit, and implementation guidance">
-            <g class="flow-lines">
+            <g class="diagram-lines">
               <path d="M120 68h150M350 68h150M310 96v44M170 96v44M445 96v44M310 170v30M170 170v30M445 170v30M530 170v30" />
               <path d="M80 140h490M60 200h510" />
             </g>
-            <g class="flow-boxes">
-              <rect x="40" y="28" width="130" height="58" rx="2" /><text x="105" y="53">1. Purpose</text><text x="105" y="70">and Scope</text>
-              <rect x="250" y="28" width="130" height="58" rx="2" /><text x="315" y="61">2. Principles</text>
-              <rect x="460" y="28" width="130" height="58" rx="2" /><text x="525" y="53">3. Infrastructure</text><text x="525" y="70">Safeguards</text>
-              <rect x="40" y="120" width="130" height="58" rx="2" /><text x="105" y="145">4. Campus</text><text x="105" y="162">AI Governance</text>
-              <rect x="220" y="120" width="130" height="58" rx="2" /><text x="285" y="145">5. Benefit-</text><text x="285" y="162">Sharing</text>
-              <rect x="380" y="120" width="130" height="58" rx="2" /><text x="445" y="145">6. Assurance</text><text x="445" y="162">and Audit</text>
-              <rect x="520" y="120" width="90" height="58" rx="2" /><text x="565" y="145">7. Implementation</text><text x="565" y="162">Guidance</text>
-              <rect x="90" y="190" width="440" height="32" rx="2" /><text x="310" y="211">Appendices and Definitions</text>
+            <g class="diagram-boxes">
+              <rect x="40" y="28" width="130" height="58" />
+              <text x="105" y="53">1. Purpose</text><text x="105" y="70">and Scope</text>
+              <rect x="250" y="28" width="130" height="58" />
+              <text x="315" y="61">2. Principles</text>
+              <rect x="460" y="28" width="130" height="58" />
+              <text x="525" y="53">3. Infrastructure</text><text x="525" y="70">Safeguards</text>
+              <rect x="40" y="120" width="130" height="58" />
+              <text x="105" y="145">4. Campus</text><text x="105" y="162">AI Governance</text>
+              <rect x="220" y="120" width="130" height="58" />
+              <text x="285" y="145">5. Benefit-</text><text x="285" y="162">Sharing</text>
+              <rect x="380" y="120" width="130" height="58" />
+              <text x="445" y="145">6. Assurance</text><text x="445" y="162">and Audit</text>
+              <rect x="520" y="120" width="90" height="58" />
+              <text x="565" y="145">7. Implementation</text><text x="565" y="162">Guidance</text>
+              <rect x="90" y="190" width="440" height="32" />
+              <text x="310" y="211">Appendices and Definitions</text>
             </g>
           </svg>
         </div>
       </section>
 
-      <section class="mock-section review-guide-section" aria-labelledby="review-title">
-        <div class="mock-icon" aria-hidden="true">
+      <section class="site-section guide-section" aria-labelledby="review-title">
+        <div class="section-icon" aria-hidden="true">
           <svg viewBox="0 0 96 96">
             <path d="M14 18c16 0 25 2 34 9v54c-9-7-18-9-34-9z" />
             <path d="M82 18c-16 0-25 2-34 9v54c9-7 18-9 34-9z" />
@@ -157,14 +168,15 @@
         </ul>
       </section>
 
-      <section class="mock-section notice-section" aria-labelledby="notice-title">
-        <div class="mock-icon shield-mock-icon" aria-hidden="true">
+      <section class="site-section notice-section" aria-labelledby="notice-title">
+        <div class="section-icon notice-icon" aria-hidden="true">
           <svg viewBox="0 0 96 96">
             <path d="M48 10c12 10 26 13 36 14v24c0 19-11 32-36 42C23 80 12 67 12 48V24c10-1 24-4 36-14z" />
-            <path d="M48 30v26" /><circle cx="48" cy="68" r="3" />
+            <path d="M48 30v26" />
+            <circle cx="48" cy="68" r="3" />
           </svg>
         </div>
-        <div class="section-copy">
+        <div class="section-copy notice-copy">
           <h2 id="notice-title">No Endorsement</h2>
           <p>
             Use of the Common Ground Standard name or draft materials does not imply endorsement
