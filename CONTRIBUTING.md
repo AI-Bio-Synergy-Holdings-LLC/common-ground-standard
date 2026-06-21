@@ -50,7 +50,7 @@ See [LICENSE](LICENSE) and [LICENSE-NOTICE.md](LICENSE-NOTICE.md).
 
 ## No Endorsement
 
-Submitting an issue, comment, suggestion, review, or pull request does not mean you endorse the Common Ground Standard, Pivot, any future partner, any AI company, any infrastructure actor, any data-center project, or any pilot.
+Submitting an issue, comment, suggestion, review, or pull request does not mean you endorse the Common Ground Standard, AI-Bio Synergy Holdings LLC, any future partner, any AI company, any infrastructure actor, any data-center project, or any pilot.
 
 ## Review Etiquette
 

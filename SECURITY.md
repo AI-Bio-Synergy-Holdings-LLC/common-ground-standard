@@ -22,7 +22,7 @@ Include:
 
 ## Response Process
 
-AI-Bio Synergy Holdings LLC will review the report, triage severity, and coordinate any fix or disclosure process. If AI Bio Synergy Inc. is using the affected software under an intercompany license, Inc. operational and customer-impact review should be coordinated through the intercompany license owner.
+AI-Bio Synergy Holdings LLC will review the report, triage severity, and coordinate any fix or disclosure process.
 
 ## Sensitive Information
 

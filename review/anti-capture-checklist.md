@@ -5,7 +5,7 @@ Date: June 13, 2026
 
 ## Purpose
 
-This checklist helps reviewers identify whether Pivot's standards could be captured by powerful actors, diluted into public-relations language, or used without real community, student, worker, data, or ecological accountability.
+This checklist helps reviewers identify whether the Common Ground Standard drafts could be captured by powerful actors, diluted into public-relations language, or used without real community, student, worker, data, or ecological accountability.
 
 ## Governance Capture
 

@@ -19,7 +19,7 @@ This repository is a public review surface. It is meant for critique before broa
 - No AI productivity gain without a dividend path.
 - No data extraction without data-trust governance.
 - No ecological burden without transparency, restoration, and enforceable guardrails.
-- No AI education system without student authorship and learning integrity.
+- No AI education system without preserving student authorship and learning integrity.
 
 ## Review Drafts
 

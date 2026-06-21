@@ -36,7 +36,7 @@ Certification, if developed later, will require formal criteria, evidence, gover
 
 ## No Endorsement or Partnership
 
-Use, review, citation, fork, issue discussion, or contribution does not mean that Pivot, the Common Ground Standard, AI-Bio Synergy Holdings LLC, any reviewer, or any future standards body endorses a project, product, company, deployment, pilot, or infrastructure proposal.
+Use, review, citation, fork, issue discussion, or contribution does not mean that the Common Ground Standard, AI-Bio Synergy Holdings LLC, any reviewer, or any future standards body endorses a project, product, company, deployment, pilot, or infrastructure proposal.
 
 ## Stewardship And Funding Boundary
 

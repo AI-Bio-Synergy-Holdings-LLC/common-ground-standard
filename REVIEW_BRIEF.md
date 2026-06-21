@@ -5,15 +5,21 @@ Date: June 13, 2026
 
 ## One-Sentence Thesis
 
-Pivot is building a public-interest standard and evidence framework for making AI deployment and AI-enabling infrastructure prove measurable human, community, worker, student, and ecological benefit.
+The Common Ground Standard is a public-review draft and evidence framework for making AI deployment and AI-enabling infrastructure prove measurable human, community, worker, student, and ecological benefit.
+
+## Origin And Stewardship
+
+The Common Ground Standard is incubated by AI-Bio Synergy Holdings LLC during public review while independent governance and fiscal pathways are evaluated.
+
+This public review is being conducted through the common-ground-standard repository and common-ground-standard.org. It is not a partnership request, funding request, pilot request, certification process, or endorsement request.
 
 ## Why This Review Comes First
 
-AI adoption is accelerating faster than public legitimacy.
+AI adoption is accelerating faster than public legitimacy. Students, workers, communities, agencies, and foundations require standards to distinguish credible public benefit from vague AI-for-good language before major industry outreach is established.
 
-Students are asking whether AI weakens authorship, learning integrity, career security, and human agency. Workers are asking whether AI creates replacement without representation. Communities are asking whether data centers and AI infrastructure increase energy stress, water pressure, retail bills, secrecy, and ecological burden. Public agencies and foundations are asking how to distinguish credible public benefit from vague AI-for-good language.
+Students are asking whether AI weakens authorship, learning integrity, career security, and human agency. Workers are asking whether AI creates replacement without representation. Communities are asking whether data centers and AI infrastructure increase energy stress, water pressure, retail bills, secrecy, and ecological burden.
 
-Pivot should not be taken to major AI or infrastructure actors before it has been reviewed by legitimacy actors.
+The Common Ground Standard should not be taken to major AI or infrastructure actors before it has been reviewed by legitimacy actors.
 
 ## Public Doctrine
 
@@ -22,7 +28,7 @@ Pivot should not be taken to major AI or infrastructure actors before it has bee
 - No AI productivity gain without a dividend path.
 - No data extraction without data-trust governance.
 - No ecological burden without transparency, restoration, and enforceable guardrails.
-- No AI education system without student authorship and learning integrity.
+- No AI education system without preserving student authorship and learning integrity.
 
 ## First Three Review Drafts
 
@@ -34,23 +40,23 @@ Pivot should not be taken to major AI or infrastructure actors before it has bee
 
 ## Operating Loop
 
-Pivot's basic operating loop is:
+The Common Ground Standard operating loop is:
 
 1. Measure value, burden, or avoided harm.
-2. Govern decisions with affected people.
+2. Align governance with affected people.
 3. Route benefit into visible public, worker, student, community, or ecological outcomes.
 4. Audit the result.
 5. Scale only what proves legitimate.
 
 ## Current Status
 
-Pivot is:
+The Common Ground Standard is:
 
 - standards-draft ready;
 - public-review ready;
 - looking for critique before broader outreach.
 
-Pivot is not yet:
+The Common Ground Standard is not yet:
 
 - operationally proven at scale;
 - certified;
@@ -70,4 +76,3 @@ The ideal review outcome is:
 - better anti-capture language;
 - practical first-pilot criteria;
 - stronger public accountability.
-

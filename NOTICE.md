@@ -13,7 +13,7 @@ The project is not currently accepting public sponsorship through GitHub Sponsor
 
 ## No Endorsement
 
-Reviewing this packet does not mean the reviewer endorses Pivot, the Common Ground Standard, any future partner, any AI company, any infrastructure actor, any data-center project, or any pilot.
+Reviewing this packet does not mean the reviewer endorses the Common Ground Standard, AI-Bio Synergy Holdings LLC, any future partner, any AI company, any infrastructure actor, any data-center project, or any pilot.
 
 ## No Ownership Transfer
 
