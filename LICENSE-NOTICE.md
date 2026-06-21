@@ -38,6 +38,14 @@ Certification, if developed later, will require formal criteria, evidence, gover
 
 Use, review, citation, fork, issue discussion, or contribution does not mean that Pivot, the Common Ground Standard, AI-Bio Synergy Holdings LLC, any reviewer, or any future standards body endorses a project, product, company, deployment, pilot, or infrastructure proposal.
 
+## Stewardship And Funding Boundary
+
+AI-Bio Synergy Holdings LLC may act as founder steward and temporary incubator during the public-review phase while independent governance and fiscal pathways are evaluated.
+
+This repository is not currently accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar public funding channel.
+
+Funding, if activated later, must not grant endorsement, partnership status, certification rights, control over draft content, access to confidential materials, access to restricted data, influence over reviewer selection, or priority treatment in pilots or conformance decisions.
+
 ## No Data Rights
 
 This repository does not grant access to student, worker, community, tribal, ecological, personal, restricted, confidential, or private data.

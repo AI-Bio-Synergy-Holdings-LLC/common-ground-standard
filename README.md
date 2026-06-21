@@ -4,6 +4,8 @@ Public review drafts for responsible AI infrastructure, campus AI governance, AI
 
 Public site: https://common-ground-standard.org
 
+Stewardship and funding posture: [FUNDING_AND_STEWARDSHIP_READINESS.md](FUNDING_AND_STEWARDSHIP_READINESS.md)
+
 ## Purpose
 
 The Common Ground Standard is a public-interest standards effort for making AI deployment and AI-enabling infrastructure prove measurable human, community, worker, student, and ecological benefit.
@@ -31,6 +33,7 @@ Start here:
 6. [Anti-Capture Review Checklist](review/anti-capture-checklist.md)
 7. [Public Roadmap Summary](ROADMAP.md)
 8. [Public Review Notice](NOTICE.md)
+9. [Funding and Stewardship Readiness](FUNDING_AND_STEWARDSHIP_READINESS.md)
 
 ## Current Status
 
@@ -46,7 +49,16 @@ This project is not yet:
 - operationally proven at scale;
 - endorsed by reviewers;
 - claiming active pilots unless separately documented;
-- claiming agency, foundation, university, tribal, community, or company partnership.
+- claiming agency, foundation, university, tribal, community, or company partnership;
+- accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar funding channel.
+
+## Stewardship And Funding Posture
+
+Common Ground Standard is incubated by AI-Bio Synergy Holdings LLC during public review while independent governance and fiscal pathways are evaluated.
+
+AI-Bio Synergy Holdings LLC may act as founder steward, IP steward, domain administrator, repository administrator, and temporary project incubator during this phase. This does not make AI-Bio Synergy Holdings LLC the permanent standards body, certification authority, nonprofit fiscal sponsor, or neutral public governance board.
+
+The repository intentionally does not include `.github/FUNDING.yml` until fiscal-host, donor-influence, conflict, and use-of-funds rules are ready.
 
 ## Review Ask
 
@@ -77,3 +89,4 @@ See:
 
 - [Public Review Notice](NOTICE.md)
 - [License and Trademark Notice](LICENSE-NOTICE.md)
+- [Funding and Stewardship Readiness](FUNDING_AND_STEWARDSHIP_READINESS.md)

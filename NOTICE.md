@@ -3,6 +3,14 @@
 Status: Sanitized public-review draft
 Date: June 13, 2026
 
+## Incubation And Funding Boundary
+
+Common Ground Standard is incubated by AI-Bio Synergy Holdings LLC during public review while independent governance and fiscal pathways are evaluated.
+
+This incubation role does not make AI-Bio Synergy Holdings LLC the permanent standards body, certification authority, nonprofit fiscal sponsor, neutral public governance board, or representative of affected parties.
+
+The project is not currently accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar public funding channel.
+
 ## No Endorsement
 
 Reviewing this packet does not mean the reviewer endorses Pivot, the Common Ground Standard, any future partner, any AI company, any infrastructure actor, any data-center project, or any pilot.
