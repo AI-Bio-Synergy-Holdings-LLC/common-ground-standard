@@ -17,7 +17,7 @@ The project needs founder control while its rights, marks, claims, and draft mat
 
 The project also needs a credible pathway toward independent review, anti-capture safeguards, and a public-interest governance structure before foundations, agencies, universities, civil society organizations, infrastructure actors, or AI companies are asked to rely on it.
 
-## AI-Bio Stewardship During Public Review
+## AI-Bio Synergy Holdings LLC Stewardship During Public Review
 
 During the public-review phase, AI-Bio Synergy Holdings LLC may hold or administer:
 

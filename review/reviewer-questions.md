@@ -11,7 +11,7 @@ Date: June 13, 2026
 4. What minimum evidence should be required before any actor can claim alignment?
 5. What should be explicitly prohibited?
 6. What would make this credible to skeptical students, workers, communities, and environmental reviewers?
-7. What would make you worry this could become reputation cover for AI or infrastructure actors?
+7. What potential risks should be flagged as possible reputation cover for AI or infrastructure actors?
 
 ## Common Ground Standard Questions
 
