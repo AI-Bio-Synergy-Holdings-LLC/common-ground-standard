@@ -84,7 +84,7 @@ Possible contexts:
 
 ## Scalable Horizon
 
-The longer-term vision includes Common Ground standards, DividendOS evidence tooling, data trusts, local cooperatives, responsible AI infrastructure guardrails, ecological accountability, student governance, and multi-site federation.
+The longer-term vision includes Common Ground standards, evidence tooling, data trusts, local cooperatives, responsible AI infrastructure guardrails, ecological accountability, student governance, and multi-site federation.
 
 The standard should scale only where evidence, affected-party governance, and enforceable benefit routing exist.
 

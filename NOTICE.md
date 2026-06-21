@@ -17,7 +17,7 @@ Reviewing this packet does not mean the reviewer endorses the Common Ground Stan
 
 ## No Ownership Transfer
 
-This packet does not transfer ownership, grant exclusivity, authorize use of marks, create certification rights, or assign any Pivot, Equilogos, CGRN, DividendOS, Common Ground Standard, Campus Common Ground Compact, or related materials.
+This packet does not transfer ownership, grant exclusivity, authorize use of marks, create certification rights, or assign any Common Ground Standard, Campus Common Ground Compact, protected mark, future-facing term, or related material. See the License and Trademark Notice and Public Exposure Register for the current public boundary.
 
 ## No Data Rights Granted
 

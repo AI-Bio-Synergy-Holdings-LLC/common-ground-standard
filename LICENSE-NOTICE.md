@@ -26,7 +26,7 @@ Names and marks that remain controlled include, without limitation:
 - AI Dividend / Benefit Clause
 - any future "Certified," "Aligned," or conformance marks
 
-Do not use these names or marks to imply endorsement, partnership, certification, official status, compliance, or approval without written permission.
+Do not use these names or marks to imply endorsement, partnership, certification, official status, compliance, or approval without written permission. See [Public Exposure Register](PUBLIC_EXPOSURE_REGISTER.md) for current public-use boundaries.
 
 ## No Certification Grant
 

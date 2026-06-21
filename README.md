@@ -90,3 +90,4 @@ See:
 - [Public Review Notice](NOTICE.md)
 - [License and Trademark Notice](LICENSE-NOTICE.md)
 - [Funding and Stewardship Readiness](FUNDING_AND_STEWARDSHIP_READINESS.md)
+- [Public Exposure Register](PUBLIC_EXPOSURE_REGISTER.md)
