@@ -1,56 +1,53 @@
 name: Anti-capture risk
-description: Flag a way the standard could be captured, diluted, or misused.
-title: "[Anti-capture] "
-labels: ["anti-capture", "review"]
+description: Flag a way the draft could be diluted, captured, or used as reputation cover.
+title: "[Anti-capture risk]: "
+labels: ["anti-capture", "public-review"]
 body:
   - type: markdown
     attributes:
       value: |
-        Use this form to identify risks that could turn public-interest language into reputation cover.
+        Use this form to identify reputation-cover, capture, self-certification, weak evidence, or public-benefit overclaiming risks.
   - type: textarea
     id: risk
     attributes:
-      label: Capture risk
-      description: How could a powerful actor use, dilute, or bypass this standard?
+      label: Risk
+      description: What could be captured, diluted, overstated, or misused?
     validations:
       required: true
   - type: dropdown
-    id: actor_type
+    id: actor
     attributes:
-      label: Actor type most likely to exploit this risk
+      label: Actor or pathway most relevant to the risk
       options:
-        - AI company
-        - Infrastructure operator
-        - Data-center developer
-        - University
+        - AI company or platform
+        - Infrastructure or data-center actor
+        - University or campus vendor
+        - Foundation or funder
         - Public agency
-        - Foundation
-        - Vendor
-        - Internal governance
+        - Certification or conformance process
         - Other
     validations:
       required: true
   - type: textarea
     id: consequence
     attributes:
-      label: Likely consequence
-      description: What harm, confusion, or public-benefit overclaim could result?
+      label: Possible consequence
+      description: What could go wrong if this risk is not addressed?
     validations:
       required: true
   - type: textarea
     id: safeguard
     attributes:
       label: Proposed safeguard
-      description: What no-go condition, evidence rule, governance right, or language change would reduce the risk?
+      description: What clause, no-go condition, evidence requirement, or governance rule would reduce this risk?
     validations:
-      required: true
+      required: false
   - type: checkboxes
-    id: notice
+    id: boundaries
     attributes:
-      label: Contribution notice
+      label: Public-review boundaries
       options:
-        - label: I am not submitting confidential, private, restricted, or personal data.
+        - label: This issue does not include confidential, restricted, personal, or private data.
           required: true
-        - label: My review does not imply endorsement, certification, partnership, or approval.
+        - label: This issue does not imply endorsement, partnership, certification, or official status.
           required: true
-

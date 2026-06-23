@@ -1,66 +1,47 @@
 name: Standard feedback
-description: Suggest a change to the Common Ground Standard.
-title: "[Standard] "
-labels: ["standard", "review"]
+description: Suggest a change or critique for the Common Ground Standard draft.
+title: "[Standard feedback]: "
+labels: ["standard", "public-review"]
 body:
   - type: markdown
     attributes:
       value: |
-        Use this form for feedback on the Common Ground Standard for Responsible AI Infrastructure.
-  - type: input
+        Thank you for reviewing the Common Ground Standard. Do not include confidential information, private data, trade secrets, or endorsement claims.
+  - type: textarea
     id: section
     attributes:
-      label: Section or clause
-      description: Which section, requirement, or phrase are you responding to?
-      placeholder: "Example: Minimum Requirements / Water"
+      label: Draft section or clause
+      description: Which part of the standard are you commenting on?
+      placeholder: "Example: Minimum Requirements / Community benefit"
     validations:
       required: true
   - type: textarea
     id: concern
     attributes:
-      label: Concern
-      description: What is weak, missing, vague, or risky?
+      label: Concern or proposed improvement
+      description: What is vague, missing, too weak, too broad, or impractical?
     validations:
       required: true
   - type: textarea
-    id: proposed_change
+    id: suggested-change
     attributes:
-      label: Proposed change
-      description: Suggest wording, a new requirement, or a structural fix.
+      label: Suggested change
+      description: Provide proposed wording, a concrete requirement, or a decision rule if possible.
     validations:
-      required: true
-  - type: dropdown
-    id: risk_area
-    attributes:
-      label: Primary risk area
-      options:
-        - Community governance
-        - Energy / grid
-        - Water
-        - Retail bills
-        - Workforce
-        - Student impact
-        - Data rights
-        - Ecology
-        - Audit / evidence
-        - Certification / public claims
-        - Other
-    validations:
-      required: true
+      required: false
   - type: textarea
     id: evidence
     attributes:
-      label: Evidence or examples
-      description: Optional links, references, lived experience, or implementation examples.
+      label: Evidence or reasoning
+      description: What practical experience, policy precedent, technical concern, or public-interest rationale supports this feedback?
     validations:
       required: false
   - type: checkboxes
-    id: notice
+    id: boundaries
     attributes:
-      label: Contribution notice
+      label: Public-review boundaries
       options:
-        - label: I am not submitting confidential, private, restricted, or personal data.
+        - label: This issue does not include confidential, restricted, personal, or private data.
           required: true
-        - label: My review does not imply endorsement, certification, partnership, or approval.
+        - label: This issue does not imply endorsement, partnership, certification, or official status.
           required: true
-

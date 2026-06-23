@@ -1,52 +1,42 @@
 name: AI Benefit Clause feedback
-description: Review the AI Dividend / Benefit Clause.
-title: "[AI Benefit Clause] "
-labels: ["ai-benefit-clause", "review"]
+description: Review benefit-sharing, AI dividend, value-routing, and public receipt terms.
+title: "[AI Benefit Clause]: "
+labels: ["ai-benefit-clause", "public-review"]
 body:
   - type: textarea
-    id: concern
+    id: benefit-concern
     attributes:
-      label: Concern
-      description: What is weak, missing, vague, or risky in the AI Dividend / Benefit Clause?
-    validations:
-      required: true
-  - type: dropdown
-    id: area
-    attributes:
-      label: Primary area
-      options:
-        - Surplus measurement
-        - Benefit-routing governance
-        - Worker protection
-        - Student benefit
-        - Community benefit
-        - Data rights
-        - Public receipt
-        - Audit / evidence
-        - Other
+      label: Benefit-sharing concern
+      description: What is missing, vague, weak, or vulnerable to misuse in the AI Dividend / Benefit Clause?
     validations:
       required: true
   - type: textarea
-    id: proposed_change
+    id: measurement
+    attributes:
+      label: Measurement or baseline issue
+      description: How should AI-created value, avoided harm, savings, productivity gains, or surplus be measured?
+    validations:
+      required: false
+  - type: textarea
+    id: governance
+    attributes:
+      label: Governance issue
+      description: Who should decide where benefits go, and what appeal or oversight rights should exist?
+    validations:
+      required: false
+  - type: textarea
+    id: proposed-change
     attributes:
       label: Proposed change
-      description: Suggest a clause, safeguard, metric, or no-go condition.
-    validations:
-      required: true
-  - type: textarea
-    id: public_receipt
-    attributes:
-      label: Public receipt requirement
-      description: What must be published before someone can claim AI-created benefit?
+      description: Suggest clause language, a no-go condition, or a public receipt requirement.
     validations:
       required: false
   - type: checkboxes
-    id: notice
+    id: boundaries
     attributes:
-      label: Contribution notice
+      label: Public-review boundaries
       options:
-        - label: I am not submitting confidential, private, restricted, or personal data.
+        - label: This issue does not include confidential, restricted, personal, or private data.
           required: true
-        - label: My review does not imply endorsement, certification, partnership, or approval.
+        - label: This issue does not imply endorsement, partnership, certification, or official status.
           required: true
-

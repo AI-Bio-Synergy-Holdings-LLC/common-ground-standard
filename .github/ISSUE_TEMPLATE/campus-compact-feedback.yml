@@ -1,58 +1,43 @@
 name: Campus Compact feedback
-description: Review the Campus Common Ground Compact.
-title: "[Campus Compact] "
-labels: ["campus-compact", "student-rights", "review"]
+description: Review student, worker, faculty, or campus-governance safeguards.
+title: "[Campus Compact]: "
+labels: ["campus-compact", "student-rights", "public-review"]
 body:
-  - type: input
-    id: section
+  - type: textarea
+    id: issue
     attributes:
-      label: Section or commitment
-      placeholder: "Example: Student data trust"
+      label: Campus AI governance issue
+      description: What student, worker, faculty, data, authorship, surveillance, procurement, or appeal-rights concern should be addressed?
     validations:
       required: true
   - type: textarea
-    id: concern
+    id: affected-party
     attributes:
-      label: Concern
-      description: What is missing, weak, unclear, or risky for students, faculty, or campus workers?
+      label: Affected parties
+      description: Who is affected by this issue?
+      placeholder: "Students, faculty, campus workers, advisors, applicants, community partners..."
     validations:
-      required: true
-  - type: dropdown
-    id: affected_group
-    attributes:
-      label: Most affected group
-      options:
-        - Students
-        - Graduate workers
-        - Faculty
-        - Campus staff
-        - Student government
-        - Accessibility communities
-        - Privacy / data governance teams
-        - Other
-    validations:
-      required: true
+      required: false
   - type: textarea
-    id: proposed_change
+    id: proposed-rule
     attributes:
-      label: Proposed change
-      description: Suggest wording, a new right, a governance requirement, or a no-go condition.
+      label: Proposed compact rule or safeguard
+      description: What should the Campus Common Ground Compact require, prohibit, disclose, or govern?
     validations:
-      required: true
+      required: false
   - type: textarea
     id: evidence
     attributes:
-      label: Evidence or examples
-      description: Optional links, examples, policies, or lived experience.
+      label: Evidence or example
+      description: Share a public example, policy precedent, or practical concern. Do not include private student or worker records.
     validations:
       required: false
   - type: checkboxes
-    id: notice
+    id: boundaries
     attributes:
-      label: Contribution notice
+      label: Public-review boundaries
       options:
-        - label: I am not submitting confidential, private, restricted, or personal data.
+        - label: This issue does not include confidential, restricted, personal, student, worker, or private data.
           required: true
-        - label: My review does not imply endorsement, certification, partnership, or approval.
+        - label: This issue does not imply endorsement, partnership, certification, or official status.
           required: true
-

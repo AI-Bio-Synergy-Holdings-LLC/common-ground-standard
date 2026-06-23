@@ -74,12 +74,14 @@ Please review the drafts and identify:
 
 - Read [Review Process](REVIEW_PROCESS.md)
 - Read [Contributing](CONTRIBUTING.md)
+- Read [Code of Conduct](CODE_OF_CONDUCT.md)
 - Open a structured issue using one of the templates:
   - Standard feedback
   - Anti-capture risk
   - Campus Compact feedback
   - AI Benefit Clause feedback
   - Evidence requirement
+  - General public review
 
 ## Notice
 
@@ -91,3 +93,4 @@ See:
 - [License and Trademark Notice](LICENSE-NOTICE.md)
 - [Funding and Stewardship Readiness](FUNDING_AND_STEWARDSHIP_READINESS.md)
 - [Public Exposure Register](PUBLIC_EXPOSURE_REGISTER.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)

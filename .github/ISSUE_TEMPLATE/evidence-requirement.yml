@@ -1,51 +1,42 @@
 name: Evidence requirement
-description: Propose a required metric, receipt, audit item, or public evidence threshold.
-title: "[Evidence] "
-labels: ["evidence", "review"]
+description: Propose evidence thresholds, public receipts, auditability, or no-go triggers.
+title: "[Evidence requirement]: "
+labels: ["evidence", "public-review"]
 body:
-  - type: input
+  - type: textarea
     id: claim
     attributes:
-      label: Claim or requirement
-      description: What claim should require evidence?
-      placeholder: "Example: No net retail-bill harm"
+      label: Claim or decision that needs evidence
+      description: What public-benefit, alignment, implementation, or scaling claim should require proof?
     validations:
       required: true
   - type: textarea
-    id: required_evidence
+    id: evidence-required
     attributes:
-      label: Required evidence
-      description: What metric, baseline, document, dashboard item, audit, or receipt should be required?
-    validations:
-      required: true
-  - type: dropdown
-    id: proof_stage
-    attributes:
-      label: Required before
-      options:
-        - Public alignment claim
-        - Pilot launch
-        - Foundation or agency submission
-        - Industry outreach
-        - Certification
-        - Public dashboard
-        - Other
+      label: Minimum evidence required
+      description: What should be measured, disclosed, audited, or published before the claim is made?
     validations:
       required: true
   - type: textarea
-    id: rationale
+    id: no-go
     attributes:
-      label: Rationale
-      description: Why is this evidence necessary?
+      label: No-go or pause condition
+      description: What condition should pause, redesign, or reject a deployment, pilot, infrastructure project, or claim?
     validations:
-      required: true
+      required: false
+  - type: textarea
+    id: audit
+    attributes:
+      label: Audit or review pathway
+      description: Who can credibly review the evidence, and what should remain public, controlled, confidential, or restricted?
+    validations:
+      required: false
   - type: checkboxes
-    id: notice
+    id: boundaries
     attributes:
-      label: Contribution notice
+      label: Public-review boundaries
       options:
-        - label: I am not submitting confidential, private, restricted, or personal data.
+        - label: This issue does not include confidential, restricted, personal, or private data.
           required: true
-        - label: My review does not imply endorsement, certification, partnership, or approval.
+        - label: This issue does not imply endorsement, partnership, certification, or official status.
           required: true
-
