@@ -163,7 +163,7 @@ figure:last-child {
   max-width: 720px;
   margin-bottom: 24px;
   color: var(--ink);
-  font-size: clamp(64px, 5.2vw, 74px);
+  font-size: clamp(58px, 4.4vw, 64px);
   font-weight: 840;
   line-height: 0.98;
   letter-spacing: 0;
@@ -174,7 +174,7 @@ figure:last-child {
 }
 
 .hero h1 span:first-child {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hero-lede {
@@ -736,6 +736,27 @@ figure:last-child {
   border-color: var(--teal);
   color: var(--ink);
   outline: 0;
+}
+
+@media (min-width: 1620px) {
+  .hero {
+    width: min(1760px, calc(100% - 176px));
+    grid-template-columns: minmax(620px, 0.9fr) minmax(720px, 1.1fr);
+    gap: 44px;
+  }
+
+  .hero-copy {
+    max-width: 760px;
+  }
+
+  .hero h1 {
+    max-width: 760px;
+    font-size: clamp(64px, 3.6vw, 72px);
+  }
+
+  .hero-map {
+    max-width: 900px;
+  }
 }
 
 @media (max-width: 1220px) {
