@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Common Ground Standard">
+  <rect width="64" height="64" rx="14" fill="#f7fbfb" />
+  <path d="M21 12h22l9 9v22l-9 9H21l-9-9V21z" fill="none" stroke="#006b7d" stroke-width="4" />
+  <circle cx="32" cy="32" r="6" fill="none" stroke="#006b7d" stroke-width="4" />
+  <path d="M32 16v10M32 38v10M16 32h10M38 32h10" stroke="#64b4bf" stroke-width="4" stroke-linecap="round" />
+</svg>
