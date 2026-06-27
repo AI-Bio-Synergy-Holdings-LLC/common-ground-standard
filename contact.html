@@ -57,8 +57,8 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260626-contact" />
-    <script defer src="site.js?v=20260626-contact"></script>
+    <link rel="stylesheet" href="styles.css?v=20260627-formspree" />
+    <script defer src="site.js?v=20260627-formspree"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -112,11 +112,10 @@
         </div>
 
         <form
+          id="contact-form"
           class="contact-form"
           action="https://formspree.io/f/mykqwozd"
           method="POST"
-          data-contact-form
-          data-success-url="contact-thank-you.html"
           aria-describedby="contact-boundary"
         >
           <input type="hidden" name="_subject" value="Common Ground Standard public contact inquiry" />
@@ -127,24 +126,27 @@
           </label>
 
           <div class="form-row">
-            <label class="form-field">
+            <label class="form-field" for="contact-name">
               <span>Name</span>
-              <input type="text" name="name" autocomplete="name" required />
+              <input id="contact-name" type="text" name="name" autocomplete="name" required data-fs-field />
+              <span class="field-error" data-fs-error="name"></span>
             </label>
-            <label class="form-field">
+            <label class="form-field" for="contact-email">
               <span>Email</span>
-              <input type="email" name="email" autocomplete="email" required />
+              <input id="contact-email" type="email" name="email" autocomplete="email" required data-fs-field />
+              <span class="field-error" data-fs-error="email"></span>
             </label>
           </div>
 
-          <label class="form-field">
+          <label class="form-field" for="contact-organization">
             <span>Organization or role <em>optional</em></span>
-            <input type="text" name="organization_or_role" autocomplete="organization" />
+            <input id="contact-organization" type="text" name="organization_or_role" autocomplete="organization" data-fs-field />
+            <span class="field-error" data-fs-error="organization_or_role"></span>
           </label>
 
-          <label class="form-field">
+          <label class="form-field" for="contact-inquiry-type">
             <span>Inquiry type</span>
-            <select name="inquiry_type" required>
+            <select id="contact-inquiry-type" name="inquiry_type" required data-fs-field>
               <option value="">Select one</option>
               <option value="Reviewer inquiry">Reviewer inquiry</option>
               <option value="Institutional review">Institutional review</option>
@@ -153,20 +155,25 @@
               <option value="Press or media">Press or media</option>
               <option value="Other bounded inquiry">Other bounded inquiry</option>
             </select>
+            <span class="field-error" data-fs-error="inquiry_type"></span>
           </label>
 
-          <label class="form-field">
+          <label class="form-field" for="contact-message">
             <span>Message</span>
-            <textarea name="message" rows="7" minlength="20" required></textarea>
+            <textarea id="contact-message" name="message" rows="7" minlength="20" required data-fs-field></textarea>
+            <span class="field-error" data-fs-error="message"></span>
           </label>
 
-          <label class="checkbox-field">
-            <input type="checkbox" name="boundary_acknowledgement" value="Acknowledged" required />
+          <label class="checkbox-field" for="contact-boundary-acknowledgement">
+            <input id="contact-boundary-acknowledgement" type="checkbox" name="boundary_acknowledgement" value="Acknowledged" required data-fs-field />
             <span>I understand this form is not for confidential submissions, endorsement requests, certification claims, funding commitments, or protected materials.</span>
           </label>
+          <span class="field-error" data-fs-error="boundary_acknowledgement"></span>
 
-          <button class="button button-primary" type="submit">Send Inquiry</button>
-          <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+          <div class="form-feedback form-success" role="status" aria-live="polite" data-fs-success></div>
+          <div class="form-feedback form-error" role="alert" data-fs-error></div>
+
+          <button class="button button-primary" type="submit" data-fs-submit-btn>Send Inquiry</button>
         </form>
       </section>
     </main>
@@ -179,5 +186,10 @@
         <a href="contact.html">Contact</a>
       </nav>
     </footer>
+    <script>
+      window.formspree = window.formspree || function () { (window.formspree.q = window.formspree.q || []).push(arguments); };
+      window.formspree("initForm", { formElement: "#contact-form", formId: "mykqwozd" });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
   </body>
 </html>

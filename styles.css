@@ -849,6 +849,12 @@ figure:last-child {
   outline: 3px solid rgba(0, 107, 125, 0.16);
 }
 
+.form-field input[aria-invalid="true"],
+.form-field select[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
+  border-color: #9c2f2f;
+}
+
 .checkbox-field {
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr);
@@ -867,11 +873,40 @@ figure:last-child {
   width: fit-content;
 }
 
-.form-status {
+.form-status,
+.form-feedback {
   min-height: 24px;
   margin: 0;
   color: var(--teal-dark);
   font-weight: 720;
+}
+
+.form-feedback:empty,
+.field-error:empty {
+  display: none;
+}
+
+.form-success:not(:empty) {
+  border: 1px solid #badfca;
+  border-radius: 4px;
+  background: #f2faf5;
+  padding: 12px 14px;
+  color: #14512b;
+}
+
+.form-error:not(:empty),
+.field-error:not(:empty) {
+  color: #8a1f1f;
+}
+
+.field-error {
+  font-size: 14px;
+  font-weight: 720;
+}
+
+.contact-form button[disabled] {
+  cursor: progress;
+  opacity: 0.68;
 }
 
 .form-honeypot {
