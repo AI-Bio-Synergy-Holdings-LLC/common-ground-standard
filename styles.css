@@ -908,9 +908,8 @@ figure:last-child {
 }
 
 .grecaptcha-badge {
-  right: 12px !important;
-  bottom: 12px !important;
-  z-index: 20;
+  right: 0 !important;
+  visibility: hidden;
 }
 
 .form-feedback:empty,
@@ -1210,10 +1209,6 @@ figure:last-child {
     max-width: 100%;
   }
 
-  .grecaptcha-badge {
-    transform: scale(0.78);
-    transform-origin: bottom right;
-  }
 }
 @media (max-width: 360px) {
   .hero h1 {
