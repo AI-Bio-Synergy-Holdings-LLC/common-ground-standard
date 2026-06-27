@@ -275,6 +275,7 @@ figure:last-child {
 .brief-section,
 .guide-grid,
 .channels-section,
+.contact-section,
 .site-footer {
   width: min(var(--content), calc(100% - 64px));
   margin: 0 auto;
@@ -346,7 +347,8 @@ figure:last-child {
 .review-section,
 .brief-section,
 .guide-grid,
-.channels-section {
+.channels-section,
+.contact-section {
   padding: 64px 0;
   border-bottom: 1px solid var(--line);
 }
@@ -738,6 +740,148 @@ figure:last-child {
   outline: 0;
 }
 
+.contact-section {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(440px, 1fr);
+  gap: 58px;
+  align-items: start;
+}
+
+.contact-copy h2,
+.contact-direct h3 {
+  color: var(--ink);
+  font-weight: 820;
+  letter-spacing: 0;
+}
+
+.contact-copy h2 {
+  margin-bottom: 14px;
+  font-size: 38px;
+  line-height: 1.08;
+}
+
+.contact-copy p {
+  color: var(--text);
+}
+
+.contact-direct {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+  border-left: 3px solid var(--teal);
+  padding-left: 18px;
+}
+
+.contact-direct h3 {
+  margin: 0 0 2px;
+  font-size: 20px;
+}
+
+.contact-direct a,
+.notice-section a:not(.text-link) {
+  color: var(--teal-dark);
+  font-weight: 760;
+  overflow-wrap: anywhere;
+}
+
+.contact-direct a:hover,
+.contact-direct a:focus-visible,
+.notice-section a:not(.text-link):hover,
+.notice-section a:not(.text-link):focus-visible {
+  color: var(--ink);
+  outline: 0;
+}
+
+.contact-form {
+  display: grid;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field span,
+.checkbox-field span {
+  color: var(--ink);
+  font-weight: 730;
+}
+
+.form-field em {
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 620;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px 13px;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.4;
+}
+
+.form-field textarea {
+  min-height: 174px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.checkbox-field input:focus-visible {
+  border-color: var(--teal);
+  outline: 3px solid rgba(0, 107, 125, 0.16);
+}
+
+.checkbox-field {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.checkbox-field input {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  accent-color: var(--teal);
+}
+
+.contact-form .button {
+  width: fit-content;
+}
+
+.form-status {
+  min-height: 24px;
+  margin: 0;
+  color: var(--teal-dark);
+  font-weight: 720;
+}
+
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 @media (min-width: 1620px) {
   .hero {
     width: min(1760px, calc(100% - 176px));
@@ -796,7 +940,8 @@ figure:last-child {
   .section-heading,
   .review-section,
   .page-hero,
-  .channels-section {
+  .channels-section,
+  .contact-section {
     grid-template-columns: 1fr;
   }
 
@@ -854,6 +999,7 @@ figure:last-child {
   .brief-section,
   .guide-grid,
   .channels-section,
+  .contact-section,
   .site-footer {
     width: min(var(--content), calc(100% - 44px));
   }
@@ -906,10 +1052,15 @@ figure:last-child {
     padding: 42px 0;
   }
 
+  .contact-section {
+    padding: 42px 0;
+  }
+
   .status-facts,
   .loop-grid,
   .brief-grid,
   .guide-grid,
+  .form-row,
   .brief-lede,
   .notice-section {
     grid-template-columns: 1fr;
@@ -922,6 +1073,7 @@ figure:last-child {
 
   .section-heading h2,
   .review-copy h2,
+  .contact-copy h2,
   .brief-lede h2,
   .guide-intro h2,
   .channels-section h2 {
@@ -968,6 +1120,14 @@ figure:last-child {
 
   .footer-links {
     justify-content: flex-start;
+  }
+
+  .contact-form {
+    padding: 20px;
+  }
+
+  .contact-form .button {
+    width: 100%;
   }
 }
 @media (max-width: 360px) {
