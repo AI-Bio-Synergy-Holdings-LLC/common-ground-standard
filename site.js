@@ -24,6 +24,88 @@
 
   window.addEventListener("pageshow", markLoaded);
 
+  const initRecaptchaForms = () => {
+    document.querySelectorAll("form[data-recaptcha-site-key]").forEach((form) => {
+      if (form.dataset.recaptchaBound === "true") return;
+
+      form.dataset.recaptchaBound = "true";
+
+      const siteKey = form.dataset.recaptchaSiteKey;
+      const action = form.dataset.recaptchaAction || "submit";
+      const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
+      const submitButton = form.querySelector("[data-fs-submit-btn]");
+      const formError = form.querySelector(".form-feedback[data-fs-error]");
+
+      const showError = (message) => {
+        if (formError) formError.textContent = message;
+      };
+
+      const clearError = () => {
+        if (formError) formError.textContent = "";
+      };
+
+      const setBusy = (busy) => {
+        if (!submitButton) return;
+        submitButton.disabled = busy;
+        submitButton.setAttribute("aria-busy", busy ? "true" : "false");
+      };
+
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (form.dataset.recaptchaTokenReady === "true") {
+            form.dataset.recaptchaTokenReady = "submitting";
+            window.setTimeout(() => {
+              if (form.dataset.recaptchaTokenReady === "submitting") {
+                delete form.dataset.recaptchaTokenReady;
+              }
+              if (tokenInput) tokenInput.value = "";
+            }, 5000);
+            return;
+          }
+
+          if (!siteKey || !tokenInput) return;
+
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          clearError();
+
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          if (!window.grecaptcha || typeof window.grecaptcha.ready !== "function") {
+            showError("Verification is still loading. Please wait a moment and try again.");
+            return;
+          }
+
+          setBusy(true);
+          window.grecaptcha.ready(() => {
+            window.grecaptcha
+              .execute(siteKey, { action })
+              .then((token) => {
+                tokenInput.value = token;
+                form.dataset.recaptchaTokenReady = "true";
+                form.requestSubmit();
+              })
+              .catch(() => {
+                showError("Verification could not be completed. Please reload the page and try again.");
+              })
+              .finally(() => setBusy(false));
+          });
+        },
+        true,
+      );
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initRecaptchaForms, { once: true });
+  } else {
+    initRecaptchaForms();
+  }
+
   const prefetch = (anchor) => {
     const url = sameOriginHtml(anchor);
     if (!url || document.head.querySelector(`link[rel="prefetch"][href="${url.href}"]`)) return;

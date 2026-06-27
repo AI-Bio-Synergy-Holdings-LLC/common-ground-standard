@@ -887,6 +887,32 @@ figure:last-child {
   font-weight: 720;
 }
 
+.form-disclosure {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.form-disclosure a {
+  color: var(--teal-dark);
+  font-weight: 760;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.form-disclosure a:hover,
+.form-disclosure a:focus-visible {
+  color: var(--ink);
+  outline: 0;
+}
+
+.grecaptcha-badge {
+  right: 12px !important;
+  bottom: 12px !important;
+  z-index: 20;
+}
+
 .form-feedback:empty,
 .field-error:empty {
   display: none;
@@ -1182,6 +1208,11 @@ figure:last-child {
   .contact-direct a {
     display: block;
     max-width: 100%;
+  }
+
+  .grecaptcha-badge {
+    transform: scale(0.78);
+    transform-origin: bottom right;
   }
 }
 @media (max-width: 360px) {

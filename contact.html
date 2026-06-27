@@ -40,7 +40,7 @@
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
       "datePublished": "2026-06-26",
-      "dateModified": "2026-06-26",
+      "dateModified": "2026-06-27",
       "image": "https://common-ground-standard.org/assets/social-preview.png",
       "isPartOf": {
             "@type": "WebSite",
@@ -57,8 +57,9 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260627-contact-responsive" />
-    <script defer src="site.js?v=20260627-formspree"></script>
+    <link rel="stylesheet" href="styles.css?v=20260627-recaptcha" />
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA" async defer></script>
+    <script defer src="site.js?v=20260627-recaptcha"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -117,9 +118,12 @@
           action="https://formspree.io/f/mykqwozd"
           method="POST"
           aria-describedby="contact-boundary"
+          data-recaptcha-site-key="6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"
+          data-recaptcha-action="contact_submit"
         >
           <input type="hidden" name="subject" value="Common Ground Standard public contact inquiry" />
           <input type="hidden" name="source_page" value="https://common-ground-standard.org/contact.html" />
+          <input type="hidden" name="g-recaptcha-response" data-recaptcha-response />
           <label class="form-honeypot">
             Leave this field empty
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
@@ -174,6 +178,11 @@
           <div class="form-feedback form-error" role="alert" data-fs-error></div>
 
           <button class="button button-primary" type="submit" data-fs-submit-btn>Send Inquiry</button>
+          <p class="form-disclosure">
+            This form is protected by Google reCAPTCHA. Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+          </p>
         </form>
       </section>
     </main>
