@@ -747,6 +747,11 @@ figure:last-child {
   align-items: start;
 }
 
+.contact-copy,
+.contact-form {
+  min-width: 0;
+}
+
 .contact-copy h2,
 .contact-direct h3 {
   color: var(--ink);
@@ -782,6 +787,7 @@ figure:last-child {
   color: var(--teal-dark);
   font-weight: 760;
   overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .contact-direct a:hover,
@@ -1020,8 +1026,16 @@ figure:last-child {
   }
 
   .site-nav {
+    flex-wrap: wrap;
     gap: 18px;
     font-size: 14px;
+    max-width: 100%;
+    overflow-x: visible;
+    white-space: normal;
+  }
+
+  .site-nav a {
+    flex: 0 0 auto;
   }
 
   .hero,
@@ -1112,7 +1126,7 @@ figure:last-child {
   .brief-lede h2,
   .guide-intro h2,
   .channels-section h2 {
-    font-size: 31px;
+    font-size: 30px;
     line-height: 1.12;
   }
 
@@ -1164,6 +1178,11 @@ figure:last-child {
   .contact-form .button {
     width: 100%;
   }
+
+  .contact-direct a {
+    display: block;
+    max-width: 100%;
+  }
 }
 @media (max-width: 360px) {
   .hero h1 {
@@ -1172,6 +1191,10 @@ figure:last-child {
 
   .hero h1 span:first-child {
     white-space: normal;
+  }
+
+  .contact-copy h2 {
+    font-size: 28px;
   }
 }
 
