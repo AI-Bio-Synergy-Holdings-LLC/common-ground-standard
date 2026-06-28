@@ -40,7 +40,7 @@
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
       "datePublished": "2026-06-26",
-      "dateModified": "2026-06-27",
+      "dateModified": "2026-06-28",
       "image": "https://common-ground-standard.org/assets/social-preview.png",
       "isPartOf": {
             "@type": "WebSite",
@@ -197,7 +197,13 @@
     </footer>
     <script>
       window.formspree = window.formspree || function () { (window.formspree.q = window.formspree.q || []).push(arguments); };
-      window.formspree("initForm", { formElement: "#contact-form", formId: "mykqwozd" });
+      window.formspree("initForm", {
+        formElement: "#contact-form",
+        formId: "mykqwozd",
+        onSuccess: () => {
+          window.location.assign(new URL("contact-thank-you.html", window.location.href).href);
+        },
+      });
     </script>
     <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
   </body>
