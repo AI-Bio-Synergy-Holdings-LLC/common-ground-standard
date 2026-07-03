@@ -1,11 +1,13 @@
 # Funding And Stewardship Readiness
 
 Status: Public boundary document
-Date: June 21, 2026
+Date: July 3, 2026
 
 ## Current Position
 
 The Common Ground Standard is a public-review draft incubated by AI-Bio Synergy Holdings LLC.
+
+The public review front door is https://common-ground-standard.org. The GitHub repository is the source record for drafts, issues, pull requests, and change history.
 
 AI-Bio Synergy Holdings LLC may act as founder steward, IP steward, domain administrator, repository administrator, and temporary project incubator during the public-review phase.
 
@@ -39,6 +41,8 @@ This public-review posture does not claim that AI-Bio Synergy Holdings LLC is:
 - a certification authority;
 - a neutral public governance board;
 - a representative body for affected communities, students, workers, tribes, agencies, universities, foundations, or industry actors.
+
+It also does not grant external access to private repositories, data rooms, technical annexes, legal materials, partner materials, certification materials, or restricted records.
 
 ## Target Structure
 

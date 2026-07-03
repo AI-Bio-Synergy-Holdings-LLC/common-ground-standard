@@ -1,7 +1,7 @@
 # Public Exposure Register
 
 Status: Public exposure-control register
-Date: June 21, 2026
+Date: July 3, 2026
 
 ## Purpose
 
@@ -16,6 +16,8 @@ Use "Common Ground Standard" as the public-facing subject of this repository and
 Use AI-Bio Synergy Holdings LLC only for stewardship, security, license, and funding-boundary context.
 
 Do not use protected or future-facing names in narrative, outreach, roadmap, or review-brief language unless a later founder/legal review explicitly approves that use.
+
+Public-facing review should describe common-ground-standard.org as the review front door and the GitHub repository as the source record for drafts, issues, pull requests, and change history.
 
 ## Public Exposure Decisions
 
@@ -37,6 +39,7 @@ Do not use protected or future-facing names in narrative, outreach, roadmap, or 
 These uses are approved during the current public-review phase:
 
 - review brief and website: Common Ground Standard;
+- public review routing: common-ground-standard.org as front door, GitHub as source record;
 - origin and stewardship: AI-Bio Synergy Holdings LLC;
 - draft names: Campus Common Ground Compact and AI Dividend / Benefit Clause;
 - legal and trademark notices: controlled names and marks, only as protective reservations;
@@ -75,3 +78,4 @@ Review this register before:
 - adding marks to the website navigation;
 - publishing outreach messages;
 - creating certification or conformance language.
+- offering deeper institutional review beyond the public website and repository.

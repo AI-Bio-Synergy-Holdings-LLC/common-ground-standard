@@ -343,6 +343,7 @@ figure:last-child {
 }
 
 .evidence-section,
+.surface-section,
 .drafts-section,
 .review-section,
 .brief-section,
@@ -390,6 +391,39 @@ figure:last-child {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+}
+
+.surface-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.surface-card {
+  min-height: 252px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 24px;
+}
+
+.surface-card span {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 830;
+}
+
+.surface-card h3 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.18;
+}
+
+.surface-card p {
+  color: var(--text);
 }
 
 .loop-step {
@@ -1027,6 +1061,7 @@ figure:last-child {
 
   .status-facts,
   .loop-grid,
+  .surface-grid,
   .brief-grid,
   .guide-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1132,6 +1167,7 @@ figure:last-child {
 
   .status-facts,
   .loop-grid,
+  .surface-grid,
   .brief-grid,
   .guide-grid,
   .form-row,
