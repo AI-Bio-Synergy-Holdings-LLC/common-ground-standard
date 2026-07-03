@@ -1,7 +1,7 @@
 # License and Trademark Notice
 
 Status: Plain-English notice
-Date: June 13, 2026
+Date: July 3, 2026
 
 ## Copyright License
 
@@ -52,9 +52,14 @@ This repository does not grant access to student, worker, community, tribal, eco
 
 This repository does not authorize model training on protected materials or data unless a separate written permission says so.
 
+## No Private Access By Default
+
+The default public review surface is common-ground-standard.org and this public repository.
+
+Public review, issue participation, contact-form submission, or contribution does not grant access to private repositories, data rooms, technical annexes, partner materials, legal materials, certification materials, restricted records, or confidential materials.
+
 ## Contributions
 
 By submitting a contribution to this repository, you agree that your contribution may be licensed under Apache-2.0 unless you clearly mark it otherwise before submission.
 
 Do not submit confidential information, restricted data, trade secrets, private partner information, personal data, or materials you do not have permission to contribute.
-

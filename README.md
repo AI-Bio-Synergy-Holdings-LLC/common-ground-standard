@@ -2,7 +2,9 @@
 
 Public review drafts for responsible AI infrastructure, campus AI governance, AI benefit clauses, evidence methods, and anti-capture safeguards.
 
-Public site: https://common-ground-standard.org
+Public review front door: https://common-ground-standard.org
+
+Source repository and public issue review: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
 
 Stewardship and funding posture: [FUNDING_AND_STEWARDSHIP_READINESS.md](FUNDING_AND_STEWARDSHIP_READINESS.md)
 
@@ -10,7 +12,9 @@ Stewardship and funding posture: [FUNDING_AND_STEWARDSHIP_READINESS.md](FUNDING_
 
 The Common Ground Standard is a public-interest standards effort for making AI deployment and AI-enabling infrastructure prove measurable human, community, worker, student, and ecological benefit.
 
-This repository is a public review surface. It is meant for critique before broader outreach to foundations, agencies, AI companies, infrastructure operators, or data-center actors.
+This repository is the public source record for the Common Ground Standard review surface. The website is the front door; this repository holds the source drafts, issue review, pull requests, and public change history.
+
+It is meant for critique before broader outreach to foundations, agencies, AI companies, infrastructure operators, or data-center actors.
 
 ## Public Doctrine
 
@@ -51,6 +55,7 @@ This project is not yet:
 - claiming active pilots unless separately documented;
 - claiming agency, foundation, university, tribal, community, or company partnership;
 - accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar funding channel.
+- granting private repository, data-room, technical-annex, legal, partner, or certification materials by default.
 
 ## Stewardship And Funding Posture
 
@@ -72,6 +77,7 @@ Please review the drafts and identify:
 
 ## How To Review
 
+- Start with the public site: https://common-ground-standard.org
 - Read [Review Process](REVIEW_PROCESS.md)
 - Read [Contributing](CONTRIBUTING.md)
 - Read [Code of Conduct](CODE_OF_CONDUCT.md)
@@ -86,6 +92,8 @@ Please review the drafts and identify:
 ## Notice
 
 Reviewing this repository does not create endorsement, partnership, certification, ownership transfer, data access, model-training rights, or permission to use marks.
+
+Requests for longer-form or institutional review may be considered case by case. They do not create access to confidential, restricted, data-room, legal, technical, partner, or certification materials.
 
 See:
 

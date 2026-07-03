@@ -2,6 +2,7 @@
 
 Status: Sanitized public-review draft
 Date: June 13, 2026
+Public surface refreshed: July 3, 2026
 
 ## Incubation And Funding Boundary
 
@@ -35,7 +36,12 @@ Certification, if developed later, will require evidence, governance, audit logs
 
 No reviewer, institution, foundation, agency, company, community, tribe, student group, or public-interest organization may be described as a partner, supporter, or endorser unless they give explicit written permission.
 
+## No Deeper Access By Default
+
+The default review surface is common-ground-standard.org and this public repository.
+
+Public review does not grant access to private repositories, data rooms, technical annexes, partner materials, legal materials, certification materials, restricted records, or confidential materials.
+
 ## Intended Use
 
 This packet is intended for critique, public-interest review, standards hardening, and anti-capture feedback before broader outreach.
-

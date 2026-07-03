@@ -2,6 +2,7 @@
 
 Status: Public review workflow
 Date: June 13, 2026
+Public surface refreshed: July 3, 2026
 
 ## Purpose
 
@@ -27,9 +28,10 @@ Priority reviewers include:
 
 | Mode | Best for |
 | --- | --- |
+| Public website | orientation, review brief, draft map, stewardship boundary, and contact route |
 | GitHub issue | specific clause critique, missing safeguard, evidence requirement, capture risk |
 | Pull request | precise wording edit or structural change |
-| External memo | longer institutional review or coalition feedback |
+| Contact form or external memo | longer institutional review or coalition feedback, without confidential or restricted material |
 
 ## Triage Labels
 
@@ -93,3 +95,8 @@ The review phase should produce:
 - reviewer-informed no-go terms;
 - minimum evidence requirements before any alignment claim.
 
+## Deeper Review Boundary
+
+The default review surface is public: common-ground-standard.org plus this repository.
+
+Longer-form or institutional review requests may be considered case by case, but public review does not grant access to private repositories, data rooms, technical annexes, legal materials, partner materials, certification materials, or restricted records.

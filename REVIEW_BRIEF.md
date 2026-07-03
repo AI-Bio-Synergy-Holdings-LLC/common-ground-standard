@@ -2,6 +2,7 @@
 
 Status: Sanitized public-review draft
 Date: June 13, 2026
+Public surface refreshed: July 3, 2026
 
 ## One-Sentence Thesis
 
@@ -11,7 +12,9 @@ The Common Ground Standard is a public-review draft and evidence framework for m
 
 The Common Ground Standard is incubated by AI-Bio Synergy Holdings LLC during public review while independent governance and fiscal pathways are evaluated.
 
-This public review is being conducted through the common-ground-standard repository and common-ground-standard.org. It is not a partnership request, funding request, pilot request, certification process, or endorsement request.
+This public review is being conducted through common-ground-standard.org and the common-ground-standard repository. The website is the public review front door; the repository is the source record for drafts, issues, pull requests, and change history.
+
+It is not a partnership request, funding request, pilot request, certification process, public sign-on, petition, or endorsement request.
 
 ## Why This Review Comes First
 
@@ -63,6 +66,13 @@ The Common Ground Standard is not yet:
 - endorsed by reviewers;
 - claiming active pilots unless separately documented;
 - asking reviewers to endorse future partners.
+- granting private repository, data-room, technical-annex, legal, partner, or certification materials by default.
+
+## Deeper Review Boundary
+
+Longer-form or institutional review may be considered case by case, but the default public review surface remains the website and public repository.
+
+Requests for deeper review do not create access to confidential, restricted, data-room, technical, partner, legal, or certification materials unless separately approved in writing.
 
 ## Review Outcome Desired
 
