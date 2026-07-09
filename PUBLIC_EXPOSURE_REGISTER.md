@@ -1,7 +1,7 @@
 # Public Exposure Register
 
 Status: Public exposure-control register
-Date: July 3, 2026
+Date: July 8, 2026
 
 ## Purpose
 
@@ -66,6 +66,8 @@ The first public ambiguity sweep removed Pivot from front-door review language a
 The roadmap should describe future capabilities generically unless a name is already part of the public review packet. For example, "evidence tooling" is safer than naming a future tool.
 
 The public notice should avoid repeating protected internal names where a cross-reference to the license and trademark notice is enough.
+
+The July 8, 2026 reviewer-readiness refresh added fast-review prompts and a 10-minute review path without adding new protected internal framework names, deeper Pivot architecture, private-access links, partner strategy, or pilot claims.
 
 ## Review Triggers
 

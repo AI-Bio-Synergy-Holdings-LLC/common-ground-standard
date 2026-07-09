@@ -78,6 +78,10 @@ Please review the drafts and identify:
 ## How To Review
 
 - Start with the public site: https://common-ground-standard.org
+- For a fast first pass, use the 10-minute review path:
+  1. read the public review frame;
+  2. pick one draft or risk area;
+  3. flag the sharpest critique through a structured issue or bounded contact note.
 - Read [Review Process](REVIEW_PROCESS.md)
 - Read [Contributing](CONTRIBUTING.md)
 - Read [Code of Conduct](CODE_OF_CONDUCT.md)
@@ -88,6 +92,13 @@ Please review the drafts and identify:
   - AI Benefit Clause feedback
   - Evidence requirement
   - General public review
+
+High-value review prompts:
+
+- What potential risks should be flagged as possible reputation cover for AI or infrastructure actors?
+- What minimum evidence should be required before any actor can claim alignment?
+- What should be published so benefit sharing is reviewable by affected people?
+- What ecological condition should trigger pause, redesign, rejection, or remedy?
 
 ## Notice
 

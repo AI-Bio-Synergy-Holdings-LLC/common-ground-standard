@@ -2,7 +2,7 @@
 
 Status: Sanitized public-review draft
 Date: June 13, 2026
-Public surface refreshed: July 3, 2026
+Public surface refreshed: July 8, 2026
 
 ## One-Sentence Thesis
 
@@ -40,6 +40,21 @@ The Common Ground Standard should not be taken to major AI or infrastructure act
 | Common Ground Standard for Responsible AI Infrastructure | What must AI infrastructure prove before it can claim public-interest legitimacy? |
 | Campus Common Ground Compact | What rights and governance should students, faculty, and campus workers have around AI adoption? |
 | AI Dividend / Benefit Clause | How should verified AI productivity gains become visible shared benefit? |
+
+## Fast Review Path
+
+A useful first pass can take about ten minutes:
+
+1. read the public review frame and boundaries;
+2. pick one draft or risk area;
+3. flag the sharpest critique through a structured issue or bounded contact note.
+
+High-value prompts:
+
+- What potential risks should be flagged as possible reputation cover for AI or infrastructure actors?
+- What minimum evidence should be required before any actor can claim alignment?
+- What should be published so benefit sharing is reviewable by affected people?
+- What ecological condition should trigger pause, redesign, rejection, or remedy?
 
 ## Operating Loop
 
