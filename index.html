@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Common Ground Standard | Public Review Draft</title>
     <meta name="description" content="Public-review draft for responsible AI infrastructure, campus AI governance, AI benefit-sharing safeguards, evidence requirements, and anti-capture review." />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="author" content="Common Ground Standard" />
     <meta name="application-name" content="Common Ground Standard" />
     <meta name="theme-color" content="#006b7d" />
@@ -31,21 +31,75 @@
     <script type="application/ld+json">
 {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": "https://common-ground-standard.org/#website",
-      "name": "Common Ground Standard",
-      "url": "https://common-ground-standard.org/",
-      "description": "Public-review draft for responsible AI infrastructure, campus AI governance, AI benefit-sharing safeguards, evidence requirements, and anti-capture review.",
-      "inLanguage": "en-US",
-      "isAccessibleForFree": true,
-      "dateModified": "2026-07-03",
-      "image": "https://common-ground-standard.org/assets/social-preview.png",
-      "publisher": {
-            "@type": "Organization",
-            "@id": "https://common-ground-standard.org/#organization",
-            "name": "Common Ground Standard",
-            "url": "https://common-ground-standard.org/"
-      }
+      "@graph": [
+            {
+                  "@type": "WebSite",
+                  "@id": "https://common-ground-standard.org/#website",
+                  "name": "Common Ground Standard",
+                  "url": "https://common-ground-standard.org/",
+                  "description": "Public-review draft for responsible AI infrastructure, campus AI governance, AI benefit-sharing safeguards, evidence requirements, and anti-capture review.",
+                  "inLanguage": "en-US",
+                  "isAccessibleForFree": true,
+                  "dateModified": "2026-07-09",
+                  "image": "https://common-ground-standard.org/assets/social-preview.png",
+                  "publisher": {
+                        "@id": "https://common-ground-standard.org/#steward"
+                  },
+                  "potentialAction": [
+                        {
+                              "@type": "ReadAction",
+                              "name": "Read the public review brief",
+                              "target": "https://common-ground-standard.org/review.html"
+                        },
+                        {
+                              "@type": "ReadAction",
+                              "name": "Review the public drafts",
+                              "target": "https://common-ground-standard.org/drafts.html"
+                        }
+                  ]
+            },
+            {
+                  "@type": "CreativeWork",
+                  "@id": "https://common-ground-standard.org/#standard",
+                  "name": "Common Ground Standard",
+                  "alternateName": "CGS",
+                  "url": "https://common-ground-standard.org/",
+                  "description": "A public-review draft and evidence framework for responsible AI infrastructure, campus AI governance, AI benefit-sharing safeguards, and anti-capture review.",
+                  "inLanguage": "en-US",
+                  "isAccessibleForFree": true,
+                  "datePublished": "2026-06-13",
+                  "dateModified": "2026-07-09",
+                  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+                  "image": "https://common-ground-standard.org/assets/social-preview.png",
+                  "keywords": [
+                        "responsible AI infrastructure",
+                        "campus AI governance",
+                        "AI benefit sharing",
+                        "public benefit evidence",
+                        "AI accountability",
+                        "anti-capture review"
+                  ],
+                  "creator": {
+                        "@id": "https://common-ground-standard.org/#steward"
+                  },
+                  "publisher": {
+                        "@id": "https://common-ground-standard.org/#steward"
+                  }
+            },
+            {
+                  "@type": "Organization",
+                  "@id": "https://common-ground-standard.org/#steward",
+                  "name": "AI-Bio Synergy Holdings LLC",
+                  "url": "https://common-ground-standard.org/stewardship.html",
+                  "sameAs": "https://github.com/AI-Bio-Synergy-Holdings-LLC",
+                  "email": "managingfounder@common-ground-standard.org",
+                  "contactPoint": {
+                        "@type": "ContactPoint",
+                        "email": "projectdevelopment@common-ground-standard.org",
+                        "contactType": "public review and project development"
+                  }
+            }
+      ]
 }
     </script>
     <link rel="stylesheet" href="styles.css?v=20260709-surface-align" />
