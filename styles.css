@@ -271,6 +271,7 @@ figure:last-child {
 .drafts-section,
 .review-section,
 .notice-section,
+.fast-path-section,
 .page-hero,
 .brief-section,
 .guide-grid,
@@ -344,6 +345,7 @@ figure:last-child {
 
 .evidence-section,
 .surface-section,
+.fast-path-section,
 .drafts-section,
 .review-section,
 .brief-section,
@@ -397,6 +399,88 @@ figure:last-child {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+.fast-path-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(520px, 1fr);
+  gap: 42px;
+  align-items: start;
+}
+
+.fast-path-copy h2 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: 38px;
+  font-weight: 820;
+  line-height: 1.08;
+}
+
+.fast-path-copy p {
+  color: var(--text);
+}
+
+.fast-path-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fast-path-list li {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 16px;
+}
+
+.fast-path-list span,
+.prompt-card span {
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 830;
+}
+
+.fast-path-list strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+
+.fast-path-list p {
+  margin: 0;
+  color: var(--text);
+}
+
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.prompt-card {
+  min-height: 190px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 20px;
+}
+
+.prompt-card h3 {
+  margin: 12px 0 8px;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.18;
+}
+
+.prompt-card p {
+  color: var(--text);
 }
 
 .surface-card {
@@ -1038,6 +1122,7 @@ figure:last-child {
   .hero,
   .status-strip,
   .section-heading,
+  .fast-path-layout,
   .review-section,
   .page-hero,
   .channels-section,
@@ -1062,6 +1147,7 @@ figure:last-child {
   .status-facts,
   .loop-grid,
   .surface-grid,
+  .prompt-grid,
   .brief-grid,
   .guide-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1104,6 +1190,7 @@ figure:last-child {
   .drafts-section,
   .review-section,
   .notice-section,
+  .fast-path-section,
   .page-hero,
   .brief-section,
   .guide-grid,
@@ -1155,6 +1242,7 @@ figure:last-child {
   .evidence-section,
   .drafts-section,
   .review-section,
+  .fast-path-section,
   .brief-section,
   .guide-grid,
   .channels-section {
@@ -1168,6 +1256,7 @@ figure:last-child {
   .status-facts,
   .loop-grid,
   .surface-grid,
+  .prompt-grid,
   .brief-grid,
   .guide-grid,
   .form-row,
@@ -1182,6 +1271,7 @@ figure:last-child {
   }
 
   .section-heading h2,
+  .fast-path-copy h2,
   .review-copy h2,
   .contact-copy h2,
   .brief-lede h2,
