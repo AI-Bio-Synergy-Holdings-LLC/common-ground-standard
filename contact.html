@@ -40,7 +40,7 @@
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
       "datePublished": "2026-06-26",
-      "dateModified": "2026-07-09",
+      "dateModified": "2026-07-12",
       "image": "https://common-ground-standard.org/assets/social-preview.png",
       "about": {
             "@type": "CreativeWork",
@@ -81,9 +81,9 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260709-surface-align" />
+    <link rel="stylesheet" href="styles.css?v=20260712-review-assistant" />
     <script src="https://www.google.com/recaptcha/api.js?render=6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA" async defer></script>
-    <script defer src="site.js?v=20260703-public-refresh"></script>
+    <script defer src="site.js?v=20260712-review-assistant"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -94,6 +94,7 @@
         <span>Common Ground Standard</span>
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
+        <a href="review-assistant.html">Review Assistant</a>
         <a href="review.html#review-brief">Review Brief</a>
         <a href="drafts.html">Drafts</a>
         <a href="review.html#review-guide">Review Guide</a>
@@ -157,11 +158,21 @@
         >
           <input type="hidden" name="subject" value="Common Ground Standard public contact inquiry" />
           <input type="hidden" name="source_page" value="https://common-ground-standard.org/contact.html" />
+          <input type="hidden" name="assistant_source" value="" data-assistant-field="source" />
+          <input type="hidden" name="reviewer_role" value="" data-assistant-field="role" />
+          <input type="hidden" name="review_focus" value="" data-assistant-field="focus" />
+          <input type="hidden" name="review_time" value="" data-assistant-field="time" />
+          <input type="hidden" name="selected_review_prompt" value="" data-assistant-field="prompt" />
           <input type="hidden" name="g-recaptcha-response" data-recaptcha-response />
           <label class="form-honeypot">
             Leave this field empty
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
           </label>
+
+          <div class="assistant-context is-hidden" data-assistant-context>
+            <span>Review path from assistant</span>
+            <p data-assistant-context-text></p>
+          </div>
 
           <div class="form-row">
             <label class="form-field" for="contact-name">

@@ -4,6 +4,8 @@ Public review drafts for responsible AI infrastructure, campus AI governance, AI
 
 Public review front door: https://common-ground-standard.org
 
+Guided review path: https://common-ground-standard.org/review-assistant.html
+
 Source repository and public issue review: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
 
 Stewardship and funding posture: [FUNDING_AND_STEWARDSHIP_READINESS.md](FUNDING_AND_STEWARDSHIP_READINESS.md)
@@ -78,6 +80,8 @@ Please review the drafts and identify:
 ## How To Review
 
 - Start with the public site: https://common-ground-standard.org
+- Use the Review Pathway Assistant if you want a role-specific prompt and contribution route:
+  https://common-ground-standard.org/review-assistant.html
 - For a fast first pass, use the 10-minute review path:
   1. read the public review frame;
   2. pick one draft or risk area;
