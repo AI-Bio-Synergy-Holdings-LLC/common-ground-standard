@@ -80,7 +80,7 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260712-assistant-hero-v2" />
+    <link rel="stylesheet" href="styles.css?v=20260712-assistant-hero-v3" />
     <script defer src="site.js?v=20260712-review-assistant"></script>
   </head>
   <body>
@@ -132,15 +132,20 @@
           <div class="review-route-canvas">
             <svg class="review-route-lines" aria-hidden="true" viewBox="0 0 700 500" preserveAspectRatio="none">
               <defs>
-                <marker id="route-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <marker id="route-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
                   <path d="M 0 0 L 10 5 L 0 10 z" />
                 </marker>
               </defs>
-              <path class="route-line route-line-one" d="M72 82 H382 L426 126 V250" />
+              <path class="route-line route-line-one" d="M72 82 V128 H370 L426 184 V250" />
               <path class="route-line route-line-two" d="M72 250 H426" />
-              <path class="route-line route-line-three" d="M72 418 H382 L426 374 V250" />
-              <path class="route-line route-line-output" d="M426 250 H500" marker-end="url(#route-arrow)" />
+              <path class="route-line route-line-three" d="M72 418 V458 H370 L426 402 V250" />
+              <path class="route-line route-line-output" d="M426 250 H468" marker-end="url(#route-arrow)" />
             </svg>
+
+            <span class="route-registration route-registration-nw" aria-hidden="true"></span>
+            <span class="route-registration route-registration-ne" aria-hidden="true"></span>
+            <span class="route-registration route-registration-sw" aria-hidden="true"></span>
+            <span class="route-registration route-registration-se" aria-hidden="true"></span>
 
             <div class="route-step route-step-one">
               <span class="route-index">01</span>
@@ -172,10 +177,16 @@
               <span class="destination-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M9 5h6m-7 2H6v14h12V7h-2M9 3h6v4H9z" /><path d="M9 12h6m-6 4h4" /></svg>
               </span>
-              <span class="destination-label">Your starting point</span>
               <strong>Campus anti-capture review</strong>
               <span class="destination-rule" aria-hidden="true"></span>
             </div>
+            <span class="destination-frame" aria-hidden="true">
+              <span class="destination-frame-mark destination-frame-nw"></span>
+              <span class="destination-frame-mark destination-frame-ne"></span>
+              <span class="destination-frame-mark destination-frame-sw"></span>
+              <span class="destination-frame-mark destination-frame-se"></span>
+            </span>
+            <span class="destination-caption" aria-hidden="true">Destination</span>
           </div>
         </figure>
       </section>
