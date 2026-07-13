@@ -40,7 +40,7 @@
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
       "datePublished": "2026-07-12",
-      "dateModified": "2026-07-12",
+      "dateModified": "2026-07-13",
       "image": "https://common-ground-standard.org/assets/social-preview.png",
       "about": {
             "@type": "CreativeWork",
@@ -80,8 +80,8 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260712-assistant-hero-v3" />
-    <script defer src="site.js?v=20260712-review-assistant"></script>
+    <link rel="stylesheet" href="styles.css?v=20260713-subject-prototype" />
+    <script defer src="site.js?v=20260713-review-intake"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -202,7 +202,7 @@
         </div>
 
         <div class="assistant-workspace">
-          <form class="assistant-form" aria-label="Review pathway selector">
+          <div class="assistant-form" role="group" aria-label="Review pathway selector">
             <fieldset>
               <legend>Reviewer role</legend>
               <div class="choice-grid">
@@ -238,23 +238,23 @@
               <div class="choice-grid">
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="capture" checked />
-                  <span>Reputation-cover or capture risk</span>
+                  <span>Could this become reputation cover?</span>
                 </label>
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="evidence" />
-                  <span>Minimum evidence requirement</span>
+                  <span>What proof should be required?</span>
                 </label>
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="no-go" />
-                  <span>No-go or pause condition</span>
+                  <span>What should make a project pause or stop?</span>
                 </label>
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="safeguard" />
-                  <span>Student, worker, data, or community safeguard</span>
+                  <span>What protection is missing for affected people?</span>
                 </label>
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="benefit" />
-                  <span>Benefit sharing or public receipt</span>
+                  <span>How should proven gains be shared?</span>
                 </label>
                 <label class="choice-option">
                   <input type="radio" name="review_focus" value="clarity" />
@@ -284,7 +284,7 @@
                 </label>
               </div>
             </fieldset>
-          </form>
+          </div>
 
           <aside class="assistant-result" aria-live="polite" aria-labelledby="assistant-result-title">
             <p class="eyebrow" data-assistant-kicker>Recommended path</p>
@@ -308,17 +308,17 @@
               <button class="copy-button" type="button" data-copy-prompt>Copy Prompt</button>
             </div>
 
-            <div class="assistant-actions" aria-label="Recommended contribution actions">
-              <a class="button button-primary" data-assistant-primary href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=anti-capture-risk.yml">
-                Open Issue Template
-                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg>
+            <div class="assistant-actions" role="group" aria-label="Recommended contribution actions">
+              <a class="button button-primary" data-assistant-primary href="review-feedback.html?source=review-assistant&amp;subject=Anti-Capture%20Safeguards">
+                Share Feedback On This Site
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
               </a>
               <a class="button button-secondary" data-assistant-seed href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/6">
-                Review Seed Issue
+                View Public GitHub Issue
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg>
               </a>
               <a class="text-link" data-assistant-contact href="contact.html?source=review-assistant">
-                Send bounded non-GitHub feedback
+                Ask about a longer institutional review
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
               </a>
             </div>
@@ -338,8 +338,8 @@
             <h2 id="tasks-title">Start where critique is already needed.</h2>
           </div>
           <p>
-            These seeded GitHub issues frame the current public-review agenda. Comment on one,
-            sharpen the question, or open a related issue with a concrete proposed change.
+            These public GitHub issues show the current source-record agenda. They are optional:
+            use the website review form above when you do not have or do not want to use a GitHub account.
           </p>
         </div>
         <div class="task-grid" aria-label="Seeded public review issues">

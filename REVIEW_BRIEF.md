@@ -47,7 +47,8 @@ A useful first pass can take about ten minutes:
 
 1. use the Review Pathway Assistant or read the public review frame and boundaries;
 2. pick one draft or risk area;
-3. flag the sharpest critique through a structured issue or bounded contact note.
+3. submit the sharpest critique through the website review form; use GitHub only when a public
+   source-record contribution is preferred.
 
 High-value prompts:
 

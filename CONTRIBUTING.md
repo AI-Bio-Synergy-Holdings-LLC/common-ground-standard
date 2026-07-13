@@ -32,7 +32,12 @@ Do not submit:
 
 ## Review Paths
 
-Use the issue templates:
+The primary review path is the public website form, which does not require a GitHub account:
+
+- [Review Pathway Assistant](https://common-ground-standard.org/review-assistant.html)
+- [Website Review Intake](https://common-ground-standard.org/review-feedback.html)
+
+Use GitHub when you want a critique or proposed source change to be public. Available issue templates include:
 
 - Standard feedback
 - Anti-capture risk
@@ -40,7 +45,8 @@ Use the issue templates:
 - AI Benefit Clause feedback
 - Evidence requirement
 
-Pull requests are welcome for wording changes, but issue-based review is preferred at this stage so feedback can be compared and triaged before v0.2.
+Pull requests are welcome for precise wording changes. Website submissions, issues, and pull requests
+are triaged into the same review program before v0.2.
 
 ## Contribution License
 
@@ -59,4 +65,3 @@ Please be direct, specific, and evidence-minded.
 Strong review sounds like:
 
 > This clause is too weak because it lets an infrastructure actor claim community benefit without a binding governance process. Minimum fix: require affected-party approval, public benefit-routing receipts, and a no-go trigger if retail-bill impacts exceed the agreed threshold.
-

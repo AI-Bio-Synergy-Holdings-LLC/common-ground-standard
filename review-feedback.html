@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Share Public-Review Feedback | Common Ground Standard</title>
+    <meta name="description" content="Submit focused, non-confidential feedback on the Common Ground Standard without needing a GitHub account." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="Common Ground Standard" />
+    <meta name="theme-color" content="#006b7d" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://common-ground-standard.org/review-feedback.html" />
+    <meta property="og:site_name" content="Common Ground Standard" />
+    <meta property="og:title" content="Share Public-Review Feedback | Common Ground Standard" />
+    <meta property="og:description" content="Answer one focused review question and submit feedback directly on the public site." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://common-ground-standard.org/review-feedback.html" />
+    <meta property="og:image" content="https://common-ground-standard.org/assets/social-preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Share Public-Review Feedback" />
+    <meta name="twitter:description" content="A no-GitHub path for focused Common Ground Standard critique." />
+    <meta name="twitter:image" content="https://common-ground-standard.org/assets/social-preview.png" />
+    <link rel="stylesheet" href="styles.css?v=20260713-subject-prototype" />
+    <script defer src="https://www.google.com/recaptcha/api.js?render=6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"></script>
+    <script defer src="site.js?v=20260713-review-intake"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Common Ground Standard home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>Common Ground Standard</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="review-assistant.html">Review Assistant</a>
+        <a href="review.html#review-brief">Review Brief</a>
+        <a href="drafts.html">Drafts</a>
+        <a href="review.html#review-guide">Review Guide</a>
+        <a href="stewardship.html">Stewardship</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="content">
+      <section class="intake-hero" aria-labelledby="intake-title">
+        <div>
+          <p class="eyebrow">Website review intake</p>
+          <h1 id="intake-title">Turn one concern into a useful public-review contribution.</h1>
+          <p>GitHub is not required. Tell us what is missing, why it matters, and what should change.</p>
+        </div>
+        <ol class="intake-route" aria-label="Feedback handling route">
+          <li><span>01</span><strong>You submit</strong><small>one focused, non-confidential review</small></li>
+          <li><span>02</span><strong>We triage</strong><small>for draft, evidence, safeguard, or clarity</small></li>
+          <li><span>03</span><strong>We route</strong><small>to revision, response, or optional public issue</small></li>
+        </ol>
+      </section>
+
+      <section class="review-intake-layout" aria-labelledby="form-title">
+        <aside class="review-intake-brief">
+          <p class="eyebrow">Before you begin</p>
+          <h2>Specific feedback is easiest to use.</h2>
+          <ul>
+            <li>Name one risk, missing proof, weak protection, or unclear phrase.</li>
+            <li>Explain who could be affected and what a stronger requirement would do.</li>
+            <li>Keep the submission non-confidential and do not speak for an organization without authority.</li>
+          </ul>
+          <div class="intake-boundary-note">
+            <strong>Not automatically public</strong>
+            <p>Your submission enters an internal review queue. It is not posted to GitHub or attributed publicly unless the selected publication preference allows a follow-up.</p>
+          </div>
+        </aside>
+
+        <form
+          id="review-feedback-form"
+          class="contact-form review-feedback-form"
+          action="https://formspree.io/f/mykqwozd"
+          method="POST"
+          data-review-feedback-form
+          data-recaptcha-site-key="6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"
+          data-recaptcha-action="review_feedback_submit"
+        >
+          <div class="form-heading">
+            <p class="eyebrow">Focused review</p>
+            <h2 id="form-title">Share your critique</h2>
+            <p>Required fields are marked. Contact details are optional unless you invite an attributed follow-up.</p>
+          </div>
+
+          <input type="hidden" name="subject" value="Common Ground Standard public-review feedback" />
+          <input type="hidden" name="source_page" value="https://common-ground-standard.org/review-feedback.html" />
+          <input type="hidden" name="public_version" value="Public review prototype - 2026-07-13" />
+          <input type="hidden" name="assistant_source" value="" data-review-field="source" />
+          <input type="hidden" name="section_id" value="" data-review-field="section" />
+          <input type="hidden" name="question_id" value="" data-review-field="question_id" />
+          <input type="hidden" name="assistant_role" value="" data-review-field="role" />
+          <input type="hidden" name="assistant_focus" value="" data-review-field="focus" />
+          <input type="hidden" name="assistant_time" value="" data-review-field="time" />
+          <input type="hidden" name="g-recaptcha-response" data-recaptcha-response />
+          <label class="form-honeypot">Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+
+          <div class="review-prefill-context is-hidden" data-review-context>
+            <span>Your selected review path</span>
+            <p data-review-context-text></p>
+          </div>
+
+          <label class="form-field" for="review-subject">
+            <span>What are you reviewing? *</span>
+            <select id="review-subject" name="review_subject" required data-fs-field data-review-subject>
+              <option value="">Select a subject</option>
+              <option value="Responsible AI Infrastructure">Responsible AI Infrastructure</option>
+              <option value="Campus AI Governance">Campus AI Governance</option>
+              <option value="AI Benefit Sharing">AI Benefit Sharing</option>
+              <option value="Reviewer Questions">Reviewer Questions</option>
+              <option value="Anti-Capture Safeguards">Anti-Capture Safeguards</option>
+              <option value="Cross-draft concern">A concern across several drafts</option>
+            </select>
+            <span class="field-error" data-fs-error="review_subject"></span>
+          </label>
+
+          <label class="form-field" for="review-question">
+            <span>Focused question *</span>
+            <select id="review-question" name="selected_review_question" required data-fs-field data-review-question>
+              <option value="">Select a question</option>
+              <option value="What minimum evidence should be required before an actor can claim alignment?">What proof should be required before an alignment claim?</option>
+              <option value="What condition should trigger pause, redesign, rejection, or remedy?">What should make a project pause or stop?</option>
+              <option value="What student, worker, data, or community safeguard is missing or too weak?">What protection is missing for affected people?</option>
+              <option value="What should be published so benefit sharing is reviewable by affected people?">How should proven gains be shared and shown?</option>
+              <option value="What language should be clarified, strengthened, removed, or made more practical?">What language should be clearer or more practical?</option>
+              <option value="Another focused concern">Another focused concern</option>
+            </select>
+            <span class="field-error" data-fs-error="selected_review_question"></span>
+          </label>
+
+          <label class="form-field" for="review-perspective">
+            <span>Your perspective <em>optional</em></span>
+            <select id="review-perspective" name="reviewer_perspective" data-fs-field data-review-perspective>
+              <option value="">Select if useful</option>
+              <option value="Student or campus reviewer">Student or campus reviewer</option>
+              <option value="Faculty or campus worker">Faculty or campus worker</option>
+              <option value="Labor or worker protection">Labor or worker protection</option>
+              <option value="Community, water, ecology, or infrastructure">Community, water, ecology, or infrastructure</option>
+              <option value="AI accountability, data rights, or civil liberties">AI accountability, data rights, or civil liberties</option>
+              <option value="Foundation, agency, nonprofit, or institution">Foundation, agency, nonprofit, or institution</option>
+              <option value="Other public-interest perspective">Other public-interest perspective</option>
+            </select>
+            <span class="field-error" data-fs-error="reviewer_perspective"></span>
+          </label>
+
+          <label class="form-field" for="review-feedback">
+            <span>What is the concern, gap, or risk? *</span>
+            <textarea id="review-feedback" name="feedback" rows="7" minlength="20" required data-fs-field placeholder="Describe one specific issue and who could be affected."></textarea>
+            <span class="field-error" data-fs-error="feedback"></span>
+          </label>
+
+          <label class="form-field" for="review-change">
+            <span>What should change? <em>optional</em></span>
+            <textarea id="review-change" name="suggested_change" rows="5" data-fs-field placeholder="Suggest a requirement, safeguard, question, or clearer phrase."></textarea>
+            <span class="field-error" data-fs-error="suggested_change"></span>
+          </label>
+
+          <label class="form-field" for="review-reference">
+            <span>Public reference link <em>optional</em></span>
+            <input id="review-reference" type="url" name="public_reference" inputmode="url" placeholder="https://" data-fs-field />
+            <span class="field-error" data-fs-error="public_reference"></span>
+          </label>
+
+          <fieldset class="review-radio-group">
+            <legend>How may this feedback be handled? *</legend>
+            <label><input type="radio" name="publication_preference" value="Keep with the review team" required data-publication-choice /> <span>Keep it with the review team.</span></label>
+            <label><input type="radio" name="publication_preference" value="May be summarized publicly without my name" data-publication-choice /> <span>It may be summarized publicly without my name.</span></label>
+            <label><input type="radio" name="publication_preference" value="Contact me before any attributed use" data-publication-choice data-attribution-choice /> <span>Contact me before any attributed use.</span></label>
+          </fieldset>
+
+          <div class="form-row">
+            <label class="form-field" for="review-name">
+              <span>Name <em>optional</em></span>
+              <input id="review-name" type="text" name="name" autocomplete="name" data-fs-field />
+              <span class="field-error" data-fs-error="name"></span>
+            </label>
+            <label class="form-field" for="review-email">
+              <span>Email <em data-email-status>optional</em></span>
+              <input id="review-email" type="email" name="email" autocomplete="email" data-fs-field />
+              <span class="field-error" data-fs-error="email"></span>
+            </label>
+          </div>
+
+          <label class="checkbox-field" for="review-boundary">
+            <input id="review-boundary" type="checkbox" name="boundary_acknowledgement" value="Acknowledged" required data-fs-field />
+            <span>I understand this is a non-confidential public-review submission, not a petition, endorsement, certification request, funding commitment, or permission to speak for an organization.</span>
+          </label>
+          <span class="field-error" data-fs-error="boundary_acknowledgement"></span>
+
+          <div class="form-feedback form-success" role="status" aria-live="polite" data-fs-success></div>
+          <div class="form-feedback form-error" role="alert" data-fs-error></div>
+
+          <button class="button button-primary" type="submit" data-fs-submit-btn>Submit focused review</button>
+          <p class="form-disclosure">Protected by Google reCAPTCHA. Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+      </section>
+
+      <section class="github-option" aria-labelledby="github-option-title">
+        <div><p class="eyebrow">Optional public source route</p><h2 id="github-option-title">Prefer to work in GitHub?</h2><p>Use GitHub only when you want your critique or proposed source edit to be public. A GitHub account is required there.</p></div>
+        <a class="button button-secondary" href="https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new/choose">Open GitHub review options<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg></a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Common Ground Standard is a public-review draft, not a certification or endorsement process.</p>
+      <nav class="footer-links" aria-label="Footer navigation"><a href="stewardship.html">Stewardship and funding</a><a href="license-notice.html">License and trademark notice</a><a href="contact.html">Contact</a></nav>
+    </footer>
+    <script>
+      window.formspree = window.formspree || function () { (window.formspree.q = window.formspree.q || []).push(arguments); };
+      window.formspree("initForm", {
+        formElement: "#review-feedback-form",
+        formId: "mykqwozd",
+        onSuccess: () => {
+          window.location.assign(new URL("review-thank-you.html", window.location.href).href);
+        },
+      });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+  </body>
+</html>
