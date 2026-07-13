@@ -2,7 +2,7 @@
 
 Status: Sanitized public-review draft
 Date: June 13, 2026
-Public surface refreshed: July 8, 2026
+Public surface refreshed: July 12, 2026
 
 ## One-Sentence Thesis
 
@@ -45,7 +45,7 @@ The Common Ground Standard should not be taken to major AI or infrastructure act
 
 A useful first pass can take about ten minutes:
 
-1. read the public review frame and boundaries;
+1. use the Review Pathway Assistant or read the public review frame and boundaries;
 2. pick one draft or risk area;
 3. flag the sharpest critique through a structured issue or bounded contact note.
 

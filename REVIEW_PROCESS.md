@@ -2,7 +2,7 @@
 
 Status: Public review workflow
 Date: June 13, 2026
-Public surface refreshed: July 3, 2026
+Public surface refreshed: July 12, 2026
 
 ## Purpose
 
@@ -29,6 +29,7 @@ Priority reviewers include:
 | Mode | Best for |
 | --- | --- |
 | Public website | orientation, review brief, draft map, stewardship boundary, and contact route |
+| Review Pathway Assistant | choosing a role-specific review prompt, draft section, issue path, or bounded contact route |
 | GitHub issue | specific clause critique, missing safeguard, evidence requirement, capture risk |
 | Pull request | precise wording edit or structural change |
 | Contact form or external memo | longer institutional review or coalition feedback, without confidential or restricted material |
