@@ -2,7 +2,7 @@
 
 Status: Public review workflow
 Date: June 13, 2026
-Public surface refreshed: July 12, 2026
+Public surface refreshed: July 13, 2026
 
 ## Purpose
 
@@ -28,9 +28,10 @@ Priority reviewers include:
 
 | Mode | Best for |
 | --- | --- |
-| Public website | orientation, review brief, draft map, stewardship boundary, and contact route |
-| Review Pathway Assistant | choosing a role-specific review prompt, draft section, issue path, or bounded contact route |
-| GitHub issue | specific clause critique, missing safeguard, evidence requirement, capture risk |
+| Public website | orientation, dedicated subject review, pressure test, focused question, and feedback intake |
+| Review Pathway Assistant | choosing a role-specific review prompt, draft section, website intake path, or longer-review route |
+| Website review form | primary no-account intake for a specific concern, suggested change, evidence link, and publication preference |
+| GitHub issue | optional public source-record critique, missing safeguard, evidence requirement, or capture risk |
 | Pull request | precise wording edit or structural change |
 | Contact form or external memo | longer institutional review or coalition feedback, without confidential or restricted material |
 
@@ -78,7 +79,7 @@ A proposed change should be considered for v0.2 if it:
 
 Suggested initial cycle:
 
-1. Open issue-based public review.
+1. Open website-native public review with GitHub retained as the optional source-record route.
 2. Invite 10-20 legitimacy reviewers.
 3. Triage feedback weekly.
 4. Group feedback by standard area.

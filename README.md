@@ -82,14 +82,20 @@ Please review the drafts and identify:
 - Start with the public site: https://common-ground-standard.org
 - Use the Review Pathway Assistant if you want a role-specific prompt and contribution route:
   https://common-ground-standard.org/review-assistant.html
+- Use the guided Responsible AI Infrastructure review to understand, pressure-test, and answer a
+  focused question without a GitHub account:
+  https://common-ground-standard.org/responsible-ai-infrastructure.html
+- Submit focused website feedback at:
+  https://common-ground-standard.org/review-feedback.html
 - For a fast first pass, use the 10-minute review path:
   1. read the public review frame;
   2. pick one draft or risk area;
-  3. flag the sharpest critique through a structured issue or bounded contact note.
+  3. submit the sharpest critique through the website review form.
 - Read [Review Process](REVIEW_PROCESS.md)
 - Read [Contributing](CONTRIBUTING.md)
 - Read [Code of Conduct](CODE_OF_CONDUCT.md)
-- Open a structured issue using one of the templates:
+- GitHub is an optional public source-record route. Open a structured issue when you want your
+  critique or proposed source edit to be public:
   - Standard feedback
   - Anti-capture risk
   - Campus Compact feedback
