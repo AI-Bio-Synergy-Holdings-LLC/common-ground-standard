@@ -82,9 +82,13 @@ Please review the drafts and identify:
 - Start with the public site: https://common-ground-standard.org
 - Use the Review Pathway Assistant if you want a role-specific prompt and contribution route:
   https://common-ground-standard.org/review-assistant.html
-- Use the guided Responsible AI Infrastructure review to understand, pressure-test, and answer a
-  focused question without a GitHub account:
-  https://common-ground-standard.org/responsible-ai-infrastructure.html
+- Choose one guided subject page to understand, pressure-test, and answer a focused question
+  without a GitHub account:
+  - https://common-ground-standard.org/responsible-ai-infrastructure.html
+  - https://common-ground-standard.org/campus-ai-governance.html
+  - https://common-ground-standard.org/benefit-sharing.html
+  - https://common-ground-standard.org/reviewer-questions.html
+  - https://common-ground-standard.org/anti-capture.html
 - Submit focused website feedback at:
   https://common-ground-standard.org/review-feedback.html
 - For a fast first pass, use the 10-minute review path:

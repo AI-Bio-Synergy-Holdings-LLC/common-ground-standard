@@ -31,6 +31,30 @@
     <priority>0.92</priority>
   </url>
   <url>
+    <loc>https://common-ground-standard.org/campus-ai-governance.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
+    <loc>https://common-ground-standard.org/benefit-sharing.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
+    <loc>https://common-ground-standard.org/reviewer-questions.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://common-ground-standard.org/anti-capture.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
     <loc>https://common-ground-standard.org/review-feedback.html</loc>
     <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
