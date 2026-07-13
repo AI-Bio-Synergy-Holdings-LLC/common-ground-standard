@@ -47,7 +47,15 @@
       const setBusy = (busy) => {
         if (!submitButton) return;
         submitButton.disabled = busy;
-        submitButton.setAttribute("aria-busy", busy ? "true" : "false");
+        if (busy) {
+          submitButton.setAttribute("aria-busy", "true");
+        } else {
+          submitButton.removeAttribute("aria-busy");
+        }
+      };
+
+      const handOffBusyState = () => {
+        if (submitButton) submitButton.removeAttribute("aria-busy");
       };
 
       form.addEventListener(
@@ -82,17 +90,18 @@
 
           setBusy(true);
           window.grecaptcha.ready(() => {
-            window.grecaptcha
-              .execute(siteKey, { action })
+            Promise.resolve()
+              .then(() => window.grecaptcha.execute(siteKey, { action }))
               .then((token) => {
                 tokenInput.value = token;
                 form.dataset.recaptchaTokenReady = "true";
                 form.requestSubmit();
+                handOffBusyState();
               })
               .catch(() => {
                 showError("Verification could not be completed. Please reload the page and try again.");
-              })
-              .finally(() => setBusy(false));
+                setBusy(false);
+              });
           });
         },
         true,
