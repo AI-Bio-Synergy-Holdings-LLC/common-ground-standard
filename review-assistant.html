@@ -80,7 +80,7 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260712-review-assistant" />
+    <link rel="stylesheet" href="styles.css?v=20260712-assistant-hero-v2" />
     <script defer src="site.js?v=20260712-review-assistant"></script>
   </head>
   <body>
@@ -105,34 +105,78 @@
     <main id="content">
       <section class="assistant-hero" aria-labelledby="assistant-hero-title">
         <div class="assistant-hero-copy">
-          <p class="eyebrow">Public review router</p>
-          <h1 id="assistant-hero-title">Find the critique only you can make.</h1>
-          <p>
-            Choose a reviewer path, focus area, and time frame. The assistant will point you to
-            the right draft section, a high-value review prompt, and the cleanest public
-            contribution channel.
+          <h1 id="assistant-hero-title">Enter the draft through the question you know best.</h1>
+          <p class="assistant-hero-lede">
+            Choose who you are reviewing for, what you need to test, and how much time you have.
+            Leave with one section, one prompt, and one clear contribution path.
           </p>
           <div class="hero-actions" aria-label="Assistant actions">
             <a class="button button-primary" href="#pathway-assistant">
-              Start The Assistant
+              Start your review path
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12m-5-5 5 5-5 5" /></svg>
             </a>
             <a class="button button-secondary" href="drafts.html">
-              Read The Drafts
+              Browse the drafts
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg>
             </a>
           </div>
+          <p class="assistant-hero-boundary">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 10v6m0-9h.01" />
+            </svg>
+            <span>Public review only. No endorsement, certification, confidential access, or sign-on.</span>
+          </p>
         </div>
-        <figure class="assistant-visual" aria-label="Review pathway overview">
-          <div class="assistant-orbit" aria-hidden="true">
-            <span>Role</span>
-            <span>Focus</span>
-            <span>Time</span>
-            <strong>Useful critique</strong>
+        <figure class="review-route" aria-label="A review route from perspective, pressure test, and available time to a recommended contribution path">
+          <div class="review-route-canvas">
+            <svg class="review-route-lines" aria-hidden="true" viewBox="0 0 700 500" preserveAspectRatio="none">
+              <defs>
+                <marker id="route-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                </marker>
+              </defs>
+              <path class="route-line route-line-one" d="M72 82 H382 L426 126 V250" />
+              <path class="route-line route-line-two" d="M72 250 H426" />
+              <path class="route-line route-line-three" d="M72 418 H382 L426 374 V250" />
+              <path class="route-line route-line-output" d="M426 250 H500" marker-end="url(#route-arrow)" />
+            </svg>
+
+            <div class="route-step route-step-one">
+              <span class="route-index">01</span>
+              <span class="route-copy">
+                <strong>Perspective</strong>
+                <span>Student or campus reviewer</span>
+              </span>
+            </div>
+            <div class="route-step route-step-two">
+              <span class="route-index">02</span>
+              <span class="route-copy">
+                <strong>Pressure test</strong>
+                <span>Reputation-cover or capture risk</span>
+              </span>
+            </div>
+            <div class="route-step route-step-three">
+              <span class="route-index">03</span>
+              <span class="route-copy">
+                <strong>Time</strong>
+                <span>10 minutes</span>
+              </span>
+            </div>
+
+            <div class="route-risk" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4L12 3Z" /><path d="M12 9v5m0 3h.01" /></svg>
+            </div>
+
+            <div class="route-destination">
+              <span class="destination-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 5h6m-7 2H6v14h12V7h-2M9 3h6v4H9z" /><path d="M9 12h6m-6 4h4" /></svg>
+              </span>
+              <span class="destination-label">Your starting point</span>
+              <strong>Campus anti-capture review</strong>
+              <span class="destination-rule" aria-hidden="true"></span>
+            </div>
           </div>
-          <figcaption>
-            Public-review only. No endorsement, certification, confidential access, or sign-on.
-          </figcaption>
         </figure>
       </section>
 
