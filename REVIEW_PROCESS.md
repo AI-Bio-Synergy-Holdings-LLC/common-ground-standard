@@ -26,14 +26,26 @@ Priority reviewers include:
 
 ## Review Modes
 
-| Mode | Best for |
-| --- | --- |
-| Public website | orientation, dedicated subject review, pressure test, focused question, and feedback intake |
-| Review Pathway Assistant | choosing a role-specific review prompt, draft section, website intake path, or longer-review route |
-| Website review form | primary no-account intake for a specific concern, suggested change, evidence link, and publication preference |
-| GitHub issue | optional public source-record critique, missing safeguard, evidence requirement, or capture risk |
-| Pull request | precise wording edit or structural change |
-| Contact form or external memo | longer institutional review or coalition feedback, without confidential or restricted material |
+| Mode                          | Best for                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Public website                | orientation, dedicated subject review, pressure test, focused question, and feedback intake                   |
+| Review Pathway Assistant      | choosing a role-specific review prompt, draft section, website intake path, or longer-review route            |
+| Website review form           | primary no-account intake for a specific concern, suggested change, evidence link, and publication preference |
+| GitHub issue                  | optional public source-record critique, missing safeguard, evidence requirement, or capture risk              |
+| Pull request                  | precise wording edit or structural change                                                                     |
+| Contact form or external memo | longer institutional review or coalition feedback, without confidential or restricted material                |
+
+## GitHub Public Source Forms
+
+GitHub is optional, public, and account-required. Use it when a contribution should enter the
+public source record under the contributor's GitHub identity:
+
+1. [Review a draft section](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=draft-section-review.yml)
+2. [Flag a risk or missing safeguard](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml)
+3. [Improve wording or accessibility](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=wording-and-accessibility.yml)
+
+Reviewers who do not want a public issue or GitHub account should use the
+[website review form](https://common-ground-standard.org/review-feedback.html).
 
 ## Triage Labels
 

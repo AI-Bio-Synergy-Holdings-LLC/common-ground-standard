@@ -99,13 +99,11 @@ Please review the drafts and identify:
 - Read [Contributing](CONTRIBUTING.md)
 - Read [Code of Conduct](CODE_OF_CONDUCT.md)
 - GitHub is an optional public source-record route. Open a structured issue when you want your
-  critique or proposed source edit to be public:
-  - Standard feedback
-  - Anti-capture risk
-  - Campus Compact feedback
-  - AI Benefit Clause feedback
-  - Evidence requirement
-  - General public review
+  critique or proposed source edit to be public. GitHub requires an account and displays your
+  GitHub identity:
+  - [Review a draft section](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=draft-section-review.yml)
+  - [Flag a risk or missing safeguard](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml)
+  - [Improve wording or accessibility](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=wording-and-accessibility.yml)
 
 High-value review prompts:
 
