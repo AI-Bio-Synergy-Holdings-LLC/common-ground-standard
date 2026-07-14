@@ -1,0 +1,66 @@
+name: Flag a risk or missing safeguard
+description: Identify misuse, capture, weak evidence, missing rights, or a reason to pause or stop.
+title: "[Risk or safeguard]: "
+labels: ["anti-capture", "review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Public Review Contribution
+
+        Thank you for helping pressure-test the Common Ground Standard. Focus on one risk and the protection, evidence, or stop condition it may require. Your issue will be public, and GitHub requires an account to publish it.
+
+        Do not include confidential, private, restricted, or unauthorized information. Submitting feedback does not imply endorsement, partnership, certification, adoption, or approval.
+
+        Start with the [guided anti-capture review](https://common-ground-standard.org/anti-capture.html), browse [all five subjects](https://common-ground-standard.org/drafts.html), or [share feedback without GitHub](https://common-ground-standard.org/review-feedback.html). Use the [security policy](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/security/policy) for sensitive security reports.
+  - type: dropdown
+    id: risk-type
+    attributes:
+      label: Risk or safeguard area
+      description: Which pressure is most relevant?
+      options:
+        - Reputation cover or public-benefit overclaiming
+        - Weak evidence, audit, or public receipt
+        - Self-certification or reviewer capture
+        - Missing student, worker, data, community, or ecological protection
+        - Governance, funding, or decision capture
+        - Benefit-sharing or economic capture
+        - Reason to pause, redesign, reject, or remedy
+        - Other public-interest risk
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: What could go wrong?
+      description: Describe the failure, misuse, weak claim, or missing safeguard and how it could occur.
+      placeholder: "Name one concrete pathway, not only a general concern."
+    validations:
+      required: true
+  - type: textarea
+    id: affected
+    attributes:
+      label: Who or what could be affected?
+      description: Identify the people, rights, services, institutions, communities, resources, or ecosystems at risk.
+      placeholder: "Example: students facing an automated decision without notice or appeal."
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: Protection, evidence, or stop condition
+      description: What rule, evidence threshold, independent check, transparency requirement, remedy, or no-go condition would reduce the risk?
+      placeholder: "A concrete safeguard is useful but not required."
+    validations:
+      required: false
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-review boundaries
+      options:
+        - label: This issue does not include confidential, restricted, personal, student, worker, partner, or private data.
+          required: true
+        - label: This issue does not imply endorsement, partnership, certification, adoption, compliance, or official status.
+          required: true
+        - label: I understand this issue and my GitHub identity will be public.
+          required: true

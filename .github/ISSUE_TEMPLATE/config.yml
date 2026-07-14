@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Share feedback without GitHub
+    url: https://common-ground-standard.org/review-feedback.html
+    about: Submit focused feedback on the website without a GitHub account. Website feedback is not automatically public.
   - name: Security or sensitive report
     url: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/security/policy
     about: Do not post secrets, vulnerabilities, private data, or conduct reports in public issues.
-  - name: Public review site
-    url: https://common-ground-standard.org/
-    about: Read the rendered public-review materials before opening an issue.

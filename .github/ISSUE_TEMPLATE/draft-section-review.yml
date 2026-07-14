@@ -1,0 +1,72 @@
+name: Review a draft section
+description: Review one part of the infrastructure, campus, benefit-sharing, question, or anti-capture drafts.
+title: "[Draft review]: "
+labels: ["review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Public Review Contribution
+
+        Thank you for helping strengthen the Common Ground Standard draft. Focus on one concern or change. Your issue will be public, and GitHub requires an account to publish it.
+
+        Do not include confidential, private, restricted, or unauthorized information. Submitting feedback does not imply endorsement, partnership, certification, adoption, or approval.
+
+        Start with the [rendered draft subjects](https://common-ground-standard.org/drafts.html), read the [public review brief](https://common-ground-standard.org/review.html), or [share feedback without GitHub](https://common-ground-standard.org/review-feedback.html). Use the [security policy](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/security/policy) for sensitive security reports.
+  - type: dropdown
+    id: subject
+    attributes:
+      label: Draft subject
+      description: Which public-review subject are you reviewing?
+      options:
+        - Responsible AI Infrastructure
+        - Campus AI Governance
+        - AI Benefit Sharing
+        - Reviewer Questions
+        - Anti-Capture Risks
+        - Concern across several subjects
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Section or clause
+      description: Identify the heading, clause, page, or passage when possible.
+      placeholder: "Example: Minimum Requirements / Community benefit"
+    validations:
+      required: false
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern or missing protection
+      description: What is unclear, missing, too weak, too broad, impractical, or vulnerable to misuse? Explain who or what could be affected.
+      placeholder: "Name one specific concern and why it matters in practice."
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-change
+    attributes:
+      label: Suggested change
+      description: Propose clearer wording, a requirement, a decision right, an evidence threshold, or a pause condition.
+      placeholder: "A concrete edit is useful but not required."
+    validations:
+      required: false
+  - type: input
+    id: public-source
+    attributes:
+      label: Public source or evidence link
+      description: Add a public source, precedent, or evidence link when useful. Do not link restricted records.
+      placeholder: "https://"
+    validations:
+      required: false
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-review boundaries
+      options:
+        - label: This issue does not include confidential, restricted, personal, student, worker, partner, or private data.
+          required: true
+        - label: This issue does not imply endorsement, partnership, certification, adoption, compliance, or official status.
+          required: true
+        - label: I understand this issue and my GitHub identity will be public.
+          required: true

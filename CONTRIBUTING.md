@@ -37,13 +37,12 @@ The primary review path is the public website form, which does not require a Git
 - [Review Pathway Assistant](https://common-ground-standard.org/review-assistant.html)
 - [Website Review Intake](https://common-ground-standard.org/review-feedback.html)
 
-Use GitHub when you want a critique or proposed source change to be public. Available issue templates include:
+Use GitHub when you want a critique or proposed source change to be public. A GitHub account is
+required, and the issue will display your GitHub identity. Choose one of three forms:
 
-- Standard feedback
-- Anti-capture risk
-- Campus Compact feedback
-- AI Benefit Clause feedback
-- Evidence requirement
+- [Review a draft section](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=draft-section-review.yml)
+- [Flag a risk or missing safeguard](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml)
+- [Improve wording or accessibility](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=wording-and-accessibility.yml)
 
 Pull requests are welcome for precise wording changes. Website submissions, issues, and pull requests
 are triaged into the same review program before v0.2.

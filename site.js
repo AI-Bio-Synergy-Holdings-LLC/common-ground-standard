@@ -124,7 +124,7 @@
       draftText: "Anti-Capture Review Checklist",
       draftHref: "anti-capture.html",
       prompt: "What potential risks should be flagged as possible reputation cover for AI or infrastructure actors?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=anti-capture-risk.yml",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/6",
     },
     evidence: {
@@ -135,7 +135,7 @@
       draftText: "Reviewer Questions",
       draftHref: "reviewer-questions.html",
       prompt: "What minimum evidence should be required before any actor can claim alignment?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=evidence-requirement.yml",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/7",
     },
     "no-go": {
@@ -146,7 +146,7 @@
       draftText: "Common Ground Standard",
       draftHref: "responsible-ai-infrastructure.html",
       prompt: "What condition should trigger pause, redesign, rejection, or remedy?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=evidence-requirement.yml",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/1",
     },
     safeguard: {
@@ -157,7 +157,7 @@
       draftText: "Campus Common Ground Compact",
       draftHref: "campus-ai-governance.html",
       prompt: "What student, worker, data, or community safeguard is missing or too weak?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=campus-compact-feedback.yml",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=risk-and-safeguard.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/2",
     },
     benefit: {
@@ -168,7 +168,7 @@
       draftText: "AI Dividend / Benefit Clause",
       draftHref: "benefit-sharing.html",
       prompt: "What should be published so benefit sharing is reviewable by affected people?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=ai-benefit-clause-feedback.yml",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=draft-section-review.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/3",
     },
     clarity: {
@@ -179,7 +179,7 @@
       draftText: "Reviewer Questions",
       draftHref: "reviewer-questions.html",
       prompt: "What language should be clarified, strengthened, removed, or made more practical?",
-      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=general-public-review.md",
+      templateHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues/new?template=wording-and-accessibility.yml",
       seedHref: "https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/issues",
     },
   };

@@ -1,0 +1,72 @@
+name: Improve wording or accessibility
+description: Report unclear language, accessibility barriers, navigation problems, or rendering issues.
+title: "[Clarity or accessibility]: "
+labels: ["review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Public Review Contribution
+
+        Thank you for making the Common Ground Standard easier to understand and use. Focus on one wording, accessibility, navigation, or rendering improvement. Your issue will be public, and GitHub requires an account to publish it.
+
+        Do not include confidential, private, restricted, or unauthorized information. Submitting feedback does not imply endorsement, partnership, certification, adoption, or approval.
+
+        Browse the [public website](https://common-ground-standard.org/), read the [public review brief](https://common-ground-standard.org/review.html), or [share feedback without GitHub](https://common-ground-standard.org/review-feedback.html). Use the [security policy](https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard/security/policy) for sensitive security reports.
+  - type: dropdown
+    id: improvement-type
+    attributes:
+      label: Improvement area
+      description: What kind of improvement is needed?
+      options:
+        - Unclear or overly technical wording
+        - Website accessibility
+        - Navigation or review flow
+        - Rendering or responsive layout
+        - Source-document clarity
+        - Other usability concern
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Page, document, or section
+      description: Where did you encounter the problem?
+      placeholder: "Example: Review Brief / Why review comes first"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is confusing or inaccessible?
+      description: Explain the barrier, what you expected, and how it affects understanding or use.
+      placeholder: "Describe one reproducible or specific problem."
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Proposed improvement
+      description: Suggest clearer language, structure, labeling, interaction, or rendering when possible.
+      placeholder: "A proposed fix is useful but not required."
+    validations:
+      required: false
+  - type: input
+    id: context
+    attributes:
+      label: Device or assistive-technology context
+      description: Add browser, device, zoom, keyboard, screen-reader, or other context when relevant.
+      placeholder: "Example: Chrome at 200% zoom using keyboard navigation"
+    validations:
+      required: false
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-review boundaries
+      options:
+        - label: This issue does not include confidential, restricted, personal, student, worker, partner, or private data.
+          required: true
+        - label: This issue does not imply endorsement, partnership, certification, adoption, compliance, or official status.
+          required: true
+        - label: I understand this issue and my GitHub identity will be public.
+          required: true
