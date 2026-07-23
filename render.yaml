@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: common-ground-standard
+    runtime: static
+    repo: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: node scripts/prepare-render-site.mjs
+    staticPublishPath: dist-render
+    domains:
+      - common-ground-standard.org
+    headers:
+      - path: /*
+        name: Content-Security-Policy
+        value: >-
+          default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://formspree.io; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google.com https://www.gstatic.com; font-src 'self' data:; connect-src 'self' https://formspree.io https://www.google.com https://www.gstatic.com; frame-src https://www.google.com https://recaptcha.google.com; upgrade-insecure-requests
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+
+previews:
+  generation: automatic
