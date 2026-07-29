@@ -5919,6 +5919,84 @@ tr:last-child td {
   font-size: 12px;
 }
 
+.institutional-operations {
+  background: var(--wash);
+}
+
+.institutional-operations-heading {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.72fr) minmax(0, 1.45fr);
+  gap: 14px 40px;
+  align-items: start;
+}
+
+.institutional-operations-heading .institutional-label {
+  grid-row: 1 / span 2;
+  margin-top: 8px;
+}
+
+.institutional-operations-heading h2 {
+  max-width: 840px;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(34px, 4.4vw, 58px);
+  line-height: 1.02;
+}
+
+.institutional-operations-heading > p:last-child {
+  max-width: 760px;
+  margin: 8px 0 0;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.institutional-operations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 42px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.institutional-operations-grid article {
+  padding: 30px;
+  background: #fff;
+}
+
+.institutional-operations-grid h3 {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-size: 25px;
+  line-height: 1.15;
+}
+
+.institutional-operations-grid article > p:last-child {
+  margin: 14px 0 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.68;
+}
+
+.institutional-operations-contact {
+  max-width: 920px;
+  margin: 28px 0 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.institutional-operations-contact a {
+  color: var(--teal-dark);
+  font-weight: 760;
+}
+
+.institutional-operations-contact a:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+
 .institutional-boundary {
   padding: 64px 0;
   background: var(--teal-dark);
@@ -6014,10 +6092,16 @@ tr:last-child td {
 
   .institutional-two-column-copy,
   .institutional-eligibility-grid,
+  .institutional-operations-heading,
   .institutional-review-copy,
   .institutional-stage-grid,
   .institutional-form-submit {
     grid-template-columns: 1fr;
+  }
+
+  .institutional-operations-heading .institutional-label {
+    grid-row: auto;
+    margin-top: 0;
   }
 
   .institutional-review-copy > .institutional-label,
@@ -6143,6 +6227,14 @@ tr:last-child td {
 
   .institutional-stage-grid {
     gap: 26px;
+  }
+
+  .institutional-operations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .institutional-operations-grid article {
+    padding: 24px 20px;
   }
 
   .institutional-boundary ul {
