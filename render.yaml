@@ -3,7 +3,6 @@ services:
     name: common-ground-standard
     runtime: static
     repo: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
-    branch: main
     autoDeployTrigger: commit
     buildCommand: node scripts/prepare-render-site.mjs
     staticPublishPath: dist-render
