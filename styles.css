@@ -711,6 +711,12 @@ figure:last-child {
   outline: 0;
 }
 
+.button:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #fff;
+}
+
 .hero-map {
   position: relative;
   z-index: 0;
@@ -5234,7 +5240,14 @@ tr:last-child td {
 }
 
 .institutional-page {
-  overflow: hidden;
+  overflow-x: clip;
+}
+
+.institutional-form-guard {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .institutional-page h1,
