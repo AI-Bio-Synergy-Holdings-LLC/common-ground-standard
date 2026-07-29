@@ -74,8 +74,9 @@ The July 8, 2026 reviewer-readiness refresh added fast-review prompts and a 10-m
 The July 28, 2026 institutional pathway staging decision keeps "Common Ground Standard" as the
 public subject, identifies AI-Bio Synergy Holdings LLC only as the current founder steward and
 temporary incubator, excludes the protected Pivot Common Ground Partnership term, and holds all
-institutional submissions in non-transmitting test mode until the operating charter and activation
-gate are approved.
+institutional submissions in non-transmitting test mode. The operating charter was approved and the
+interim intake-owner role accepted on July 28, 2026; the remaining activation controls and separate
+final live authorization are still required.
 
 ## Review Triggers
 

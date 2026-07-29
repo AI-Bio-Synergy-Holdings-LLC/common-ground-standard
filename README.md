@@ -61,7 +61,7 @@ This project is not yet:
 - claiming agency, foundation, university, tribal, community, or company partnership;
 - accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar funding channel.
 - granting private repository, data-room, technical-annex, legal, partner, or certification materials by default.
-- accepting live institutional pathway submissions until the operating charter and intake activation gate are approved.
+- accepting live institutional pathway submissions until the remaining intake activation controls and separate final launch authorization are complete.
 
 ## Stewardship And Funding Posture
 
