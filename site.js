@@ -105,6 +105,34 @@
       form.addEventListener(
         "submit",
         (event) => {
+          if (form.dataset.intakeMode === "test") {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            clearError();
+
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              return;
+            }
+
+            const successMessage = form.querySelector(".form-feedback[data-fs-success]");
+            const destination = form.dataset.testRedirect;
+            if (successMessage) {
+              successMessage.textContent =
+                "Test validation passed. No information was sent or stored.";
+            }
+            setBusy(true);
+
+            if (destination) {
+              window.setTimeout(() => {
+                window.location.assign(new URL(destination, window.location.href).href);
+              }, 450);
+            } else {
+              setBusy(false);
+            }
+            return;
+          }
+
           if (form.dataset.recaptchaTokenReady === "true") {
             form.dataset.recaptchaTokenReady = "submitting";
             window.setTimeout(() => {
