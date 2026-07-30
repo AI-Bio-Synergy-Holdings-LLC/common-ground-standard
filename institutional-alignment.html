@@ -125,13 +125,8 @@
       }
 }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260729-institutional-integration-test" />
-    <script
-      src="https://www.google.com/recaptcha/api.js?render=6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"
-      async
-      defer
-    ></script>
-    <script defer src="site.js?v=20260729-institutional-integration-test"></script>
+    <link rel="stylesheet" href="styles.css?v=20260729-institutional-test-guard" />
+    <script defer src="site.js?v=20260729-institutional-test-guard"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -462,11 +457,11 @@
             </header>
 
             <div class="institutional-test-notice" id="institutional-test-notice" role="note">
-              <strong>Controlled integration verification — authorized synthetic data only.</strong>
+              <strong>Test mode — no form-field data will be transmitted.</strong>
               <span>
-                This isolated staging form sends one non-sensitive verification record to the
-                approved Formspree inbox. It is not open institutional intake. Live intake and
-                production promotion remain disabled pending separate final authorization.
+                Interim intake owner: AI-Bio Synergy Holdings LLC, acting as current founder steward
+                and temporary incubator. The operating charter is approved; live intake remains
+                disabled until the remaining activation controls and final authorization are complete.
               </span>
             </div>
 
@@ -474,42 +469,38 @@
               id="institutional-review-form"
               class="institutional-form"
               aria-describedby="institutional-test-notice institutional-form-boundary"
-              data-intake-mode="integration-test"
-              data-integration-endpoint="https://formspree.io/f/mykqwozd"
-              data-recaptcha-site-key="6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"
-              data-recaptcha-action="institutional_review_integration_test"
-              data-test-redirect="institutional-thank-you.html?mode=integration-test"
+              data-intake-mode="test"
+              data-test-redirect="institutional-thank-you.html?mode=test"
             >
               <noscript>
                 <p class="form-feedback form-error" role="alert">
-                  The controlled integration verification requires JavaScript. The fields remain
-                  disabled, and no information will be sent.
+                  Test submission requires JavaScript. The fields remain disabled, and no
+                  information will be sent.
                 </p>
               </noscript>
               <fieldset class="institutional-form-guard" data-test-form-guard disabled>
-                <legend class="sr-only">Controlled institutional integration verification form</legend>
+                <legend class="sr-only">Institutional review test form</legend>
                 <input
                   type="hidden"
                   name="subject"
-                  value="CGS controlled integration verification — 2026-07-29 — 00e3415"
+                  value="Common Ground Standard institutional review intake"
                 />
                 <input
                   type="hidden"
                   name="source_page"
-                  value="https://common-ground-standard-institutional.onrender.com/institutional-alignment.html"
+                  value="https://common-ground-standard.org/institutional-alignment.html"
                 />
                 <input
                   type="hidden"
                   name="public_version"
-                  value="Institutional alignment staging integration verification - 00e3415"
+                  value="Institutional alignment staging - 2026-07-28"
                 />
                 <input
                   type="hidden"
                   name="intake_owner"
                   value="AI-Bio Synergy Holdings LLC"
                 />
-                <input type="hidden" name="intake_mode" value="integration-test" />
-                <input type="hidden" name="g-recaptcha-response" data-recaptcha-response />
+                <input type="hidden" name="intake_mode" value="test" />
                 <label class="form-honeypot">
                   Leave this field empty
                   <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
@@ -873,13 +864,11 @@
                   ></div>
                   <div class="form-feedback form-error" role="alert" data-fs-error></div>
                   <button class="button button-primary" type="button" data-fs-submit-btn>
-                    Send authorized synthetic test
+                    Run test submission
                   </button>
                   <p class="form-disclosure">
-                    This staging-only action sends one authorized synthetic record through
-                    Formspree and reCAPTCHA. Do not enter real institutional or personal
-                    information. Review the
-                    <a href="#operating-rules-section">privacy, retention, and recourse rules</a>,
+                    Live submission will use Formspree and reCAPTCHA only after operating approval.
+                    Review the <a href="#operating-rules-section">privacy, retention, and recourse rules</a>,
                     the <a href="https://formspree.io/legal/privacy-policy/">Formspree Privacy Policy</a>,
                     and Google's <a href="https://policies.google.com/privacy">Privacy Policy</a> and
                     <a href="https://policies.google.com/terms">Terms of Service</a>.
@@ -903,9 +892,8 @@
             Know how a live submission would be handled before sharing information.
           </h2>
           <p>
-            This controlled staging verification transmits only authorized synthetic data. Live
-            intake remains disabled. If live intake is separately authorized, the following
-            controls apply to every institutional review note.
+            Test mode does not transmit or store form-field data. If live intake is separately
+            authorized, the following controls apply to every institutional review note.
           </p>
         </div>
 

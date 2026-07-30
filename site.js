@@ -77,12 +77,9 @@
       form.dataset.recaptchaBound = "true";
 
       const isTestMode = form.dataset.intakeMode === "test";
-      const isIntegrationTest = form.dataset.intakeMode === "integration-test";
-      const isGuardedMode = isTestMode || isIntegrationTest;
       const testGuard = form.querySelector("[data-test-form-guard]");
       const siteKey = form.dataset.recaptchaSiteKey;
       const action = form.dataset.recaptchaAction || "submit";
-      const integrationEndpoint = form.dataset.integrationEndpoint;
       const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
       const submitButton = form.querySelector("[data-fs-submit-btn]");
       const formError = form.querySelector(".form-feedback[data-fs-error]");
@@ -153,81 +150,6 @@
             return;
           }
 
-          if (isIntegrationTest) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            clearError();
-
-            if (!form.checkValidity()) {
-              form.reportValidity();
-              return;
-            }
-
-            let endpointUrl;
-            let destinationUrl;
-
-            try {
-              endpointUrl = new URL(integrationEndpoint);
-              if (
-                endpointUrl.origin !== "https://formspree.io" ||
-                endpointUrl.pathname !== "/f/mykqwozd"
-              ) {
-                throw new Error("Unexpected integration endpoint");
-              }
-
-              const resolvedDestination = new URL(form.dataset.testRedirect, window.location.href);
-              if (resolvedDestination.origin !== window.location.origin) {
-                throw new Error("Cross-origin integration redirect");
-              }
-              destinationUrl = resolvedDestination.href;
-            } catch {
-              showError(
-                "The controlled integration route is unavailable. No information was sent.",
-              );
-              return;
-            }
-
-            if (!siteKey || !tokenInput) {
-              showError(
-                "The controlled integration verification is incomplete. No information was sent.",
-              );
-              return;
-            }
-
-            if (!window.grecaptcha || typeof window.grecaptcha.ready !== "function") {
-              showError("Verification is still loading. Please wait a moment and try again.");
-              return;
-            }
-
-            setBusy(true);
-            window.grecaptcha.ready(() => {
-              Promise.resolve()
-                .then(() => window.grecaptcha.execute(siteKey, { action }))
-                .then((token) => {
-                  tokenInput.value = token;
-                  return window.fetch(endpointUrl.href, {
-                    method: "POST",
-                    headers: {
-                      Accept: "application/json",
-                    },
-                    body: new FormData(form),
-                  });
-                })
-                .then((response) => {
-                  if (!response.ok) throw new Error(`Formspree returned ${response.status}`);
-                  window.location.assign(destinationUrl);
-                })
-                .catch(() => {
-                  tokenInput.value = "";
-                  showError(
-                    "The controlled integration verification could not be completed. No live intake was opened.",
-                  );
-                  setBusy(false);
-                });
-            });
-            return;
-          }
-
           if (form.dataset.recaptchaTokenReady === "true") {
             form.dataset.recaptchaTokenReady = "submitting";
             window.setTimeout(() => {
@@ -274,17 +196,10 @@
         true,
       );
 
-      if (isGuardedMode) {
+      if (isTestMode) {
         if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
           showError(
-            "The guarded form could not be enabled safely. No information can be submitted.",
-          );
-          return;
-        }
-
-        if (isIntegrationTest && (!siteKey || !tokenInput || !integrationEndpoint)) {
-          showError(
-            "The controlled integration verification is incomplete. No information can be submitted.",
+            "The test form could not be enabled safely. No information can be submitted.",
           );
           return;
         }
