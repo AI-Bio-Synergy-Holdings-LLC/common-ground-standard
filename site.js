@@ -79,10 +79,6 @@
       const isTestMode = form.dataset.intakeMode === "test";
       const isIntegrationTest = form.dataset.intakeMode === "integration-test";
       const isGuardedMode = isTestMode || isIntegrationTest;
-      const integrationWindowAuthorized =
-        isIntegrationTest &&
-        new URLSearchParams(window.location.search).get("integration") ===
-          "cgs-manual-b4c627940dd35972368efd0e";
       const testGuard = form.querySelector("[data-test-form-guard]");
       const siteKey = form.dataset.recaptchaSiteKey;
       const action = form.dataset.recaptchaAction || "submit";
@@ -161,13 +157,6 @@
             event.preventDefault();
             event.stopImmediatePropagation();
             clearError();
-
-            if (!integrationWindowAuthorized || form.dataset.testGuardReady !== "true") {
-              showError(
-                "This staging route is not authorized for transmission. No information was sent.",
-              );
-              return;
-            }
 
             if (!form.checkValidity()) {
               form.reportValidity();
@@ -298,60 +287,6 @@
             "The controlled integration verification is incomplete. No information can be submitted.",
           );
           return;
-        }
-
-        if (isIntegrationTest && !integrationWindowAuthorized) {
-          showError(
-            "The integration form is disabled. Use the short-lived authorized manual-test link.",
-          );
-          return;
-        }
-
-        if (isIntegrationTest) {
-          const syntheticValues = {
-            organization_name: "CGS-INTEGRATION-2026-07-29-MANUAL",
-            public_website: "https://example.org/cgs-integration-test",
-            organization_type: "Public-interest organization",
-            review_domain: "Data rights and public evidence",
-            represented_constituency:
-              "SYNTHETIC TEST RECORD ONLY — no real constituency or institutional authority.",
-            proposed_contribution:
-              "Authorized synthetic routing verification for the Charter v0.2 activation gate.",
-            material_conflicts: "SYNTHETIC — none; no real institution.",
-            funding_relationships: "SYNTHETIC — none; no real institution.",
-            requested_role: "Legitimacy reviewer",
-            public_listing_permission: "No, keep the submission private",
-            contact_name: "Synthetic Test Record",
-            email: "integration-test@example.org",
-          };
-
-          const fieldsReady = Object.entries(syntheticValues).every(([name, value]) => {
-            const field = form.elements.namedItem(name);
-            if (!(field instanceof HTMLInputElement ||
-              field instanceof HTMLSelectElement ||
-              field instanceof HTMLTextAreaElement)) {
-              return false;
-            }
-            field.value = value;
-            return field.value === value;
-          });
-          const boundary = form.elements.namedItem("participation_boundary");
-
-          if (!fieldsReady || !(boundary instanceof HTMLInputElement)) {
-            showError(
-              "The synthetic test record could not be prepared safely. No information can be submitted.",
-            );
-            return;
-          }
-
-          boundary.checked = true;
-
-          const recaptchaScript = document.createElement("script");
-          recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
-          recaptchaScript.async = true;
-          recaptchaScript.defer = true;
-          recaptchaScript.dataset.integrationVerification = "true";
-          document.head.appendChild(recaptchaScript);
         }
 
         submitButton.type = "submit";

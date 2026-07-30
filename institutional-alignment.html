@@ -126,7 +126,12 @@
 }
     </script>
     <link rel="stylesheet" href="styles.css?v=20260729-institutional-integration-test" />
-    <script defer src="site.js?v=20260729-institutional-manual-window"></script>
+    <script
+      src="https://www.google.com/recaptcha/api.js?render=6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA"
+      async
+      defer
+    ></script>
+    <script defer src="site.js?v=20260729-institutional-integration-test"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -457,11 +462,11 @@
             </header>
 
             <div class="institutional-test-notice" id="institutional-test-notice" role="note">
-              <strong>Controlled manual verification — authorized synthetic data only.</strong>
+              <strong>Controlled integration verification — authorized synthetic data only.</strong>
               <span>
-                The ordinary staging route remains disabled. A short-lived authorization link
-                preloads one non-sensitive synthetic record for a human-browser Formspree and
-                reCAPTCHA routing test. This is not open institutional intake.
+                This isolated staging form sends one non-sensitive verification record to the
+                approved Formspree inbox. It is not open institutional intake. Live intake and
+                production promotion remain disabled pending separate final authorization.
               </span>
             </div>
 
@@ -850,9 +855,8 @@
                 <div>
                   <h4>What happens next</h4>
                   <p>
-                    The authorized manual test sends one clearly labeled synthetic record to the
-                    approved Formspree inbox, then opens the staging confirmation page. The record
-                    must be verified and deleted before this operational gate can close.
+                    In test mode, the form checks completeness and opens a confirmation page. No
+                    institutional form-field data is sent or stored.
                   </p>
                   <p>
                     Do not submit confidential information, protected community data, student
