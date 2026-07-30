@@ -212,20 +212,54 @@
 
             setBusy(true);
             window.grecaptcha.ready(() => {
-              Promise.resolve()
-                .then(() => window.grecaptcha.execute(siteKey, { action }))
-                .then((token) => {
-                  tokenInput.value = token;
-                  return window.fetch(endpointUrl.href, {
+              const retryDelay = (attempt) =>
+                new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
+              const submitIntegrationRecord = async (attempt = 0) => {
+                let token;
+
+                try {
+                  token = await window.grecaptcha.execute(siteKey, { action });
+                } catch (error) {
+                  if (attempt < 2) {
+                    await retryDelay(attempt + 1);
+                    return submitIntegrationRecord(attempt + 1);
+                  }
+                  throw error;
+                }
+
+                tokenInput.value = token;
+                const response = await window.fetch(endpointUrl.href, {
                     method: "POST",
                     headers: {
                       Accept: "application/json",
                     },
                     body: new FormData(form),
                   });
-                })
-                .then((response) => {
-                  if (!response.ok) throw new Error(`Formspree returned ${response.status}`);
+
+                if (response.ok) return;
+
+                let responseText = "";
+                try {
+                  responseText = await response.text();
+                } catch {
+                  // Keep response details private and use the status-only error below.
+                }
+
+                if (
+                  response.status === 400 &&
+                  /browser[-_ ]error/i.test(responseText) &&
+                  attempt < 2
+                ) {
+                  tokenInput.value = "";
+                  await retryDelay(attempt + 1);
+                  return submitIntegrationRecord(attempt + 1);
+                }
+
+                throw new Error(`Formspree returned ${response.status}`);
+              };
+
+              submitIntegrationRecord()
+                .then(() => {
                   window.location.assign(destinationUrl);
                 })
                 .catch(() => {
