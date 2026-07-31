@@ -6,6 +6,8 @@ Public review front door: https://common-ground-standard.org
 
 Guided review path: https://common-ground-standard.org/review-assistant.html
 
+Institutional alignment pathway: https://common-ground-standard.org/institutional-alignment.html
+
 Source repository and public issue review: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
 
 Stewardship and funding posture: [FUNDING_AND_STEWARDSHIP_READINESS.md](FUNDING_AND_STEWARDSHIP_READINESS.md)
@@ -48,6 +50,7 @@ This project is:
 - public-review ready;
 - standards-draft ready;
 - seeking critique from legitimacy actors before industry outreach.
+- preparing a test-mode institutional alignment pathway under current-steward operating controls.
 
 This project is not yet:
 
@@ -58,6 +61,7 @@ This project is not yet:
 - claiming agency, foundation, university, tribal, community, or company partnership;
 - accepting public sponsorship through GitHub Sponsors, Open Collective, or a similar funding channel.
 - granting private repository, data-room, technical-annex, legal, partner, or certification materials by default.
+- accepting live institutional pathway submissions until the remaining intake activation controls and separate final launch authorization are complete.
 
 ## Stewardship And Funding Posture
 

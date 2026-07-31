@@ -1,7 +1,7 @@
 # Public Exposure Register
 
 Status: Public exposure-control register
-Date: July 8, 2026
+Date: July 28, 2026
 
 ## Purpose
 
@@ -27,6 +27,7 @@ Public-facing review should describe common-ground-standard.org as the review fr
 | AI-Bio Synergy Holdings LLC | Founder steward and temporary incubator | Keep public in stewardship, security, and notice contexts | Reviewers need to understand origin and current administrative responsibility. |
 | Campus Common Ground Compact | Public-review draft | Keep public | It is one of the review materials being offered for critique. |
 | AI Dividend / Benefit Clause | Public-review draft | Keep public | It is one of the review materials being offered for critique. |
+| Institutional Alignment Pathway | Public institutional-review readiness page | Approved for test-mode staging; live intake remains held | The page describes bounded contribution roles without implying partnership, accreditation, certification, adoption, or institutional authority. |
 | Pivot | Protected/founder lineage term | Limit to controlled legal/mark notices unless later approved | It creates ambiguity if used as the public subject of the review phase. |
 | Pivot Common Ground Partnership | Protected/internal consortium term | Limit to controlled legal/mark notices unless later approved | It can imply a formed partnership or consortium before one exists. |
 | Common Ground Resilience Network | Future-facing network term | Limit to controlled legal/mark notices unless later approved | It can imply operational infrastructure or an active network. |
@@ -42,6 +43,7 @@ These uses are approved during the current public-review phase:
 - public review routing: common-ground-standard.org as front door, GitHub as source record;
 - origin and stewardship: AI-Bio Synergy Holdings LLC;
 - draft names: Campus Common Ground Compact and AI Dividend / Benefit Clause;
+- the generic public name "Institutional Alignment Pathway" for a bounded, test-mode readiness page;
 - legal and trademark notices: controlled names and marks, only as protective reservations;
 - security policy: AI-Bio Synergy Holdings LLC as repository maintainer.
 
@@ -68,6 +70,13 @@ The roadmap should describe future capabilities generically unless a name is alr
 The public notice should avoid repeating protected internal names where a cross-reference to the license and trademark notice is enough.
 
 The July 8, 2026 reviewer-readiness refresh added fast-review prompts and a 10-minute review path without adding new protected internal framework names, deeper Pivot architecture, private-access links, partner strategy, or pilot claims.
+
+The July 28, 2026 institutional pathway staging decision keeps "Common Ground Standard" as the
+public subject, identifies AI-Bio Synergy Holdings LLC only as the current founder steward and
+temporary incubator, excludes the protected Pivot Common Ground Partnership term, and holds all
+institutional submissions in non-transmitting test mode. The operating charter was approved and the
+interim intake-owner role accepted on July 28, 2026; the remaining activation controls and separate
+final live authorization are still required.
 
 ## Review Triggers
 

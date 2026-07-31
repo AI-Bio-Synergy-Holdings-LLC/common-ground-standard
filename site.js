@@ -69,11 +69,15 @@
   window.addEventListener("pageshow", markLoaded);
 
   const initRecaptchaForms = () => {
-    document.querySelectorAll("form[data-recaptcha-site-key]").forEach((form) => {
+    document
+      .querySelectorAll('form[data-recaptcha-site-key], form[data-intake-mode="test"]')
+      .forEach((form) => {
       if (form.dataset.recaptchaBound === "true") return;
 
       form.dataset.recaptchaBound = "true";
 
+      const isTestMode = form.dataset.intakeMode === "test";
+      const testGuard = form.querySelector("[data-test-form-guard]");
       const siteKey = form.dataset.recaptchaSiteKey;
       const action = form.dataset.recaptchaAction || "submit";
       const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
@@ -105,6 +109,47 @@
       form.addEventListener(
         "submit",
         (event) => {
+          if (isTestMode) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            clearError();
+
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              return;
+            }
+
+            const successMessage = form.querySelector(".form-feedback[data-fs-success]");
+            const destination = form.dataset.testRedirect;
+            let destinationUrl = "";
+
+            try {
+              if (!destination) throw new Error("Missing test redirect");
+              const resolvedDestination = new URL(destination, window.location.href);
+              if (resolvedDestination.origin !== window.location.origin) {
+                throw new Error("Cross-origin test redirect");
+              }
+              destinationUrl = resolvedDestination.href;
+            } catch {
+              showError(
+                "The local test confirmation route is unavailable. No information was sent.",
+              );
+              setBusy(false);
+              return;
+            }
+
+            if (successMessage) {
+              successMessage.textContent =
+                "Test validation passed. No information was sent or stored.";
+            }
+            setBusy(true);
+
+            window.setTimeout(() => {
+              window.location.assign(destinationUrl);
+            }, 450);
+            return;
+          }
+
           if (form.dataset.recaptchaTokenReady === "true") {
             form.dataset.recaptchaTokenReady = "submitting";
             window.setTimeout(() => {
@@ -150,6 +195,19 @@
         },
         true,
       );
+
+      if (isTestMode) {
+        if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+          showError(
+            "The test form could not be enabled safely. No information can be submitted.",
+          );
+          return;
+        }
+
+        submitButton.type = "submit";
+        testGuard.disabled = false;
+        form.dataset.testGuardReady = "true";
+      }
     });
   };
 
