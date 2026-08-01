@@ -1,0 +1,117 @@
+# Standalone public-repository policy derived from AI-Bio-Synergy-Holdings-LLC/.github/.github/workflows/reusable-policy.yml
+# Public vendor contract v1.0.1-p1; canonical source ba36400c48698af5dd799e4e2cd387493054a1c7.
+name: Organization policy
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  MAX_ADDED_FILE_BYTES: "10485760"
+  ALLOW_LARGE_PATHS: ""
+
+jobs:
+  policy:
+    name: policy / Organization baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Fetch evaluated Git objects
+        env:
+          BASE_REPOSITORY: ${{ github.repository }}
+          BASE_SHA: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.repository }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          SERVER_URL: ${{ github.server_url }}
+        shell: bash
+        run: |
+          git init --quiet .
+          git remote add evaluated-head "${SERVER_URL}/${HEAD_REPOSITORY}.git"
+          git fetch --no-tags --depth=1 evaluated-head "${HEAD_SHA}"
+          if [[ -n "${BASE_SHA}" && ! "${BASE_SHA}" =~ ^0+$ ]]; then
+            git remote add protected-base "${SERVER_URL}/${BASE_REPOSITORY}.git"
+            git fetch --no-tags --depth=1 protected-base "${BASE_SHA}"
+          fi
+
+      - name: Enforce changed-file policy
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import fnmatch
+          import json
+          import os
+          import pathlib
+          import subprocess
+          import sys
+
+          event = json.loads(pathlib.Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+          pull_request = event.get("pull_request")
+          head = pull_request["head"]["sha"] if pull_request else os.environ["GITHUB_SHA"]
+          base = None
+          if pull_request:
+              base = pull_request["base"]["sha"]
+          else:
+              candidate = event.get("before")
+              if candidate and set(candidate) != {"0"}:
+                  base = candidate
+
+          if base:
+              command = ["git", "diff", "--no-renames", "--name-only", "--diff-filter=AM", "-z", base, head]
+          else:
+              command = ["git", "ls-tree", "-r", "--name-only", "-z", head]
+
+          changed = [
+              item.decode("utf-8", errors="surrogateescape")
+              for item in subprocess.check_output(command).split(b"\0")
+              if item
+          ]
+          allowed = [line.strip() for line in os.environ.get("ALLOW_LARGE_PATHS", "").splitlines() if line.strip()]
+          maximum = int(os.environ["MAX_ADDED_FILE_BYTES"])
+          violations = []
+          blob_sizes = {}
+          tree_records = subprocess.check_output(
+              ["git", "ls-tree", "-r", "-z", "-l", "--full-tree", head]
+          ).split(b"\0")
+          for record in tree_records:
+              if not record:
+                  continue
+              metadata, separator, raw_path = record.partition(b"\t")
+              fields = metadata.split()
+              if not separator or len(fields) != 4 or fields[1] != b"blob" or fields[3] == b"-":
+                  continue
+              tracked_path = raw_path.decode("utf-8", errors="surrogateescape")
+              blob_sizes[tracked_path] = int(fields[3])
+
+          for path in changed:
+              normalized = path.replace(os.sep, "/")
+              if any(fnmatch.fnmatch(normalized, pattern) for pattern in allowed):
+                  continue
+              size = blob_sizes.get(normalized)
+              if size is None:
+                  continue
+              if size > maximum:
+                  violations.append((normalized, size))
+
+          summary_path = pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with summary_path.open("a", encoding="utf-8") as summary:
+              summary.write("## Organization baseline\n\n")
+              summary.write(f"Inspected {len(changed)} tracked paths in policy scope.\n\n")
+              summary.write(f"Maximum permitted Git blob size: {maximum:,} bytes.\n")
+
+          if violations:
+              def escape_workflow_property(value):
+                  return (value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                          .replace(":", "%3A").replace(",", "%2C"))
+
+              for path, size in violations:
+                  print(f"::error file={escape_workflow_property(path)}::{size:,}-byte file exceeds the {maximum:,}-byte Git policy")
+              print("Move large deliverables to Releases, Git LFS, or controlled artifact storage.")
+              sys.exit(1)
+          PY
