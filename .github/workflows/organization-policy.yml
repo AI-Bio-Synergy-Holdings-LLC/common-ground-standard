@@ -1,5 +1,5 @@
-# Vendored from AI-Bio-Synergy-Holdings-LLC/.github/.github/workflows/reusable-policy.yml
-# Organization CI contract v1.0.1; canonical source ba36400c48698af5dd799e4e2cd387493054a1c7.
+# Standalone public-repository policy derived from AI-Bio-Synergy-Holdings-LLC/.github/.github/workflows/reusable-policy.yml
+# Public vendor contract v1.0.1-p1; canonical source ba36400c48698af5dd799e4e2cd387493054a1c7.
 name: Organization policy
 
 on:
@@ -23,14 +23,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
 
       - name: Enforce changed-file policy
         shell: bash
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import fnmatch
           import json
           import os
@@ -50,12 +50,12 @@ jobs:
                   base = candidate
 
           if base:
-              command = ["git", "diff", "--name-only", "--diff-filter=AM", "-z", base, head]
+              command = ["git", "diff", "--no-renames", "--name-only", "--diff-filter=AM", "-z", base, head]
           else:
               command = ["git", "ls-files", "-z"]
 
           changed = [
-              pathlib.Path(item.decode("utf-8", errors="surrogateescape"))
+              item.decode("utf-8", errors="surrogateescape")
               for item in subprocess.check_output(command).split(b"\0")
               if item
           ]
@@ -64,24 +64,39 @@ jobs:
           violations = []
 
           for path in changed:
-              if not path.is_file():
-                  continue
-              normalized = path.as_posix()
+              normalized = path.replace(os.sep, "/")
               if any(fnmatch.fnmatch(normalized, pattern) for pattern in allowed):
                   continue
-              size = path.stat().st_size
+              try:
+                  object_id = subprocess.check_output(
+                      ["git", "rev-parse", f"{head}:{normalized}"],
+                      text=True,
+                      stderr=subprocess.DEVNULL,
+                  ).strip()
+                  object_type = subprocess.check_output(
+                      ["git", "cat-file", "-t", object_id], text=True
+                  ).strip()
+              except subprocess.CalledProcessError:
+                  continue
+              if object_type != "blob":
+                  continue
+              size = int(subprocess.check_output(["git", "cat-file", "-s", object_id], text=True).strip())
               if size > maximum:
                   violations.append((normalized, size))
 
           summary_path = pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"])
           with summary_path.open("a", encoding="utf-8") as summary:
               summary.write("## Organization baseline\n\n")
-              summary.write(f"Inspected {len(changed)} added or modified tracked files.\n\n")
+              summary.write(f"Inspected {len(changed)} tracked paths in policy scope.\n\n")
               summary.write(f"Maximum permitted Git blob size: {maximum:,} bytes.\n")
 
           if violations:
+              def escape_workflow_property(value):
+                  return (value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                          .replace(":", "%3A").replace(",", "%2C"))
+
               for path, size in violations:
-                  print(f"::error file={path}::{size:,}-byte file exceeds the {maximum:,}-byte Git policy")
+                  print(f"::error file={escape_workflow_property(path)}::{size:,}-byte file exceeds the {maximum:,}-byte Git policy")
               print("Move large deliverables to Releases, Git LFS, or controlled artifact storage.")
               sys.exit(1)
           PY
