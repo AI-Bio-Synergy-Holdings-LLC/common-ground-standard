@@ -62,25 +62,26 @@ jobs:
           allowed = [line.strip() for line in os.environ.get("ALLOW_LARGE_PATHS", "").splitlines() if line.strip()]
           maximum = int(os.environ["MAX_ADDED_FILE_BYTES"])
           violations = []
+          literal_git_env = dict(os.environ)
+          literal_git_env["GIT_LITERAL_PATHSPECS"] = "1"
 
           for path in changed:
               normalized = path.replace(os.sep, "/")
               if any(fnmatch.fnmatch(normalized, pattern) for pattern in allowed):
                   continue
               try:
-                  object_id = subprocess.check_output(
-                      ["git", "rev-parse", f"{head}:{normalized}"],
-                      text=True,
+                  entry = subprocess.check_output(
+                      ["git", "ls-tree", "-z", "-l", "--full-tree", head, "--", normalized],
+                      env=literal_git_env,
                       stderr=subprocess.DEVNULL,
-                  ).strip()
-                  object_type = subprocess.check_output(
-                      ["git", "cat-file", "-t", object_id], text=True
-                  ).strip()
+                  )
               except subprocess.CalledProcessError:
                   continue
-              if object_type != "blob":
+              metadata, separator, _ = entry.partition(b"\t")
+              fields = metadata.split()
+              if not separator or len(fields) != 4 or fields[1] != b"blob" or fields[3] == b"-":
                   continue
-              size = int(subprocess.check_output(["git", "cat-file", "-s", object_id], text=True).strip())
+              size = int(fields[3])
               if size > maximum:
                   violations.append((normalized, size))
 
