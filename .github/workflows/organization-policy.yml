@@ -3,8 +3,9 @@
 name: Organization policy
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
@@ -22,10 +23,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          fetch-depth: 0
+      - name: Fetch evaluated Git objects
+        env:
+          BASE_REPOSITORY: ${{ github.repository }}
+          BASE_SHA: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.repository }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          SERVER_URL: ${{ github.server_url }}
+        shell: bash
+        run: |
+          git init --quiet .
+          git remote add evaluated-head "${SERVER_URL}/${HEAD_REPOSITORY}.git"
+          git fetch --no-tags --depth=1 evaluated-head "${HEAD_SHA}"
+          if [[ -n "${BASE_SHA}" && ! "${BASE_SHA}" =~ ^0+$ ]]; then
+            git remote add protected-base "${SERVER_URL}/${BASE_REPOSITORY}.git"
+            git fetch --no-tags --depth=1 protected-base "${BASE_SHA}"
+          fi
 
       - name: Enforce changed-file policy
         shell: bash
@@ -39,9 +52,9 @@ jobs:
           import sys
 
           event = json.loads(pathlib.Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
-          head = os.environ["GITHUB_SHA"]
-          base = None
           pull_request = event.get("pull_request")
+          head = pull_request["head"]["sha"] if pull_request else os.environ["GITHUB_SHA"]
+          base = None
           if pull_request:
               base = pull_request["base"]["sha"]
           else:
@@ -52,7 +65,7 @@ jobs:
           if base:
               command = ["git", "diff", "--no-renames", "--name-only", "--diff-filter=AM", "-z", base, head]
           else:
-              command = ["git", "ls-files", "-z"]
+              command = ["git", "ls-tree", "-r", "--name-only", "-z", head]
 
           changed = [
               item.decode("utf-8", errors="surrogateescape")
@@ -62,26 +75,27 @@ jobs:
           allowed = [line.strip() for line in os.environ.get("ALLOW_LARGE_PATHS", "").splitlines() if line.strip()]
           maximum = int(os.environ["MAX_ADDED_FILE_BYTES"])
           violations = []
-          literal_git_env = dict(os.environ)
-          literal_git_env["GIT_LITERAL_PATHSPECS"] = "1"
+          blob_sizes = {}
+          tree_records = subprocess.check_output(
+              ["git", "ls-tree", "-r", "-z", "-l", "--full-tree", head]
+          ).split(b"\0")
+          for record in tree_records:
+              if not record:
+                  continue
+              metadata, separator, raw_path = record.partition(b"\t")
+              fields = metadata.split()
+              if not separator or len(fields) != 4 or fields[1] != b"blob" or fields[3] == b"-":
+                  continue
+              tracked_path = raw_path.decode("utf-8", errors="surrogateescape")
+              blob_sizes[tracked_path] = int(fields[3])
 
           for path in changed:
               normalized = path.replace(os.sep, "/")
               if any(fnmatch.fnmatch(normalized, pattern) for pattern in allowed):
                   continue
-              try:
-                  entry = subprocess.check_output(
-                      ["git", "ls-tree", "-z", "-l", "--full-tree", head, "--", normalized],
-                      env=literal_git_env,
-                      stderr=subprocess.DEVNULL,
-                  )
-              except subprocess.CalledProcessError:
+              size = blob_sizes.get(normalized)
+              if size is None:
                   continue
-              metadata, separator, _ = entry.partition(b"\t")
-              fields = metadata.split()
-              if not separator or len(fields) != 4 or fields[1] != b"blob" or fields[3] == b"-":
-                  continue
-              size = int(fields[3])
               if size > maximum:
                   violations.append((normalized, size))
 
