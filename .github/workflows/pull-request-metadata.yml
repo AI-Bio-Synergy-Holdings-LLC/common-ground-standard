@@ -21,7 +21,7 @@ jobs:
           PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
         shell: bash
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import os
           import pathlib
           import re
@@ -41,7 +41,10 @@ jobs:
           with summary_path.open("a", encoding="utf-8") as summary:
               summary.write("## Pull request metadata\n\n")
               summary.write(f"Title: `{title}`\n\n")
-              summary.write("Expected format: `type(scope): concise outcome`.\n")
+              summary.write(
+                  "Expected format: `type: concise outcome` or "
+                  "`type(scope): concise outcome`.\n"
+              )
 
           if conventional.fullmatch(title) or automation:
               print(f"Accepted pull request title: {title}")
