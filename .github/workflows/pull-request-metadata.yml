@@ -1,0 +1,58 @@
+# Standalone public-repository metadata check derived from AI-Bio-Synergy-Holdings-LLC/.github/.github/workflows/reusable-pr-metadata.yml
+# Public vendor contract v1.1.1; canonical source 6e91ad5d0680bb79c6e3552ef9efea96a2158ca1.
+name: Pull request metadata
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    name: metadata / PR metadata
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate pull request title
+        env:
+          PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import pathlib
+          import re
+          import sys
+
+          title = os.environ.get("PULL_REQUEST_TITLE", "").strip()
+          conventional = re.compile(
+              r"^(feat|fix|docs|refactor|perf|test|build|ci|chore|revert)"
+              r"(?:\([A-Za-z0-9._/-]+\))?!?: .{3,}$"
+          )
+          automation = (
+              re.match(r"^Bump .+ from .+ to .+$", title)
+              or re.match(r"^chore\([^)]*\): release .+$", title)
+          )
+
+          summary_path = pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with summary_path.open("a", encoding="utf-8") as summary:
+              summary.write("## Pull request metadata\n\n")
+              summary.write(f"Title: `{title}`\n\n")
+              summary.write(
+                  "Expected format: `type: concise outcome` or "
+                  "`type(scope): concise outcome`.\n"
+              )
+
+          if conventional.fullmatch(title) or automation:
+              print(f"Accepted pull request title: {title}")
+              sys.exit(0)
+
+          print(
+              "::error::Use a Conventional Commit title such as "
+              "'feat(api): add governed export'. Dependabot bump titles are also accepted."
+          )
+          sys.exit(1)
+          PY
