@@ -1,0 +1,22 @@
+{
+  "name": "@ai-bio-synergy/common-ground-public-evidence-validator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline structural validator for common-ground-public-evidence/v0.1 packages",
+  "type": "module",
+  "bin": {
+    "cgs-public-evidence": "./evidence-validator/bin/cgs-evidence.mjs"
+  },
+  "exports": {
+    "./public-evidence": "./evidence-validator/lib/public-evidence.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check": "node --check evidence-validator/lib/public-evidence.mjs && node --check evidence-validator/bin/cgs-evidence.mjs && node --test evidence-validator/test/public-evidence.test.mjs",
+    "test": "node --test evidence-validator/test/public-evidence.test.mjs",
+    "validate:example": "node evidence-validator/bin/cgs-evidence.mjs verify evidence-validator/examples/golden evidence-validator/examples/golden/receipt.json"
+  },
+  "license": "SEE LICENSE IN LICENSE"
+}
