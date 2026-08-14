@@ -1,0 +1,44 @@
+name: Public evidence validator
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "evidence-validator/**"
+      - "package.json"
+      - ".github/workflows/public-evidence-validator.yml"
+  push:
+    branches: [main]
+    paths:
+      - "evidence-validator/**"
+      - "package.json"
+      - ".github/workflows/public-evidence-validator.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-evidence-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  evidence:
+    name: evidence / Offline validator
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Run dependency-free validator suite
+        run: npm run check
+
+      - name: Verify checksum-only golden package
+        run: npm run validate:example
