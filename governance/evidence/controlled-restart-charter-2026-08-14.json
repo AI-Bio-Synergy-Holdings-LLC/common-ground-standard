@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "1.0",
+  "recordType": "CONTROLLED_RESTART_REPOSITORY_CHARTER",
+  "recordedOn": "2026-08-14",
+  "capturedAt": "2026-08-14T05:19:54.2887130Z",
+  "organization": "AI-Bio-Synergy-Holdings-LLC",
+  "authorizationBasis": "explicit owner instruction to proceed with the next strongest action after protected COSMOS-CQA closeout",
+  "prerequisiteCloseout": {
+    "repository": "AI-Bio-Synergy-Holdings-LLC/.github",
+    "pullRequest": 27,
+    "mergeCommitSha": "dd86afd08cea3f532445a2eba14510458f0e968a",
+    "mergedAt": "2026-08-14T05:12:04Z",
+    "normalProtectedMerge": true,
+    "policyOverrideRecorded": false
+  },
+  "repository": {
+    "slug": "AI-Bio-Synergy-Holdings-LLC/common-ground-standard",
+    "visibility": "public",
+    "defaultBranch": "main",
+    "baselineHeadSha": "20187a91f196832ca73d8b84f46b430b86368186",
+    "baselineHeadSignatureVerified": true,
+    "baselineStatusRollup": "SUCCESS"
+  },
+  "operationalProjectId": "common-ground-standard",
+  "assetRegistryId": null,
+  "assetMappingStatus": "UNASSIGNED",
+  "repositoryNameIsAssetIdentity": false,
+  "admission": {
+    "sequence": 5,
+    "preMergeStatus": "PENDING_KICKOFF",
+    "postProtectedMergeStatus": "ACTIVE_CONTROLLED",
+    "newRepositoriesAdmitted": 1,
+    "engineeringActiveRepositoryCountAfterMerge": 5,
+    "engineeringActiveRepositoriesAfterMerge": [
+      "AI-Bio-Synergy-Holdings-LLC/portfolio-control-plane",
+      "AI-Bio-Synergy-Holdings-LLC/lumical-studio",
+      "AI-Bio-Synergy-Holdings-LLC/QS-DMSS",
+      "AI-Bio-Synergy-Holdings-LLC/COSMOS-CQA",
+      "AI-Bio-Synergy-Holdings-LLC/common-ground-standard"
+    ],
+    "allOtherOrganizationRepositoriesStatus": "PENDING_KICKOFF",
+    "maximumActiveFeaturePullRequestsInRepository": 1
+  },
+  "firstBoundedDelivery": {
+    "title": "offline public-review evidence-package and claim-status boundary validator",
+    "contract": "common-ground-public-evidence/v0.1",
+    "relatedIssuesRemainOpen": [4, 6, 7],
+    "authorizedScope": [
+      "closed versioned public-review evidence manifest",
+      "deterministic canonical JSON and SHA-256 receipts",
+      "machine-readable separation of draft assertion, review, alignment, endorsement, and certification states without granting any state",
+      "declared public-source inventory, limitations, review scope, and affected-party-governance fields",
+      "local non-executing validation of manifest and evidence-package structure before any state mutation",
+      "dependency-free Node.js library and command-line surfaces",
+      "golden, negative-path, deterministic replay, and checksum-only example coverage",
+      "explicit structural-integrity-only claim boundary"
+    ],
+    "substantiveStandardChangeAuthorized": false,
+    "issueClosureAuthorized": false,
+    "evidenceSufficiencyDecisionAuthorized": false,
+    "alignmentDecisionAuthorized": false,
+    "endorsementAuthorized": false,
+    "certificationAuthorized": false,
+    "partnershipOrPilotClaimAuthorized": false,
+    "publicIntakeActivationAuthorized": false,
+    "newRuntimeOrDevelopmentDependencyAuthorized": false,
+    "networkSubmissionAuthorized": false,
+    "evidencePackageCodeExecutionAuthorized": false
+  },
+  "retainedProhibitions": [
+    "closure of issues 4, 6, or 7 based on structural validation alone",
+    "substantive v0.2, no-go, benefit-sharing, ecological, student, worker, data-rights, or affected-party-governance change in the first delivery",
+    "review, alignment, endorsement, certification, compliance, partnership, sponsorship, pilot, procurement, or independent-audit status grant or inference",
+    "representation of declared, checksum-valid, or structurally valid evidence as substantively sufficient or independently verified",
+    "public institutional intake activation or sensitive submission acceptance",
+    "Formspree, reCAPTCHA, analytics, cookie, or contact behavior change",
+    "backend, database, account, identity, partner-data, private-review, data-room, confidential-submission, or live-provider path",
+    "new runtime or development dependency, network submission, external package execution, or evidence-package code execution",
+    "release publication, Render or Cloudflare change, or production deployment-authority change",
+    "Holdings connector, private asset-data access, or transaction path",
+    "Control Plane repository execution, actuation, automated merge, deployment, transaction, diligence, or Gate 6 authority",
+    "internal development or repository identifier represented as registered asset identity",
+    "repository protection, required check, ruleset, auto-merge, security-feature, or visibility change",
+    "admin bypass, force push, history rewrite, unprotected merge, branch deletion, or protected dirty clone mutation",
+    "sixth repository admission without separate protected charter and owner approval"
+  ],
+  "entryEvidence": {
+    "openPullRequests": 0,
+    "openPublicReviewIssues": 7,
+    "requiredChecksStrict": true,
+    "requiredChecks": [
+      { "context": "policy / Organization baseline", "appId": 15368 },
+      { "context": "metadata / PR metadata", "appId": 15368 }
+    ],
+    "conversationResolutionRequired": true,
+    "linearHistoryRequired": true,
+    "forcePushAllowed": false,
+    "branchDeletionAllowed": false,
+    "openDependabotAlerts": 0,
+    "openCodeqlAlerts": 0,
+    "openSecretScanningAlerts": 0,
+    "dependabotSecurityUpdates": "enabled",
+    "secretScanning": "enabled",
+    "pushProtection": "enabled",
+    "activeAncillaryRulesets": 0,
+    "disabledAncillaryRulesets": [
+      {
+        "id": 19324061,
+        "name": "Code Quality Copilot review for default branch"
+      }
+    ],
+    "allowAutoMerge": false,
+    "exactHeadPolicyRunId": 30781351252,
+    "latestScheduledCodeqlRunId": 31519391840,
+    "publicDomain": {
+      "url": "https://common-ground-standard.org/",
+      "checkedAt": "2026-08-14T05:20:13Z",
+      "httpStatus": 200,
+      "contentSecurityPolicy": "present",
+      "strictTransportSecurity": "present",
+      "permissionsPolicy": "present",
+      "referrerPolicy": "present",
+      "xContentTypeOptions": "nosniff",
+      "xFrameOptions": "DENY"
+    }
+  },
+  "firstDeliveryExitCriteria": [
+    "exact-head protected feature PR with every required check successful",
+    "manifest contract, canonicalization, receipt, validation, negative-path, replay, documentation, and applicable static-site checks successful",
+    "zero high or critical dependency and CodeQL findings and zero secret-scanning alerts unless separately accepted",
+    "dependency-free offline deterministic non-executing validation with complete negative-path coverage",
+    "explicit distinction between structural integrity and truth, sufficiency, independence, review, alignment, endorsement, certification, compliance, partnership, pilot, or public-benefit proof",
+    "issues 4, 6, and 7 remain open",
+    "no substantive standard, public-intake, backend, provider, authentication, private-review, Holdings, execution, release, actuation, transaction, deployment-authority, or Gate 6 path",
+    "green exact protected main rollup and applicable Render build after normal protected merge",
+    "no protected_branch.policy_override event for charter or delivery merge",
+    "signed observe-only Control Plane delivery review",
+    "protected central-ledger delivery closeout"
+  ],
+  "charterChangesRuntime": false,
+  "charterChangesDependencies": false,
+  "charterChangesPublicWebsite": false,
+  "charterChangesDeployment": false,
+  "charterChangesRepositorySettings": false,
+  "ownerApprovalRequiredForNextRepository": true,
+  "publicWebsiteMonorepo": {
+    "repository": "SIONSOULSION/AI-Bio-Synergy-Holdings-LLC",
+    "insideOrganizationCensus": false,
+    "engineeringAdmission": false
+  }
+}
