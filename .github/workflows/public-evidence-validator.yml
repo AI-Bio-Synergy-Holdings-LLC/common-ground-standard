@@ -6,12 +6,14 @@ on:
     paths:
       - "evidence-validator/**"
       - "package.json"
+      - ".gitattributes"
       - ".github/workflows/public-evidence-validator.yml"
   push:
     branches: [main]
     paths:
       - "evidence-validator/**"
       - "package.json"
+      - ".gitattributes"
       - ".github/workflows/public-evidence-validator.yml"
   workflow_dispatch:
 
