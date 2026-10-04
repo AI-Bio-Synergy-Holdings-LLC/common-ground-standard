@@ -43,3 +43,25 @@ test("the staging build requires a complete non-production configuration", async
   assert.match(site, /formEndpoint\.origin !== "https:\/\/formspree\.io"/);
   assert.doesNotMatch(site, /\/f\/mykqwozd/);
 });
+
+test("the integration thank-you route distinguishes a synthetic transmission from local validation", async () => {
+  const html = await read("institutional-thank-you.html");
+  const site = await read("site.js");
+
+  for (const hook of [
+    "data-institutional-result-title",
+    "data-institutional-result-summary",
+    "data-institutional-result-status",
+    "data-institutional-result-transmission",
+    "data-institutional-result-live",
+    "data-institutional-result-notice-title",
+    "data-institutional-result-notice-copy",
+  ]) {
+    assert.match(html, new RegExp(hook));
+  }
+
+  assert.match(site, /mode !== "integration-success"/);
+  assert.match(site, /One synthetic test record/);
+  assert.match(site, /does not confirm inbox delivery or final classification/);
+  assert.match(site, /Live institutional intake remains disabled/);
+});

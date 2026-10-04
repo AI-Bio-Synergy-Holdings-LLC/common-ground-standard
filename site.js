@@ -1139,6 +1139,42 @@
     returnLink.childNodes[0].textContent = `${safePages.get(page)} `;
   };
 
+  const initInstitutionalThankYou = () => {
+    const title = document.querySelector("[data-institutional-result-title]");
+    if (!(title instanceof HTMLElement)) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const record = params.get("record") || "";
+    if (mode !== "integration-success" || !/^CGS-INSTITUTIONAL-RC1-\d{4}-\d{2}-\d{2}$/.test(record)) {
+      return;
+    }
+
+    const setText = (selector, value) => {
+      const element = document.querySelector(selector);
+      if (element) element.textContent = value;
+    };
+
+    document.title = "Institutional Routing Test Accepted | Common Ground Standard";
+    setText("[data-institutional-result-label]", "Controlled institutional routing test");
+    setText("[data-institutional-result-title]", "Routing response accepted.");
+    setText(
+      "[data-institutional-result-summary]",
+      "Formspree accepted one staging-only synthetic record. This page does not confirm inbox delivery or final classification; the receipt must be verified in Formspree before the gate can close.",
+    );
+    setText("[data-institutional-result-status]", "Formspree response accepted");
+    setText("[data-institutional-result-transmission]", "One synthetic test record");
+    setText("[data-institutional-result-live]", "Disabled — no live intake opened");
+    setText(
+      "[data-institutional-result-notice-title]",
+      "This was a synthetic routing verification, not an institutional submission.",
+    );
+    setText(
+      "[data-institutional-result-notice-copy]",
+      `Receipt ${record} must be checked for delivery status and deleted after verification. Live institutional intake remains disabled pending separate final authorization.`,
+    );
+  };
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       initReviewAssistant();
@@ -1146,6 +1182,7 @@
       initSubjectPressureTests();
       initReviewFeedbackForm();
       initReviewThankYou();
+      initInstitutionalThankYou();
     }, { once: true });
   } else {
     initReviewAssistant();
@@ -1153,6 +1190,7 @@
     initSubjectPressureTests();
     initReviewFeedbackForm();
     initReviewThankYou();
+    initInstitutionalThankYou();
   }
 
   const prefetch = (anchor) => {
