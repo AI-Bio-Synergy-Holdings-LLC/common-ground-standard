@@ -10,6 +10,9 @@ services:
     domains:
       - common-ground-standard.org
     headers:
+      - path: /institutional-rc1-config.js
+        name: Cache-Control
+        value: no-store, no-cache, must-revalidate, max-age=0
       - path: /*
         name: Content-Security-Policy
         value: >-

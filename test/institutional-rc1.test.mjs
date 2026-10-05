@@ -37,6 +37,45 @@ test("the committed RC1 configuration is inert", async () => {
   assert.doesNotMatch(config, /recaptchaSiteKey\s*:/i);
 });
 
+test("the institutional runtime config cannot remain cached across activation modes", async () => {
+  const build = await read("scripts/prepare-render-site.mjs");
+  const render = await read("render.yaml");
+
+  assert.match(build, /createHash\("sha256"\)/);
+  assert.match(build, /institutional-rc1-config\\\.js\(\?:\\\?\[\^"'\]\*\)\?/);
+  assert.match(render, /path: \/institutional-rc1-config\.js/);
+  assert.match(render, /value: no-store, no-cache, must-revalidate, max-age=0/);
+
+  const commonEnvironment = {
+    CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT: "https://formspree.io/f/mrpezwok",
+    CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY: publicRecaptchaSiteKey,
+    CGS_INSTITUTIONAL_FINAL_AUTHORIZATION_ID:
+      "CGS-INSTITUTIONAL-LIVE-2026-10-05-CHARTER-V0-4",
+  };
+
+  await runBuild({
+    ...commonEnvironment,
+    CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED: "true",
+  });
+  const verificationHtml = await read("dist-render/institutional-alignment.html");
+  const verificationVersion = verificationHtml.match(
+    /institutional-rc1-config\.js\?v=([a-f0-9]{16})/,
+  )?.[1];
+
+  await runBuild({
+    ...commonEnvironment,
+    CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED: "true",
+  });
+  const liveHtml = await read("dist-render/institutional-alignment.html");
+  const liveVersion = liveHtml.match(/institutional-rc1-config\.js\?v=([a-f0-9]{16})/)?.[1];
+
+  assert.ok(verificationVersion);
+  assert.ok(liveVersion);
+  assert.notEqual(verificationVersion, liveVersion);
+
+  await runBuild();
+});
+
 test("the staging build requires a complete non-production configuration", async () => {
   const build = await read("scripts/prepare-render-site.mjs");
   const site = await read("site.js");
