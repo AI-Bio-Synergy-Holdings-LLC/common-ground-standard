@@ -25,6 +25,8 @@ test("the committed institutional form remains structurally fail-closed", async 
   assert.match(form, /<button[^>]*type="button"[^>]*data-fs-submit-btn/);
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
+  assert.match(html, /Final activation authority has been issued/);
+  assert.match(html, /production verification and the enable-last controls pass/);
 });
 
 test("the committed RC1 configuration is inert", async () => {
