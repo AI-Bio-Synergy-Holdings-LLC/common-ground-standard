@@ -20,6 +20,58 @@ const publicEntries = [
   "styles.css",
 ];
 
+const productionOrigin = "https://common-ground-standard.org";
+const productionInstitutionalFormEndpoint = "https://formspree.io/f/mrpezwok";
+
+const requireEnvironment = (label, values) => {
+  const missing = Object.entries(values)
+    .filter(([, value]) => !value)
+    .map(([name]) => name);
+
+  if (missing.length > 0) {
+    throw new Error(`${label} is enabled but missing: ${missing.join(", ")}`);
+  }
+
+  return values;
+};
+
+const parseHttpsOrigin = (value, label) => {
+  const url = new URL(value);
+  if (url.protocol !== "https:" || url.pathname !== "/" || url.search || url.hash) {
+    throw new Error(`${label} must be an HTTPS origin without a path, query, or fragment`);
+  }
+  return url.origin;
+};
+
+const parseFormspreeEndpoint = (value, label, expectedEndpoint = null) => {
+  const url = new URL(value);
+  if (
+    url.origin !== "https://formspree.io" ||
+    !/^\/f\/[A-Za-z0-9_-]+$/.test(url.pathname) ||
+    url.search ||
+    url.hash
+  ) {
+    throw new Error(`${label} requires a Formspree /f/{form-id} endpoint`);
+  }
+  if (expectedEndpoint && url.href !== expectedEndpoint) {
+    throw new Error(`${label} must use the dedicated production institutional form`);
+  }
+  return url.href;
+};
+
+const parseRecaptchaSiteKey = (value, label) => {
+  if (!/^[A-Za-z0-9_-]{20,}$/.test(value)) {
+    throw new Error(`${label} reCAPTCHA site key is malformed`);
+  }
+  return value;
+};
+
+const writeInstitutionalConfig = async (config, message) => {
+  const configSource = `window.__CGS_INSTITUTIONAL_RC1__ = Object.freeze(${JSON.stringify(config)});\n`;
+  await writeFile(path.join(artifactRoot, "institutional-rc1-config.js"), configSource, "utf8");
+  console.log(message);
+};
+
 await rm(artifactRoot, { recursive: true, force: true });
 await mkdir(artifactRoot, { recursive: true });
 
@@ -28,41 +80,39 @@ for (const entry of publicEntries) {
 }
 
 const rc1Enabled = process.env.CGS_INSTITUTIONAL_RC1_ENABLED === "true";
+const productionCandidateEnabled =
+  process.env.CGS_INSTITUTIONAL_PRODUCTION_CANDIDATE_ENABLED === "true";
+const productionLiveEnabled = process.env.CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED === "true";
+
+if ([rc1Enabled, productionCandidateEnabled, productionLiveEnabled].filter(Boolean).length > 1) {
+  throw new Error("Only one institutional intake build mode may be enabled at a time");
+}
 
 if (rc1Enabled) {
-  const requiredEnvironment = {
+  const requiredEnvironment = requireEnvironment("Institutional Route RC1", {
     allowedOrigin: process.env.CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN,
     formEndpoint: process.env.CGS_INSTITUTIONAL_RC1_FORM_ENDPOINT,
     recaptchaSiteKey: process.env.CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY,
     authorizationCode: process.env.CGS_INSTITUTIONAL_RC1_AUTHORIZATION_CODE,
     recordId: process.env.CGS_INSTITUTIONAL_RC1_RECORD_ID,
-  };
-  const missing = Object.entries(requiredEnvironment)
-    .filter(([, value]) => !value)
-    .map(([name]) => name);
+  });
 
-  if (missing.length > 0) {
-    throw new Error(`Institutional Route RC1 is enabled but missing: ${missing.join(", ")}`);
-  }
+  const allowedOrigin = parseHttpsOrigin(
+    requiredEnvironment.allowedOrigin,
+    "Institutional Route RC1 allowed origin",
+  );
+  const formEndpoint = parseFormspreeEndpoint(
+    requiredEnvironment.formEndpoint,
+    "Institutional Route RC1",
+  );
 
-  const allowedOrigin = new URL(requiredEnvironment.allowedOrigin);
-  const formEndpoint = new URL(requiredEnvironment.formEndpoint);
-
-  if (allowedOrigin.protocol !== "https:" || allowedOrigin.pathname !== "/") {
-    throw new Error("Institutional Route RC1 allowed origin must be an HTTPS origin without a path");
-  }
-  if (allowedOrigin.origin === "https://common-ground-standard.org") {
+  if (allowedOrigin === productionOrigin) {
     throw new Error("Institutional Route RC1 cannot be enabled for the production origin");
   }
-  if (
-    formEndpoint.origin !== "https://formspree.io" ||
-    !/^\/f\/[A-Za-z0-9_-]+$/.test(formEndpoint.pathname)
-  ) {
-    throw new Error("Institutional Route RC1 requires a Formspree /f/{form-id} endpoint");
-  }
-  if (!/^[A-Za-z0-9_-]{20,}$/.test(requiredEnvironment.recaptchaSiteKey)) {
-    throw new Error("Institutional Route RC1 reCAPTCHA site key is malformed");
-  }
+  const recaptchaSiteKey = parseRecaptchaSiteKey(
+    requiredEnvironment.recaptchaSiteKey,
+    "Institutional Route RC1",
+  );
   if (!/^[A-Za-z0-9_-]{24,}$/.test(requiredEnvironment.authorizationCode)) {
     throw new Error("Institutional Route RC1 authorization code must be at least 24 URL-safe characters");
   }
@@ -72,16 +122,82 @@ if (rc1Enabled) {
 
   const publicConfig = {
     mode: "integration-test",
-    allowedOrigin: allowedOrigin.origin,
-    formEndpoint: formEndpoint.href,
-    recaptchaSiteKey: requiredEnvironment.recaptchaSiteKey,
+    allowedOrigin,
+    formEndpoint,
+    recaptchaSiteKey,
     authorizationCode: requiredEnvironment.authorizationCode,
     recordId: requiredEnvironment.recordId,
   };
-  const configSource = `window.__CGS_INSTITUTIONAL_RC1__ = Object.freeze(${JSON.stringify(publicConfig)});\n`;
+  await writeInstitutionalConfig(
+    publicConfig,
+    `Institutional Route RC1 enabled for ${allowedOrigin}`,
+  );
+}
 
-  await writeFile(path.join(artifactRoot, "institutional-rc1-config.js"), configSource, "utf8");
-  console.log(`Institutional Route RC1 enabled for ${allowedOrigin.origin}`);
+if (productionCandidateEnabled) {
+  const requiredEnvironment = requireEnvironment("Institutional production candidate", {
+    previewOrigin: process.env.CGS_INSTITUTIONAL_CANDIDATE_PREVIEW_ORIGIN,
+    formEndpoint: process.env.CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT,
+    recaptchaSiteKey: process.env.CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY,
+  });
+  const previewOrigin = parseHttpsOrigin(
+    requiredEnvironment.previewOrigin,
+    "Institutional production-candidate preview origin",
+  );
+  if (previewOrigin === productionOrigin) {
+    throw new Error("Institutional production candidate must use an isolated non-production preview origin");
+  }
+
+  const publicConfig = {
+    mode: "production-candidate",
+    productionOrigin,
+    previewOrigin,
+    formEndpoint: parseFormspreeEndpoint(
+      requiredEnvironment.formEndpoint,
+      "Institutional production candidate",
+      productionInstitutionalFormEndpoint,
+    ),
+    recaptchaSiteKey: parseRecaptchaSiteKey(
+      requiredEnvironment.recaptchaSiteKey,
+      "Institutional production candidate",
+    ),
+    intakeOwner: "AI-Bio Synergy Holdings LLC",
+  };
+  await writeInstitutionalConfig(
+    publicConfig,
+    `Institutional production candidate prepared for isolated preview at ${previewOrigin}`,
+  );
+}
+
+if (productionLiveEnabled) {
+  const requiredEnvironment = requireEnvironment("Institutional production live mode", {
+    formEndpoint: process.env.CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT,
+    recaptchaSiteKey: process.env.CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY,
+    authorizationId: process.env.CGS_INSTITUTIONAL_FINAL_AUTHORIZATION_ID,
+  });
+  if (!/^CGS-INSTITUTIONAL-LIVE-\d{4}-\d{2}-\d{2}-[A-Z0-9-]+$/.test(requiredEnvironment.authorizationId)) {
+    throw new Error("Institutional production live mode requires a valid final authorization ID");
+  }
+
+  const publicConfig = {
+    mode: "production-live",
+    allowedOrigin: productionOrigin,
+    formEndpoint: parseFormspreeEndpoint(
+      requiredEnvironment.formEndpoint,
+      "Institutional production live mode",
+      productionInstitutionalFormEndpoint,
+    ),
+    recaptchaSiteKey: parseRecaptchaSiteKey(
+      requiredEnvironment.recaptchaSiteKey,
+      "Institutional production live mode",
+    ),
+    authorizationId: requiredEnvironment.authorizationId,
+    intakeOwner: "AI-Bio Synergy Holdings LLC",
+  };
+  await writeInstitutionalConfig(
+    publicConfig,
+    `Institutional production live mode prepared for ${productionOrigin}`,
+  );
 }
 
 console.log(`Common Ground Standard Render artifact prepared at ${path.relative(repoRoot, artifactRoot)}`);
