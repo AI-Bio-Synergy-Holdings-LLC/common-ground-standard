@@ -486,7 +486,6 @@
           const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
           const nextStep = form.querySelector("[data-rc1-next-step]");
           const disclosure = form.querySelector("[data-rc1-disclosure]");
-          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
           if (noticeTitle) {
             noticeTitle.textContent = "Controlled RC1 integration window - synthetic data only.";
           }
@@ -536,6 +535,7 @@
           const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
           const nextStep = form.querySelector("[data-rc1-next-step]");
           const disclosure = form.querySelector("[data-rc1-disclosure]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
           if (noticeTitle) {
             noticeTitle.textContent = "Production candidate — live intake is not authorized.";
           }

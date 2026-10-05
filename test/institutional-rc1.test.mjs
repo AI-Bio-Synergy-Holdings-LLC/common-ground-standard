@@ -74,6 +74,10 @@ test("the production candidate is exact-destination and structurally non-transmi
   assert.match(site, /Production candidate — live intake is not authorized\./);
   assert.match(site, /This candidate does not contact either service\./);
   assert.match(site, /This production candidate does not transmit or store form-field data\./);
+  assert.match(
+    site,
+    /if \(isProductionCandidate\)[\s\S]*const operatingCopy = document\.querySelector\("\[data-rc1-operating-copy\]"\);[\s\S]*if \(operatingCopy\)/,
+  );
   assert.match(site, /submitButton\.type = "button"/);
   assert.match(site, /submitButton\.disabled = true/);
   assert.match(html, /name="email"/);
