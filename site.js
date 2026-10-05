@@ -116,7 +116,10 @@
     }
 
     const config = window.__CGS_INSTITUTIONAL_RC1__;
-    if (!config || !["production-candidate", "production-live"].includes(config.mode)) {
+    if (
+      !config ||
+      !["production-candidate", "production-verification", "production-live"].includes(config.mode)
+    ) {
       return null;
     }
 
@@ -181,11 +184,14 @@
         const institutionalProduction = getInstitutionalProductionConfig(form);
         const isIntegrationTest = Boolean(institutionalRc1);
         const isProductionCandidate = institutionalProduction?.mode === "production-candidate";
+        const isProductionVerification =
+          institutionalProduction?.mode === "production-verification";
         const isProductionLive = institutionalProduction?.mode === "production-live";
         const isTestMode =
           form.dataset.intakeMode === "test" &&
           !isIntegrationTest &&
           !isProductionCandidate &&
+          !isProductionVerification &&
           !isProductionLive;
         const testGuard = form.querySelector("[data-test-form-guard]");
         const siteKey =
@@ -558,6 +564,53 @@
           return;
         }
 
+        if (isProductionVerification) {
+          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            showError(
+              "The production verification route could not be locked safely. No information can be submitted.",
+            );
+            return;
+          }
+
+          testGuard.disabled = true;
+          form.querySelectorAll("input, select, textarea").forEach((field) => {
+            field.disabled = true;
+            field.setAttribute("aria-disabled", "true");
+          });
+          form.removeAttribute("action");
+          form.removeAttribute("method");
+          form.dataset.intakeMode = "production-verification";
+          submitButton.type = "button";
+          submitButton.textContent = "Held during production verification";
+          submitButton.disabled = true;
+
+          const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
+          const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
+          const nextStep = form.querySelector("[data-rc1-next-step]");
+          const disclosure = form.querySelector("[data-rc1-disclosure]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
+          if (noticeTitle) {
+            noticeTitle.textContent = "Production verification — institutional intake is not open.";
+          }
+          if (noticeCopy) {
+            noticeCopy.textContent =
+              "The exact production route and authorized destination are being verified while every field and transmission path remains disabled. No institutional information can be submitted in this mode.";
+          }
+          if (nextStep) {
+            nextStep.textContent =
+              "This route is being checked for origin lock, accessibility, responsive behavior, security headers, and confirmation handling before the final enable switch is used.";
+          }
+          if (disclosure) {
+            disclosure.textContent =
+              "Formspree and Google reCAPTCHA are configured for the authorized live route, but production verification mode does not load, contact, or submit to either service.";
+          }
+          if (operatingCopy) {
+            operatingCopy.textContent =
+              "Production verification mode does not transmit or store form-field data. The following controls will govern every institutional review note if the enable-last checks pass.";
+          }
+          return;
+        }
+
         if (isProductionLive) {
           if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
             showError(
@@ -593,6 +646,7 @@
           const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
           const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
           const nextStep = form.querySelector("[data-rc1-next-step]");
+          const disclosureLead = form.querySelector("[data-rc1-disclosure-lead]");
           const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
           if (noticeTitle) noticeTitle.textContent = "Institutional review intake is open.";
           if (noticeCopy) {
@@ -602,6 +656,10 @@
           if (nextStep) {
             nextStep.textContent =
               "The current steward will screen the note for fit, conflicts, scope, and handling requirements, then respond through the institutional contact provided. Submission does not guarantee a review role or public listing.";
+          }
+          if (disclosureLead) {
+            disclosureLead.textContent =
+              "Live submission uses the dedicated institutional Formspree route and Google reCAPTCHA.";
           }
           if (operatingCopy) {
             operatingCopy.textContent =

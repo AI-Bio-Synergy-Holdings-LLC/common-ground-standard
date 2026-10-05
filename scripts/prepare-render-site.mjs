@@ -82,9 +82,15 @@ for (const entry of publicEntries) {
 const rc1Enabled = process.env.CGS_INSTITUTIONAL_RC1_ENABLED === "true";
 const productionCandidateEnabled =
   process.env.CGS_INSTITUTIONAL_PRODUCTION_CANDIDATE_ENABLED === "true";
+const productionVerificationEnabled =
+  process.env.CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED === "true";
 const productionLiveEnabled = process.env.CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED === "true";
 
-if ([rc1Enabled, productionCandidateEnabled, productionLiveEnabled].filter(Boolean).length > 1) {
+if (
+  [rc1Enabled, productionCandidateEnabled, productionVerificationEnabled, productionLiveEnabled].filter(
+    Boolean,
+  ).length > 1
+) {
   throw new Error("Only one institutional intake build mode may be enabled at a time");
 }
 
@@ -166,6 +172,37 @@ if (productionCandidateEnabled) {
   await writeInstitutionalConfig(
     publicConfig,
     `Institutional production candidate prepared for isolated preview at ${previewOrigin}`,
+  );
+}
+
+if (productionVerificationEnabled) {
+  const requiredEnvironment = requireEnvironment("Institutional production verification mode", {
+    formEndpoint: process.env.CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT,
+    recaptchaSiteKey: process.env.CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY,
+    authorizationId: process.env.CGS_INSTITUTIONAL_FINAL_AUTHORIZATION_ID,
+  });
+  if (!/^CGS-INSTITUTIONAL-LIVE-\d{4}-\d{2}-\d{2}-[A-Z0-9-]+$/.test(requiredEnvironment.authorizationId)) {
+    throw new Error("Institutional production verification mode requires a valid final authorization ID");
+  }
+
+  const publicConfig = {
+    mode: "production-verification",
+    allowedOrigin: productionOrigin,
+    formEndpoint: parseFormspreeEndpoint(
+      requiredEnvironment.formEndpoint,
+      "Institutional production verification mode",
+      productionInstitutionalFormEndpoint,
+    ),
+    recaptchaSiteKey: parseRecaptchaSiteKey(
+      requiredEnvironment.recaptchaSiteKey,
+      "Institutional production verification mode",
+    ),
+    authorizationId: requiredEnvironment.authorizationId,
+    intakeOwner: "AI-Bio Synergy Holdings LLC",
+  };
+  await writeInstitutionalConfig(
+    publicConfig,
+    `Institutional production verification mode prepared for ${productionOrigin}`,
   );
 }
 
