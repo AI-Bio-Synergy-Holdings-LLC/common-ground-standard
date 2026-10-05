@@ -68,48 +68,324 @@
 
   window.addEventListener("pageshow", markLoaded);
 
+  const getInstitutionalRc1Config = (form) => {
+    if (!(form instanceof HTMLFormElement) || form.id !== "institutional-review-form") {
+      return null;
+    }
+
+    const config = window.__CGS_INSTITUTIONAL_RC1__;
+    if (!config || config.mode !== "integration-test") return null;
+
+    try {
+      const allowedOrigin = new URL(config.allowedOrigin);
+      const formEndpoint = new URL(config.formEndpoint);
+      const authorizationCode = new URLSearchParams(window.location.search).get("integration");
+
+      if (allowedOrigin.origin !== window.location.origin || allowedOrigin.pathname !== "/") {
+        return null;
+      }
+      if (
+        formEndpoint.origin !== "https://formspree.io" ||
+        !/^\/f\/[A-Za-z0-9_-]+$/.test(formEndpoint.pathname)
+      ) {
+        return null;
+      }
+      if (
+        !config.recaptchaSiteKey ||
+        !config.recordId ||
+        !config.authorizationCode ||
+        authorizationCode !== config.authorizationCode
+      ) {
+        return null;
+      }
+
+      return {
+        allowedOrigin: allowedOrigin.origin,
+        formEndpoint: formEndpoint.href,
+        recaptchaSiteKey: config.recaptchaSiteKey,
+        recordId: config.recordId,
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const getInstitutionalProductionConfig = (form) => {
+    if (!(form instanceof HTMLFormElement) || form.id !== "institutional-review-form") {
+      return null;
+    }
+
+    const config = window.__CGS_INSTITUTIONAL_RC1__;
+    if (!config || !["production-candidate", "production-live"].includes(config.mode)) {
+      return null;
+    }
+
+    try {
+      const formEndpoint = new URL(config.formEndpoint);
+      const productionOrigin =
+        config.mode === "production-candidate"
+          ? new URL(config.productionOrigin)
+          : new URL(config.allowedOrigin);
+      const previewOrigin =
+        config.mode === "production-candidate" ? new URL(config.previewOrigin) : null;
+
+      if (
+        productionOrigin.origin !== "https://common-ground-standard.org" ||
+        productionOrigin.pathname !== "/" ||
+        formEndpoint.href !== "https://formspree.io/f/mrpezwok" ||
+        !config.recaptchaSiteKey ||
+        config.intakeOwner !== "AI-Bio Synergy Holdings LLC"
+      ) {
+        return null;
+      }
+
+      if (config.mode === "production-candidate") {
+        if (
+          !previewOrigin ||
+          previewOrigin.origin !== window.location.origin ||
+          previewOrigin.origin === productionOrigin.origin ||
+          previewOrigin.pathname !== "/"
+        ) {
+          return null;
+        }
+      } else if (
+        window.location.origin !== productionOrigin.origin ||
+        !/^CGS-INSTITUTIONAL-LIVE-\d{4}-\d{2}-\d{2}-[A-Z0-9-]+$/.test(
+          config.authorizationId || "",
+        )
+      ) {
+        return null;
+      }
+
+      return {
+        mode: config.mode,
+        allowedOrigin: productionOrigin.origin,
+        formEndpoint: formEndpoint.href,
+        recaptchaSiteKey: config.recaptchaSiteKey,
+        authorizationId: config.authorizationId || "",
+      };
+    } catch {
+      return null;
+    }
+  };
+
   const initRecaptchaForms = () => {
     document
       .querySelectorAll('form[data-recaptcha-site-key], form[data-intake-mode="test"]')
       .forEach((form) => {
-      if (form.dataset.recaptchaBound === "true") return;
+        if (form.dataset.recaptchaBound === "true") return;
 
-      form.dataset.recaptchaBound = "true";
+        form.dataset.recaptchaBound = "true";
 
-      const isTestMode = form.dataset.intakeMode === "test";
-      const testGuard = form.querySelector("[data-test-form-guard]");
-      const siteKey = form.dataset.recaptchaSiteKey;
-      const action = form.dataset.recaptchaAction || "submit";
-      const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
-      const submitButton = form.querySelector("[data-fs-submit-btn]");
-      const formError = form.querySelector(".form-feedback[data-fs-error]");
+        const institutionalRc1 = getInstitutionalRc1Config(form);
+        const institutionalProduction = getInstitutionalProductionConfig(form);
+        const isIntegrationTest = Boolean(institutionalRc1);
+        const isProductionCandidate = institutionalProduction?.mode === "production-candidate";
+        const isProductionLive = institutionalProduction?.mode === "production-live";
+        const isTestMode =
+          form.dataset.intakeMode === "test" &&
+          !isIntegrationTest &&
+          !isProductionCandidate &&
+          !isProductionLive;
+        const testGuard = form.querySelector("[data-test-form-guard]");
+        const siteKey =
+          institutionalRc1?.recaptchaSiteKey ||
+          (isProductionLive ? institutionalProduction.recaptchaSiteKey : "") ||
+          form.dataset.recaptchaSiteKey;
+        const action = isIntegrationTest
+          ? "institutional_rc1_test"
+          : isProductionLive
+            ? "institutional_review_intake"
+            : form.dataset.recaptchaAction || "submit";
+        const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
+        const submitButton = form.querySelector("[data-fs-submit-btn]");
+        const formError = form.querySelector(".form-feedback[data-fs-error]");
 
-      const showError = (message) => {
-        if (formError) formError.textContent = message;
-      };
+        const showError = (message) => {
+          if (formError) formError.textContent = message;
+        };
 
-      const clearError = () => {
-        if (formError) formError.textContent = "";
-      };
+        const clearError = () => {
+          if (formError) formError.textContent = "";
+        };
 
-      const setBusy = (busy) => {
-        if (!submitButton) return;
-        submitButton.disabled = busy;
-        if (busy) {
-          submitButton.setAttribute("aria-busy", "true");
-        } else {
-          submitButton.removeAttribute("aria-busy");
-        }
-      };
+        const setBusy = (busy) => {
+          if (!submitButton) return;
+          submitButton.disabled = busy;
+          if (busy) {
+            submitButton.setAttribute("aria-busy", "true");
+          } else {
+            submitButton.removeAttribute("aria-busy");
+          }
+        };
 
-      const handOffBusyState = () => {
-        if (submitButton) submitButton.removeAttribute("aria-busy");
-      };
+        const handOffBusyState = () => {
+          if (submitButton) submitButton.removeAttribute("aria-busy");
+        };
 
-      form.addEventListener(
-        "submit",
-        (event) => {
-          if (isTestMode) {
+        form.addEventListener(
+          "submit",
+          (event) => {
+            if (isProductionCandidate) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              showError("Live intake is not authorized. No information was sent.");
+              return;
+            }
+
+            if (isIntegrationTest) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              clearError();
+
+              if (form.dataset.testGuardReady !== "true") {
+                showError(
+                  "The controlled integration route is unavailable. No information was sent.",
+                );
+                return;
+              }
+              if (!window.grecaptcha || typeof window.grecaptcha.ready !== "function") {
+                showError("Verification is still loading. Please wait a moment and try again.");
+                return;
+              }
+
+              const syntheticRecord = {
+                subject: `${institutionalRc1.recordId} authorized synthetic routing verification`,
+                source_page: `${window.location.origin}${window.location.pathname}`,
+                public_version: "Institutional Route RC1 - 2026-10-04",
+                intake_owner: "AI-Bio Synergy Holdings LLC",
+                intake_mode: "controlled-integration-test",
+                organization_name: institutionalRc1.recordId,
+                public_website: "https://example.org/cgs-institutional-rc1",
+                organization_type: "Public-interest organization",
+                review_domain: "Data rights and public evidence",
+                represented_constituency:
+                  "SYNTHETIC TEST RECORD ONLY - no real constituency or institutional authority.",
+                proposed_contribution:
+                  "Authorized synthetic routing verification for the Institutional Route RC1 activation gate.",
+                material_conflicts: "SYNTHETIC - none; no real institution.",
+                funding_relationships: "SYNTHETIC - none; no real institution.",
+                requested_role: "Legitimacy reviewer",
+                public_listing_permission: "No, keep the submission private",
+                contact_name: "Synthetic Test Record",
+                email: "integration-test@example.org",
+                participation_boundary: "Acknowledged",
+                _gotcha: "",
+              };
+
+              setBusy(true);
+              window.grecaptcha.ready(() => {
+                const retryDelay = (attempt) =>
+                  new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
+                const submitIntegrationRecord = async (attempt = 0) => {
+                  const token = await window.grecaptcha.execute(siteKey, { action });
+                  const payload = new FormData();
+                  Object.entries(syntheticRecord).forEach(([name, value]) => {
+                    payload.append(name, value);
+                  });
+                  payload.append("g-recaptcha-response", token);
+
+                  const response = await window.fetch(institutionalRc1.formEndpoint, {
+                    method: "POST",
+                    headers: { Accept: "application/json" },
+                    body: payload,
+                  });
+
+                  if (response.ok) return;
+
+                  let responseText = "";
+                  try {
+                    responseText = await response.text();
+                  } catch {
+                    // Use the bounded status-only failure below when no response body is available.
+                  }
+
+                  if (
+                    response.status === 400 &&
+                    /browser[-_ ]error/i.test(responseText) &&
+                    attempt < 2
+                  ) {
+                    await retryDelay(attempt + 1);
+                    return submitIntegrationRecord(attempt + 1);
+                  }
+
+                  throw new Error(`Formspree returned ${response.status}`);
+                };
+
+                submitIntegrationRecord()
+                  .then(() => {
+                    const destination = new URL(
+                      "institutional-thank-you.html",
+                      window.location.href,
+                    );
+                    destination.searchParams.set("mode", "integration-success");
+                    destination.searchParams.set("record", institutionalRc1.recordId);
+                    window.location.assign(destination.href);
+                  })
+                  .catch(() => {
+                    showError(
+                      "The controlled integration verification could not be completed. No live intake was opened.",
+                    );
+                    setBusy(false);
+                  });
+              });
+              return;
+            }
+
+            if (isTestMode) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              clearError();
+
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+              }
+
+              const successMessage = form.querySelector(".form-feedback[data-fs-success]");
+              const destination = form.dataset.testRedirect;
+              let destinationUrl = "";
+
+              try {
+                if (!destination) throw new Error("Missing test redirect");
+                const resolvedDestination = new URL(destination, window.location.href);
+                if (resolvedDestination.origin !== window.location.origin) {
+                  throw new Error("Cross-origin test redirect");
+                }
+                destinationUrl = resolvedDestination.href;
+              } catch {
+                showError(
+                  "The local test confirmation route is unavailable. No information was sent.",
+                );
+                setBusy(false);
+                return;
+              }
+
+              if (successMessage) {
+                successMessage.textContent =
+                  "Test validation passed. No information was sent or stored.";
+              }
+              setBusy(true);
+
+              window.setTimeout(() => {
+                window.location.assign(destinationUrl);
+              }, 450);
+              return;
+            }
+
+            if (form.dataset.recaptchaTokenReady === "true") {
+              form.dataset.recaptchaTokenReady = "submitting";
+              window.setTimeout(() => {
+                if (form.dataset.recaptchaTokenReady === "submitting") {
+                  delete form.dataset.recaptchaTokenReady;
+                }
+                if (tokenInput) tokenInput.value = "";
+              }, 5000);
+              return;
+            }
+
+            if (!siteKey || !tokenInput) return;
+
             event.preventDefault();
             event.stopImmediatePropagation();
             clearError();
@@ -119,96 +395,241 @@
               return;
             }
 
-            const successMessage = form.querySelector(".form-feedback[data-fs-success]");
-            const destination = form.dataset.testRedirect;
-            let destinationUrl = "";
-
-            try {
-              if (!destination) throw new Error("Missing test redirect");
-              const resolvedDestination = new URL(destination, window.location.href);
-              if (resolvedDestination.origin !== window.location.origin) {
-                throw new Error("Cross-origin test redirect");
-              }
-              destinationUrl = resolvedDestination.href;
-            } catch {
-              showError(
-                "The local test confirmation route is unavailable. No information was sent.",
-              );
-              setBusy(false);
+            if (!window.grecaptcha || typeof window.grecaptcha.ready !== "function") {
+              showError("Verification is still loading. Please wait a moment and try again.");
               return;
             }
 
-            if (successMessage) {
-              successMessage.textContent =
-                "Test validation passed. No information was sent or stored.";
-            }
             setBusy(true);
+            window.grecaptcha.ready(() => {
+              Promise.resolve()
+                .then(() => window.grecaptcha.execute(siteKey, { action }))
+                .then((token) => {
+                  tokenInput.value = token;
+                  form.dataset.recaptchaTokenReady = "true";
+                  form.requestSubmit();
+                  handOffBusyState();
+                })
+                .catch(() => {
+                  showError(
+                    "Verification could not be completed. Please reload the page and try again.",
+                  );
+                  setBusy(false);
+                });
+            });
+          },
+          true,
+        );
 
-            window.setTimeout(() => {
-              window.location.assign(destinationUrl);
-            }, 450);
+        if (isIntegrationTest) {
+          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            showError(
+              "The controlled integration form could not be enabled safely. No information can be submitted.",
+            );
             return;
           }
 
-          if (form.dataset.recaptchaTokenReady === "true") {
-            form.dataset.recaptchaTokenReady = "submitting";
-            window.setTimeout(() => {
-              if (form.dataset.recaptchaTokenReady === "submitting") {
-                delete form.dataset.recaptchaTokenReady;
-              }
-              if (tokenInput) tokenInput.value = "";
-            }, 5000);
-            return;
-          }
+          const syntheticDisplayValues = {
+            organization_name: institutionalRc1.recordId,
+            public_website: "https://example.org/cgs-institutional-rc1",
+            organization_type: "Public-interest organization",
+            review_domain: "Data rights and public evidence",
+            represented_constituency:
+              "SYNTHETIC TEST RECORD ONLY - no real constituency or institutional authority.",
+            proposed_contribution:
+              "Authorized synthetic routing verification for the Institutional Route RC1 activation gate.",
+            material_conflicts: "SYNTHETIC - none; no real institution.",
+            funding_relationships: "SYNTHETIC - none; no real institution.",
+            requested_role: "Legitimacy reviewer",
+            public_listing_permission: "No, keep the submission private",
+            contact_name: "Synthetic Test Record",
+            email: "integration-test@example.org",
+          };
 
-          if (!siteKey || !tokenInput) return;
-
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          clearError();
-
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-          }
-
-          if (!window.grecaptcha || typeof window.grecaptcha.ready !== "function") {
-            showError("Verification is still loading. Please wait a moment and try again.");
-            return;
-          }
-
-          setBusy(true);
-          window.grecaptcha.ready(() => {
-            Promise.resolve()
-              .then(() => window.grecaptcha.execute(siteKey, { action }))
-              .then((token) => {
-                tokenInput.value = token;
-                form.dataset.recaptchaTokenReady = "true";
-                form.requestSubmit();
-                handOffBusyState();
-              })
-              .catch(() => {
-                showError("Verification could not be completed. Please reload the page and try again.");
-                setBusy(false);
-              });
+          const fieldsReady = Object.entries(syntheticDisplayValues).every(([name, value]) => {
+            const field = form.elements.namedItem(name);
+            if (
+              !(
+                field instanceof HTMLInputElement ||
+                field instanceof HTMLSelectElement ||
+                field instanceof HTMLTextAreaElement
+              )
+            ) {
+              return false;
+            }
+            field.value = value;
+            return field.value === value;
           });
-        },
-        true,
-      );
+          const boundary = form.elements.namedItem("participation_boundary");
 
-      if (isTestMode) {
-        if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
-          showError(
-            "The test form could not be enabled safely. No information can be submitted.",
-          );
+          if (!fieldsReady || !(boundary instanceof HTMLInputElement)) {
+            showError(
+              "The synthetic test record could not be prepared safely. No information can be submitted.",
+            );
+            return;
+          }
+
+          boundary.checked = true;
+          testGuard.disabled = false;
+          form.querySelectorAll("input, select, textarea").forEach((field) => {
+            field.disabled = true;
+            field.setAttribute("aria-disabled", "true");
+          });
+
+          form.dataset.intakeMode = "integration-test";
+          form.dataset.testGuardReady = "true";
+          submitButton.type = "submit";
+          submitButton.textContent = "Send authorized synthetic test";
+          submitButton.disabled = false;
+
+          const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
+          const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
+          const nextStep = form.querySelector("[data-rc1-next-step]");
+          const disclosure = form.querySelector("[data-rc1-disclosure]");
+          if (noticeTitle) {
+            noticeTitle.textContent = "Controlled RC1 integration window - synthetic data only.";
+          }
+          if (noticeCopy) {
+            noticeCopy.textContent =
+              "The fields are locked to one authorized synthetic record. Live institutional intake remains disabled.";
+          }
+          if (nextStep) {
+            nextStep.textContent =
+              "This action sends one clearly labeled synthetic record to the approved staging Formspree inbox. Receipt and deletion must be verified before the activation gate can close.";
+          }
+          if (disclosure) {
+            disclosure.textContent =
+              "This staging-only action uses Formspree and reCAPTCHA. It cannot transmit real institutional or personal information through the locked form.";
+          }
+
+          const recaptchaScript = document.createElement("script");
+          recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+          recaptchaScript.async = true;
+          recaptchaScript.defer = true;
+          recaptchaScript.dataset.integrationVerification = "true";
+          document.head.appendChild(recaptchaScript);
           return;
         }
 
-        submitButton.type = "submit";
-        testGuard.disabled = false;
-        form.dataset.testGuardReady = "true";
-      }
-    });
+        if (isProductionCandidate) {
+          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            showError(
+              "The production candidate could not be locked safely. No information can be submitted.",
+            );
+            return;
+          }
+
+          testGuard.disabled = true;
+          form.querySelectorAll("input, select, textarea").forEach((field) => {
+            field.disabled = true;
+            field.setAttribute("aria-disabled", "true");
+          });
+          form.removeAttribute("action");
+          form.removeAttribute("method");
+          form.dataset.intakeMode = "production-candidate";
+          submitButton.type = "button";
+          submitButton.textContent = "Held pending final authorization";
+          submitButton.disabled = true;
+
+          const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
+          const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
+          const nextStep = form.querySelector("[data-rc1-next-step]");
+          const disclosure = form.querySelector("[data-rc1-disclosure]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
+          if (noticeTitle) {
+            noticeTitle.textContent = "Production candidate — live intake is not authorized.";
+          }
+          if (noticeCopy) {
+            noticeCopy.textContent =
+              "The dedicated production route is configured for common-ground-standard.org, but this isolated preview cannot send information. Final activation requires a separately issued authorization against the reviewed candidate.";
+          }
+          if (nextStep) {
+            nextStep.textContent =
+              "This candidate verifies the production form structure, operating notices, and controlled destination while keeping every field disabled and omitting all transmission behavior.";
+          }
+          if (disclosure) {
+            disclosure.textContent =
+              "If separately activated on common-ground-standard.org, this form will use the dedicated institutional Formspree route and Google reCAPTCHA. This candidate does not contact either service.";
+          }
+          if (operatingCopy) {
+            operatingCopy.textContent =
+              "This production candidate does not transmit or store form-field data. If live intake is separately authorized, the following controls apply to every institutional review note.";
+          }
+          return;
+        }
+
+        if (isProductionLive) {
+          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            showError(
+              "The institutional intake could not be enabled safely. No information can be submitted.",
+            );
+            return;
+          }
+
+          const intakeMode = form.elements.namedItem("intake_mode");
+          const publicVersion = form.elements.namedItem("public_version");
+          if (!(intakeMode instanceof HTMLInputElement) || !(publicVersion instanceof HTMLInputElement)) {
+            showError(
+              "The institutional intake metadata is incomplete. No information can be submitted.",
+            );
+            return;
+          }
+
+          form.action = institutionalProduction.formEndpoint;
+          form.method = "post";
+          form.dataset.intakeMode = "live";
+          form.dataset.recaptchaAction = "institutional_review_intake";
+          intakeMode.value = "live";
+          publicVersion.value = "Institutional alignment production candidate - 2026-10-04";
+          testGuard.disabled = false;
+          form.querySelectorAll("input, select, textarea").forEach((field) => {
+            field.disabled = false;
+            field.removeAttribute("aria-disabled");
+          });
+          submitButton.type = "submit";
+          submitButton.textContent = "Submit institutional review note";
+          submitButton.disabled = false;
+
+          const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
+          const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
+          const nextStep = form.querySelector("[data-rc1-next-step]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
+          if (noticeTitle) noticeTitle.textContent = "Institutional review intake is open.";
+          if (noticeCopy) {
+            noticeCopy.textContent =
+              "AI-Bio Synergy Holdings LLC is the current steward and initial intake owner. Submission begins a private fit assessment under the published operating controls; it does not create endorsement, partnership, accreditation, certification, or adoption.";
+          }
+          if (nextStep) {
+            nextStep.textContent =
+              "The current steward will screen the note for fit, conflicts, scope, and handling requirements, then respond through the institutional contact provided. Submission does not guarantee a review role or public listing.";
+          }
+          if (operatingCopy) {
+            operatingCopy.textContent =
+              "Live institutional review notes are handled under the following privacy, retention, recourse, conflict, and removal controls.";
+          }
+
+          const recaptchaScript = document.createElement("script");
+          recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+          recaptchaScript.async = true;
+          recaptchaScript.defer = true;
+          recaptchaScript.dataset.institutionalProduction = "true";
+          document.head.appendChild(recaptchaScript);
+          return;
+        }
+
+        if (isTestMode) {
+          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            showError(
+              "The test form could not be enabled safely. No information can be submitted.",
+            );
+            return;
+          }
+
+          submitButton.type = "submit";
+          testGuard.disabled = false;
+          form.dataset.testGuardReady = "true";
+        }
+      });
   };
 
   if (document.readyState === "loading") {
@@ -902,6 +1323,71 @@
     returnLink.childNodes[0].textContent = `${safePages.get(page)} `;
   };
 
+  const initInstitutionalThankYou = () => {
+    const title = document.querySelector("[data-institutional-result-title]");
+    if (!(title instanceof HTMLElement)) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const record = params.get("record") || "";
+
+    const setText = (selector, value) => {
+      const element = document.querySelector(selector);
+      if (element) element.textContent = value;
+    };
+
+    if (mode === "live") {
+      document.title = "Institutional Review Note Received | Common Ground Standard";
+      setText("[data-institutional-result-label]", "Institutional review intake");
+      setText("[data-institutional-result-title]", "Your review note was received.");
+      setText(
+        "[data-institutional-result-summary]",
+        "The current steward will assess the note against the published fit, conflict, scope, privacy, and participation controls before proposing any next step.",
+      );
+      setText("[data-institutional-result-status]", "Received for bounded fit assessment");
+      setText(
+        "[data-institutional-result-transmission]",
+        "Submitted privately through Formspree",
+      );
+      setText("[data-institutional-result-live]", "Active under published operating controls");
+      setText(
+        "[data-institutional-result-notice-title]",
+        "Receipt does not create an institutional role or public association.",
+      );
+      setText(
+        "[data-institutional-result-notice-copy]",
+        "The note begins an internal fit assessment only. Partnership, endorsement, membership, accreditation, certification, adoption, funding priority, confidential access, and public listing all require separate written decisions.",
+      );
+      return;
+    }
+
+    if (
+      mode !== "integration-success" ||
+      !/^CGS-INSTITUTIONAL-RC1-\d{4}-\d{2}-\d{2}$/.test(record)
+    ) {
+      return;
+    }
+
+    document.title = "Institutional Routing Test Accepted | Common Ground Standard";
+    setText("[data-institutional-result-label]", "Controlled institutional routing test");
+    setText("[data-institutional-result-title]", "Routing response accepted.");
+    setText(
+      "[data-institutional-result-summary]",
+      "Formspree accepted one staging-only synthetic record. This page does not confirm inbox delivery or final classification; the receipt must be verified in Formspree before the gate can close.",
+    );
+    setText("[data-institutional-result-status]", "Formspree response accepted");
+    setText("[data-institutional-result-transmission]", "One synthetic test record");
+    setText("[data-institutional-result-live]", "Disabled — no live intake opened");
+    setText(
+      "[data-institutional-result-notice-title]",
+      "This was a synthetic routing verification, not an institutional submission.",
+    );
+    setText(
+      "[data-institutional-result-notice-copy]",
+      `Receipt ${record} must be checked for delivery status and deleted after verification. Live institutional intake remains disabled pending separate final authorization.`,
+    );
+  };
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       initReviewAssistant();
@@ -909,6 +1395,7 @@
       initSubjectPressureTests();
       initReviewFeedbackForm();
       initReviewThankYou();
+      initInstitutionalThankYou();
     }, { once: true });
   } else {
     initReviewAssistant();
@@ -916,6 +1403,7 @@
     initSubjectPressureTests();
     initReviewFeedbackForm();
     initReviewThankYou();
+    initInstitutionalThankYou();
   }
 
   const prefetch = (anchor) => {
