@@ -73,6 +73,7 @@ test("the production candidate is exact-destination and structurally non-transmi
   assert.match(build, /https:\/\/formspree\.io\/f\/mrpezwok/);
   assert.match(site, /Production candidate — live intake is not authorized\./);
   assert.match(site, /This candidate does not contact either service\./);
+  assert.match(site, /This production candidate does not transmit or store form-field data\./);
   assert.match(site, /submitButton\.type = "button"/);
   assert.match(site, /submitButton\.disabled = true/);
   assert.match(html, /name="email"/);

@@ -486,6 +486,7 @@
           const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
           const nextStep = form.querySelector("[data-rc1-next-step]");
           const disclosure = form.querySelector("[data-rc1-disclosure]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
           if (noticeTitle) {
             noticeTitle.textContent = "Controlled RC1 integration window - synthetic data only.";
           }
@@ -550,6 +551,10 @@
             disclosure.textContent =
               "If separately activated on common-ground-standard.org, this form will use the dedicated institutional Formspree route and Google reCAPTCHA. This candidate does not contact either service.";
           }
+          if (operatingCopy) {
+            operatingCopy.textContent =
+              "This production candidate does not transmit or store form-field data. If live intake is separately authorized, the following controls apply to every institutional review note.";
+          }
           return;
         }
 
@@ -588,6 +593,7 @@
           const noticeTitle = form.parentElement?.querySelector("[data-rc1-notice-title]");
           const noticeCopy = form.parentElement?.querySelector("[data-rc1-notice-copy]");
           const nextStep = form.querySelector("[data-rc1-next-step]");
+          const operatingCopy = document.querySelector("[data-rc1-operating-copy]");
           if (noticeTitle) noticeTitle.textContent = "Institutional review intake is open.";
           if (noticeCopy) {
             noticeCopy.textContent =
@@ -596,6 +602,10 @@
           if (nextStep) {
             nextStep.textContent =
               "The current steward will screen the note for fit, conflicts, scope, and handling requirements, then respond through the institutional contact provided. Submission does not guarantee a review role or public listing.";
+          }
+          if (operatingCopy) {
+            operatingCopy.textContent =
+              "Live institutional review notes are handled under the following privacy, retention, recourse, conflict, and removal controls.";
           }
 
           const recaptchaScript = document.createElement("script");
