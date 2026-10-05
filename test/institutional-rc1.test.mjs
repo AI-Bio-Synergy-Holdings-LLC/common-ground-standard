@@ -25,6 +25,8 @@ test("the committed institutional form remains structurally fail-closed", async 
   assert.match(form, /<button[^>]*type="button"[^>]*data-fs-submit-btn/);
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
+  assert.match(html, /Final activation authority has been issued/);
+  assert.match(html, /production verification and the enable-last controls pass/);
 });
 
 test("the committed RC1 configuration is inert", async () => {
@@ -137,6 +139,54 @@ test("production live mode remains unavailable without a separate final authoriz
   assert.match(liveConfig, /"authorizationId":"CGS-INSTITUTIONAL-LIVE-2026-10-04-TEST"/);
 
   await runBuild();
+});
+
+test("production verification mode is exact-origin and structurally non-transmitting", async () => {
+  const build = await read("scripts/prepare-render-site.mjs");
+  const site = await read("site.js");
+
+  assert.match(build, /CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED/);
+  assert.match(site, /Production verification — institutional intake is not open\./);
+  assert.match(site, /production verification mode does not load, contact, or submit to either service\./i);
+  assert.match(site, /Held during production verification/);
+
+  await assert.rejects(
+    runBuild({
+      CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED: "true",
+      CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT: "https://formspree.io/f/mrpezwok",
+      CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY: publicRecaptchaSiteKey,
+    }),
+    /authorizationId/,
+  );
+
+  await runBuild({
+    CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED: "true",
+    CGS_INSTITUTIONAL_PRODUCTION_FORM_ENDPOINT: "https://formspree.io/f/mrpezwok",
+    CGS_INSTITUTIONAL_PRODUCTION_RECAPTCHA_SITE_KEY: publicRecaptchaSiteKey,
+    CGS_INSTITUTIONAL_FINAL_AUTHORIZATION_ID:
+      "CGS-INSTITUTIONAL-LIVE-2026-10-05-CHARTER-V0-4",
+  });
+
+  const verificationConfig = await read("dist-render/institutional-rc1-config.js");
+  const verificationHtml = await read("dist-render/institutional-alignment.html");
+  assert.match(verificationConfig, /"mode":"production-verification"/);
+  assert.match(verificationConfig, /"allowedOrigin":"https:\/\/common-ground-standard\.org"/);
+  assert.match(verificationConfig, /"formEndpoint":"https:\/\/formspree\.io\/f\/mrpezwok"/);
+  assert.doesNotMatch(verificationHtml.match(/<form[\s\S]*?>/)?.[0] || "", /\saction=/i);
+  assert.match(verificationHtml, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
+  assert.doesNotMatch(verificationHtml, /recaptcha\/api\.js/i);
+
+  await runBuild();
+});
+
+test("production live mode publishes current processing disclosure", async () => {
+  const site = await read("site.js");
+
+  assert.match(site, /Live submission uses the dedicated institutional Formspree route/);
+  assert.doesNotMatch(
+    site.match(/if \(isProductionLive\)[\s\S]*?return;\n        }/)?.[0] || "",
+    /only after operating approval/,
+  );
 });
 
 test("the integration thank-you route distinguishes a synthetic transmission from local validation", async () => {
