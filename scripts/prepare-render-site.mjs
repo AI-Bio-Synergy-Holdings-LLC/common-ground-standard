@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -70,6 +71,27 @@ const writeInstitutionalConfig = async (config, message) => {
   const configSource = `window.__CGS_INSTITUTIONAL_RC1__ = Object.freeze(${JSON.stringify(config)});\n`;
   await writeFile(path.join(artifactRoot, "institutional-rc1-config.js"), configSource, "utf8");
   console.log(message);
+};
+
+const fingerprintInstitutionalConfig = async () => {
+  const configPath = path.join(artifactRoot, "institutional-rc1-config.js");
+  const htmlPath = path.join(artifactRoot, "institutional-alignment.html");
+  const configSource = await readFile(configPath, "utf8");
+  const html = await readFile(htmlPath, "utf8");
+  const configVersion = createHash("sha256").update(configSource).digest("hex").slice(0, 16);
+  const configReference = /institutional-rc1-config\.js(?:\?[^"']*)?/g;
+  const matches = html.match(configReference) || [];
+
+  if (matches.length !== 1) {
+    throw new Error("Institutional config script reference must appear exactly once");
+  }
+
+  await writeFile(
+    htmlPath,
+    html.replace(configReference, `institutional-rc1-config.js?v=${configVersion}`),
+    "utf8",
+  );
+  console.log(`Institutional config cache key prepared: ${configVersion}`);
 };
 
 await rm(artifactRoot, { recursive: true, force: true });
@@ -236,6 +258,8 @@ if (productionLiveEnabled) {
     `Institutional production live mode prepared for ${productionOrigin}`,
   );
 }
+
+await fingerprintInstitutionalConfig();
 
 console.log(`Common Ground Standard Render artifact prepared at ${path.relative(repoRoot, artifactRoot)}`);
 console.log(`Included public entries: ${publicEntries.join(", ")}`);
