@@ -27,6 +27,12 @@ Each stage has a 15-second limit. Only token length is displayed; the token is d
 sent for server verification, and never written into an intake form. A reload is required for
 another run. This result cannot establish receipt delivery or backend acceptance.
 
+The initial `api.js` load can expose a ready queue before the full library installs `execute`.
+The diagnostic reports method-availability booleans, waits for the ready callback, then reacquires
+the current API object before checking or invoking `execute`. These readiness steps never issue a
+token themselves. Missing readiness, missing execution after readiness, and bounded timeouts are
+separate failures; a failed run never retries automatically.
+
 Before running, verify the public site-key ID, score/v3 type, exact staging hostname in the Google
 domain list, enabled domain verification, the dedicated Formspree project's exact hostname
 restriction, and its secret-key pairing. Keep both institutional Formspree forms disabled.
@@ -35,5 +41,6 @@ When this diagnostic gate passes, request separate authorization for one synthet
 deletion test. Production activation still requires a later decision against the reviewed commit.
 
 Reference: [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3),
+[Google asynchronous loading](https://developers.google.com/recaptcha/docs/loading),
 [Google domain validation](https://developers.google.com/recaptcha/docs/domain_validation),
 [Formspree reCAPTCHA integration](https://formspree.io/blog/recaptcha-3/).

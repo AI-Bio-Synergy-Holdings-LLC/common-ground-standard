@@ -37,16 +37,26 @@ export const runDiagnostic = async ({ siteKey, action, load, api, report, timeou
   try {
     await withTimeout(load(), timeoutMs, stage);
     stage = "api-ready";
-    report({ stage, status: "running" });
     const client = api();
-    if (typeof client?.ready !== "function" || typeof client?.execute !== "function") {
-      throw Object.assign(new Error("reCAPTCHA v3 API methods unavailable"), { code: "api-unavailable" });
+    report({
+      stage, status: "running",
+      readyAvailable: typeof client?.ready === "function",
+      executeAvailable: typeof client?.execute === "function",
+    });
+    if (typeof client?.ready !== "function") {
+      throw Object.assign(new Error("reCAPTCHA ready API unavailable after script load"), { code: "api-unavailable" });
     }
     await withTimeout(new Promise((resolve) => client.ready(resolve)), timeoutMs, stage);
+    // api.js can initially expose only a ready queue. The full library installs execute later
+    // and may replace the API object, so obtain the current client after the ready callback.
+    const readyClient = api();
+    if (typeof readyClient?.execute !== "function") {
+      throw Object.assign(new Error("reCAPTCHA execute API unavailable after ready callback"), { code: "execute-unavailable" });
+    }
     stage = "execute";
     report({ stage, status: "running" });
     // The token remains local to this scope. It is never added to a form, logged, stored, or sent.
-    let token = await withTimeout(Promise.resolve().then(() => client.execute(siteKey, { action })), timeoutMs, stage);
+    let token = await withTimeout(Promise.resolve().then(() => readyClient.execute(siteKey, { action })), timeoutMs, stage);
     if (typeof token !== "string" || token.length === 0) {
       throw Object.assign(new Error("reCAPTCHA returned an empty token"), { code: "empty-token" });
     }

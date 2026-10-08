@@ -30,6 +30,46 @@ test("token issuance reports only length and never returns the token", async () 
   assert.doesNotMatch(JSON.stringify(evidence), new RegExp(token));
 });
 
+test("execute may be installed asynchronously after the ready queue is exposed", async () => {
+  let readyCompleted = false;
+  const queuedClient = {
+    ready: (callback) => setTimeout(() => {
+      queuedClient.execute = () => {
+        assert.equal(readyCompleted, true);
+        return "synthetic-token";
+      };
+      readyCompleted = true;
+      callback();
+    }, 0),
+  };
+  const { result, evidence } = await run(queuedClient);
+  assert.equal(result.status, "passed");
+  assert.equal(evidence.find((entry) => entry.stage === "api-ready").executeAvailable, false);
+});
+
+test("the current API object is reacquired after the ready callback", async () => {
+  const evidence = [];
+  let currentClient = {
+    ready: (callback) => {
+      currentClient = client(() => "synthetic-token");
+      callback();
+    },
+  };
+  const result = await runDiagnostic({
+    siteKey, action: config.action, load: async () => {}, api: () => currentClient,
+    report: (entry) => evidence.push(entry), timeoutMs: 10,
+  });
+  assert.equal(result.status, "passed");
+  assert.equal(result.tokenLength, "synthetic-token".length);
+});
+
+test("execute missing after readiness remains a distinct non-executing failure", async () => {
+  const { result } = await run({ ready: (callback) => callback() });
+  assert.equal(result.stage, "api-ready");
+  assert.equal(result.status, "failed");
+  assert.equal(result.error.code, "execute-unavailable");
+});
+
 test("execute rejection retains the failure stage and redacts credentials", async () => {
   const { result } = await run(client(() => Promise.reject(Object.assign(new Error(`Invalid site key: ${siteKey}`), { code: "browser-error" }))));
   assert.equal(result.stage, "execute");
