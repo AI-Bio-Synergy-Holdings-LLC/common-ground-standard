@@ -23,6 +23,10 @@ test("the committed institutional form remains structurally fail-closed", async 
   assert.doesNotMatch(form.match(/<form[\s\S]*?>/)?.[0] || "", /\saction=/i);
   assert.match(form, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
   assert.match(form, /<button[^>]*type="button"[^>]*data-fs-submit-btn/);
+  assert.match(
+    form,
+    /<input\s+type="hidden"\s+name="g-recaptcha-response"\s+data-recaptcha-response\s+\/>/,
+  );
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
   assert.match(html, /Final activation authority has been issued/);
@@ -94,6 +98,22 @@ test("the staging build requires a complete non-production configuration", async
   assert.match(site, /allowedOrigin\.origin !== window\.location\.origin/);
   assert.match(site, /formEndpoint\.origin !== "https:\/\/formspree\.io"/);
   assert.doesNotMatch(site, /\/f\/mykqwozd/);
+});
+
+test("the controlled integration route exercises the in-form reCAPTCHA token field", async () => {
+  const site = await read("site.js");
+
+  assert.match(
+    site,
+    /const tokenInput = form\.querySelector\('input\[name="g-recaptcha-response"\]'\)/,
+  );
+  assert.match(site, /!\(tokenInput instanceof HTMLInputElement\)/);
+  assert.match(site, /tokenInput\.value = token/);
+  assert.match(
+    site,
+    /payload\.append\("g-recaptcha-response", tokenInput\.value\)/,
+  );
+  assert.match(site, /Verification configuration is unavailable\. No information was sent\./);
 });
 
 test("the production candidate is exact-destination and structurally non-transmitting", async () => {
