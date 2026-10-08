@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import { promisify } from "node:util";
 
@@ -23,6 +23,10 @@ test("the committed institutional form remains structurally fail-closed", async 
   assert.doesNotMatch(form.match(/<form[\s\S]*?>/)?.[0] || "", /\saction=/i);
   assert.match(form, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
   assert.match(form, /<button[^>]*type="button"[^>]*data-fs-submit-btn/);
+  assert.match(
+    form,
+    /<input\s+type="hidden"\s+name="g-recaptcha-response"\s+data-recaptcha-response\s+\/>/,
+  );
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
   assert.match(html, /Final activation authority has been issued/);
@@ -94,6 +98,22 @@ test("the staging build requires a complete non-production configuration", async
   assert.match(site, /allowedOrigin\.origin !== window\.location\.origin/);
   assert.match(site, /formEndpoint\.origin !== "https:\/\/formspree\.io"/);
   assert.doesNotMatch(site, /\/f\/mykqwozd/);
+});
+
+test("the controlled integration route exercises the in-form reCAPTCHA token field", async () => {
+  const site = await read("site.js");
+
+  assert.match(
+    site,
+    /const tokenInput = form\.querySelector\('input\[name="g-recaptcha-response"\]'\)/,
+  );
+  assert.match(site, /!\(tokenInput instanceof HTMLInputElement\)/);
+  assert.match(site, /tokenInput\.value = token/);
+  assert.match(
+    site,
+    /payload\.append\("g-recaptcha-response", tokenInput\.value\)/,
+  );
+  assert.match(site, /Verification configuration is unavailable\. No information was sent\./);
 });
 
 test("the production candidate is exact-destination and structurally non-transmitting", async () => {
@@ -257,4 +277,30 @@ test("the institutional confirmation route distinguishes a live receipt", async 
   assert.match(site, /Your review note was received\./);
   assert.match(site, /Receipt does not create an institutional role or public association\./);
   assert.match(site, /Submitted privately through Formspree/);
+});
+
+test("diagnostic staging excludes form submission and is unavailable in the default artifact", async () => {
+  const environment = {
+    CGS_INSTITUTIONAL_DIAGNOSTIC_ENABLED: "true",
+    CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard-institutional.onrender.com",
+    CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY: "test_staging_site_key_1234567890",
+  };
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard.org" }), /exact institutional staging hostname/);
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://other.onrender.com" }), /exact institutional staging hostname/);
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ENABLED: "true" }), /Only one/);
+  await runBuild(environment);
+  const config = await read("dist-render/institutional-rc1-config.js");
+  const html = await read("dist-render/institutional-alignment.html");
+  const script = await read("dist-render/recaptcha-diagnostic.mjs");
+  assert.match(config, /"mode":"recaptcha-diagnostic"/);
+  assert.doesNotMatch(config, /formEndpoint|secretKey|formspree/);
+  assert.doesNotMatch(html, /<form\b|<input\b|<textarea\b|site\.js|formspree\.io/i);
+  assert.match(html, /form-action 'none'/);
+  assert.match(html, /type="button" disabled data-run/);
+  assert.match(html, /noindex, nofollow, noarchive/);
+  assert.doesNotMatch(script, /FormData|fetch\(|sendBeacon|localStorage|sessionStorage|console\./);
+  assert.match(html, /institutional-rc1-config\.js\?v=[a-f0-9]{16}/);
+  await runBuild();
+  await assert.rejects(access(new URL("../dist-render/recaptcha-diagnostic.mjs", import.meta.url)), /ENOENT/);
+  assert.doesNotMatch(await read("dist-render/institutional-alignment.html"), /recaptcha-diagnostic\.mjs/);
 });
