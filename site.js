@@ -285,11 +285,12 @@
                   new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
                 const submitIntegrationRecord = async (attempt = 0) => {
                   const token = await window.grecaptcha.execute(siteKey, { action });
+                  tokenInput.value = token;
                   const payload = new FormData();
                   Object.entries(syntheticRecord).forEach(([name, value]) => {
                     payload.append(name, value);
                   });
-                  payload.append("g-recaptcha-response", token);
+                  payload.append("g-recaptcha-response", tokenInput.value);
 
                   const response = await window.fetch(institutionalRc1.formEndpoint, {
                     method: "POST",
@@ -390,7 +391,14 @@
               return;
             }
 
-            if (!siteKey || !tokenInput) return;
+            if (!siteKey || !(tokenInput instanceof HTMLInputElement)) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              showError(
+                "Verification configuration is unavailable. No information was sent.",
+              );
+              return;
+            }
 
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -428,7 +436,11 @@
         );
 
         if (isIntegrationTest) {
-          if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+          if (
+            !(testGuard instanceof HTMLFieldSetElement) ||
+            !submitButton ||
+            !(tokenInput instanceof HTMLInputElement)
+          ) {
             showError(
               "The controlled integration form could not be enabled safely. No information can be submitted.",
             );
