@@ -22,6 +22,7 @@ const publicEntries = [
 ];
 
 const productionOrigin = "https://common-ground-standard.org";
+const diagnosticOrigin = "https://common-ground-standard-institutional.onrender.com";
 const productionInstitutionalFormEndpoint = "https://formspree.io/f/mrpezwok";
 
 const requireEnvironment = (label, values) => {
@@ -102,6 +103,7 @@ for (const entry of publicEntries) {
 }
 
 const rc1Enabled = process.env.CGS_INSTITUTIONAL_RC1_ENABLED === "true";
+const diagnosticEnabled = process.env.CGS_INSTITUTIONAL_DIAGNOSTIC_ENABLED === "true";
 const productionCandidateEnabled =
   process.env.CGS_INSTITUTIONAL_PRODUCTION_CANDIDATE_ENABLED === "true";
 const productionVerificationEnabled =
@@ -109,11 +111,33 @@ const productionVerificationEnabled =
 const productionLiveEnabled = process.env.CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED === "true";
 
 if (
-  [rc1Enabled, productionCandidateEnabled, productionVerificationEnabled, productionLiveEnabled].filter(
+  [rc1Enabled, diagnosticEnabled, productionCandidateEnabled, productionVerificationEnabled, productionLiveEnabled].filter(
     Boolean,
   ).length > 1
 ) {
   throw new Error("Only one institutional intake build mode may be enabled at a time");
+}
+
+if (diagnosticEnabled) {
+  const requiredEnvironment = requireEnvironment("Institutional reCAPTCHA diagnostic", {
+    allowedOrigin: process.env.CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN,
+    recaptchaSiteKey: process.env.CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY,
+  });
+  if (parseHttpsOrigin(requiredEnvironment.allowedOrigin, "Diagnostic origin") !== diagnosticOrigin) {
+    throw new Error("Diagnostic mode requires the exact institutional staging hostname");
+  }
+  await cp(
+    path.join(repoRoot, "diagnostics/institutional-recaptcha.html"),
+    path.join(artifactRoot, "institutional-alignment.html"),
+  );
+  await cp(path.join(repoRoot, "diagnostics/recaptcha.mjs"), path.join(artifactRoot, "recaptcha-diagnostic.mjs"));
+  await cp(path.join(repoRoot, "diagnostics/diagnostic.css"), path.join(artifactRoot, "diagnostic.css"));
+  await writeInstitutionalConfig({
+    mode: "recaptcha-diagnostic",
+    allowedOrigin: diagnosticOrigin,
+    recaptchaSiteKey: parseRecaptchaSiteKey(requiredEnvironment.recaptchaSiteKey, "Diagnostic"),
+    action: "institutional_rc1_test",
+  }, "Institutional staging diagnostic prepared; no form or submission endpoint");
 }
 
 if (rc1Enabled) {
