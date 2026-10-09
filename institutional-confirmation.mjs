@@ -36,28 +36,8 @@ export const initInstitutionalThankYou = (document, location) => {
     return;
   }
 
-  if (mode === "live") {
-    document.title = "Institutional Review Note Received | Common Ground Standard";
-    setText("[data-institutional-result-label]", "Institutional review intake");
-    setText("[data-institutional-result-title]", "Your review note was received.");
-    setText(
-      "[data-institutional-result-summary]",
-      "The current steward will assess the note against the published fit, conflict, scope, privacy, and participation controls before proposing any next step.",
-    );
-    setText("[data-institutional-result-status]", "Received for bounded fit assessment");
-    setText("[data-institutional-result-transmission]", "Submitted privately through Formspree");
-    setText("[data-institutional-result-live]", "Active under published operating controls");
-    setText(
-      "[data-institutional-result-notice-title]",
-      "Receipt does not create an institutional role or public association.",
-    );
-    setText(
-      "[data-institutional-result-notice-copy]",
-      "The note begins an internal fit assessment only. Partnership, endorsement, membership, accreditation, certification, adoption, funding priority, confidential access, and public listing all require separate written decisions.",
-    );
-    return;
-  }
-
+  // URL parameters cannot authenticate a live receipt or operational activation.
+  // Live-result URLs retain the neutral static template instead of asserting either.
   if (mode !== "integration-success" || !isInstitutionalRc1Record(record)) return;
 
   document.title = "Institutional Routing Test Accepted | Common Ground Standard";

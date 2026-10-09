@@ -33,9 +33,9 @@ const fixture = () => {
   return { document, text: (name) => fields.get(`[data-institutional-result-${name}]`).textContent };
 };
 
-const render = (search) => {
+const render = (search, origin = "https://common-ground-standard-institutional.onrender.com") => {
   const result = fixture();
-  initInstitutionalThankYou(result.document, { search });
+  initInstitutionalThankYou(result.document, new URL(`institutional-thank-you.html?${search}`, origin));
   return result;
 };
 
@@ -95,11 +95,42 @@ test("the explicit local-only result remains distinct from an accepted synthetic
   assert.doesNotMatch(result.text("summary"), /Formspree acceptance/);
 });
 
-test("the existing live result still retains its bounded assessment disclosure", () => {
-  const result = render("mode=live");
-  assert.equal(result.text("title"), "Your review note was received.");
-  assert.equal(result.text("transmission"), "Submitted privately through Formspree");
-  assert.match(result.text("notice-title"), /does not create an institutional role/);
+for (const origin of [
+  "https://common-ground-standard.org",
+  "https://common-ground-standard-institutional.onrender.com",
+]) {
+  test(`live-result URLs remain neutral on ${origin}`, () => {
+    const baseline = fixture();
+    for (const search of [
+      "mode=live",
+      `mode=live&record=${validRecords[1]}`,
+      "mode=live&record=invalid",
+      `mode=live&record=${validRecords[0]}&record=${validRecords[1]}`,
+      "mode=live&mode=live",
+      "mode=live&success=true&authorized=true&receipt=123&intake=active",
+    ]) {
+      const result = render(search, origin);
+      assert.equal(result.document.title, baseline.document.title, search);
+      for (const name of ["label", "title", "summary", "status", "transmission", "live", "notice-title", "notice-copy"]) {
+        assert.equal(result.text(name), baseline.text(name), `${search}: ${name}`);
+      }
+      assert.equal(result.text("title"), "Result not verified.", search);
+      assert.equal(result.text("transmission"), "Not established by this page", search);
+      assert.equal(result.text("live"), "Not established by this page", search);
+    }
+  });
+}
+
+test("the confirmation route cannot assert live receipt or activation from client presentation", async () => {
+  const module = await readFile(new URL("../institutional-confirmation.mjs", import.meta.url), "utf8");
+  for (const source of [module, html]) {
+    assert.doesNotMatch(source, /Your review note was received|Received for bounded fit assessment|Submitted privately through Formspree|Active under published operating controls/);
+  }
+});
+
+test("the corrected confirmation module has a new cache identity", () => {
+  assert.match(html, /institutional-confirmation\.mjs\?v=20261008-live-result-neutral/);
+  assert.doesNotMatch(html, /institutional-confirmation\.mjs\?v=20261008-confirmation-contract/);
 });
 
 test("static and JavaScript-disabled results are neutral and do not offer resubmission", () => {

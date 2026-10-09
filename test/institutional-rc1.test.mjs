@@ -278,13 +278,15 @@ test("the integration thank-you route distinguishes a synthetic transmission fro
   assert.match(site, /Live institutional intake remains disabled/);
 });
 
-test("the institutional confirmation route distinguishes a live receipt", async () => {
+test("the institutional confirmation route leaves live receipt and activation unverified", async () => {
   const site = await read("institutional-confirmation.mjs");
+  const html = await read("institutional-thank-you.html");
 
-  assert.match(site, /mode === "live"/);
-  assert.match(site, /Your review note was received\./);
-  assert.match(site, /Receipt does not create an institutional role or public association\./);
-  assert.match(site, /Submitted privately through Formspree/);
+  assert.doesNotMatch(site, /mode === "live"|Your review note was received\.|Submitted privately through Formspree|Active under published operating controls/);
+  assert.match(html, /data-institutional-result-title>Result not verified\./);
+  assert.match(html, /data-institutional-result-transmission>Not established by this page/);
+  assert.match(html, /data-institutional-result-live>Not established by this page/);
+  assert.match(html, /It will not create[\s\S]*endorsement, partnership, membership, accreditation, certification/);
 });
 
 test("the staging builder and confirmation renderer share the same record contract", async () => {
