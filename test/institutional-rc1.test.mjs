@@ -23,6 +23,41 @@ const runBuild = (environment = {}) =>
     },
   });
 
+const assertCurrentAuthorityNotice = (html) => {
+  const notice = html.match(/<span\s+data-rc1-notice-copy>([\s\S]*?)<\/span>/)?.[1];
+  assert.ok(notice, "the default intake authority notice is present");
+  const copy = notice.replace(/\s+/g, " ").trim();
+
+  assert.equal(
+    /Final activation authority has been issued/i.test(html),
+    false,
+    "the default intake must not imply previously issued current activation authority",
+  );
+  assert.match(
+    copy,
+    /Interim intake owner: AI-Bio Synergy Holdings LLC, acting as current founder steward and temporary incubator\./,
+  );
+  assert.match(copy, /Live intake remains disabled\./);
+  assert.match(
+    copy,
+    /Activation requires separate exact-commit authorization, completed production verification, and the enable-last controls\./,
+  );
+};
+
+test("the default institutional notice does not imply current activation authority", async () => {
+  assertCurrentAuthorityNotice(await read("institutional-alignment.html"));
+});
+
+test("the default institutional notice remains neutral in the non-transmitting artifact", async () => {
+  await runBuild();
+  const html = await read("dist-render/institutional-alignment.html");
+  assertCurrentAuthorityNotice(html);
+  assert.match(await read("dist-render/institutional-rc1-config.js"), /window\.__CGS_INSTITUTIONAL_RC1__\s*=\s*null/);
+  assert.match(html, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
+  assert.doesNotMatch(html.match(/<form[\s\S]*?>/)?.[0] || "", /\s(?:action|method)=/i);
+  assert.doesNotMatch(html, /recaptcha\/api\.js|formspree\.io\/f\//i);
+});
+
 test("the committed institutional form remains structurally fail-closed", async () => {
   const html = await read("institutional-alignment.html");
   const form = html.match(/<form[\s\S]*?<\/form>/)?.[0] || "";
@@ -37,8 +72,6 @@ test("the committed institutional form remains structurally fail-closed", async 
   );
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
-  assert.match(html, /Final activation authority has been issued/);
-  assert.match(html, /production verification and the enable-last controls pass/);
 });
 
 test("the committed RC1 configuration is inert", async () => {
