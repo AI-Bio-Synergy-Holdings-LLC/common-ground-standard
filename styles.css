@@ -1882,6 +1882,10 @@ figure:last-child {
   font-size: 30px;
 }
 
+.notice-section [data-institutional-result-notice-copy] {
+  overflow-wrap: anywhere;
+}
+
 .notice-section p {
   max-width: 900px;
 }

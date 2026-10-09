@@ -12,7 +12,15 @@ const publicRecaptchaSiteKey = "6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA";
 const runBuild = (environment = {}) =>
   execFileAsync(process.execPath, ["scripts/prepare-render-site.mjs"], {
     cwd: repoRoot,
-    env: { ...process.env, ...environment },
+    env: {
+      ...process.env,
+      CGS_INSTITUTIONAL_RC1_ENABLED: "false",
+      CGS_INSTITUTIONAL_DIAGNOSTIC_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_CANDIDATE_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED: "false",
+      ...environment,
+    },
   });
 
 test("the committed institutional form remains structurally fail-closed", async () => {
@@ -250,7 +258,7 @@ test("production live mode publishes current processing disclosure", async () =>
 
 test("the integration thank-you route distinguishes a synthetic transmission from local validation", async () => {
   const html = await read("institutional-thank-you.html");
-  const site = await read("site.js");
+  const site = await read("institutional-confirmation.mjs");
 
   for (const hook of [
     "data-institutional-result-title",
@@ -271,12 +279,39 @@ test("the integration thank-you route distinguishes a synthetic transmission fro
 });
 
 test("the institutional confirmation route distinguishes a live receipt", async () => {
-  const site = await read("site.js");
+  const site = await read("institutional-confirmation.mjs");
 
   assert.match(site, /mode === "live"/);
   assert.match(site, /Your review note was received\./);
   assert.match(site, /Receipt does not create an institutional role or public association\./);
   assert.match(site, /Submitted privately through Formspree/);
+});
+
+test("the staging builder and confirmation renderer share the same record contract", async () => {
+  const { isInstitutionalRc1Record } = await import("../institutional-confirmation.mjs");
+  const environment = {
+    CGS_INSTITUTIONAL_RC1_ENABLED: "true",
+    CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard-institutional.onrender.com",
+    CGS_INSTITUTIONAL_RC1_FORM_ENDPOINT: "https://formspree.io/f/offline_test",
+    CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY: "offline_public_site_key_1234567890",
+    CGS_INSTITUTIONAL_RC1_AUTHORIZATION_CODE: "offline_selector_1234567890123456",
+  };
+  try {
+    for (const record of ["CGS-INSTITUTIONAL-RC1-2026-10-08", "CGS-INSTITUTIONAL-RC1-20261008-7CB67E4-RECEIPT"]) {
+      assert.equal(isInstitutionalRc1Record(record), true);
+      await runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_RECORD_ID: record });
+      assert.match(await read("dist-render/institutional-rc1-config.js"), new RegExp(record));
+      assert.equal(await read("dist-render/institutional-confirmation.mjs"), await read("institutional-confirmation.mjs"));
+    }
+    for (const record of ["bad", "CGS-INSTITUTIONAL-RC1--RECEIPT", "CGS-INSTITUTIONAL-RC1-lowercase", "CGS-INSTITUTIONAL-RC1-20261008\n", "CGS-INSTITUTIONAL-RC1-" + "A".repeat(107)]) {
+      assert.equal(isInstitutionalRc1Record(record), false);
+      await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_RECORD_ID: record }), /record ID is malformed/);
+    }
+  } finally {
+    await runBuild();
+  }
+  assert.match(await read("dist-render/institutional-rc1-config.js"), /window\.__CGS_INSTITUTIONAL_RC1__\s*=\s*null/);
+  assert.doesNotMatch(await read("site.js"), /const initInstitutionalThankYou/);
 });
 
 test("diagnostic staging excludes form submission and is unavailable in the default artifact", async () => {

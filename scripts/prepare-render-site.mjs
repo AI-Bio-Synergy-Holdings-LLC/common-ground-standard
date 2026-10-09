@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isInstitutionalRc1Record } from "../institutional-confirmation.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifactRoot = path.join(repoRoot, "dist-render");
@@ -17,6 +18,7 @@ const publicEntries = [
   "robots.txt",
   "sitemap.xml",
   "institutional-rc1-config.js",
+  "institutional-confirmation.mjs",
   "site.js",
   "styles.css",
 ];
@@ -168,7 +170,7 @@ if (rc1Enabled) {
   if (!/^[A-Za-z0-9_-]{24,}$/.test(requiredEnvironment.authorizationCode)) {
     throw new Error("Institutional Route RC1 authorization code must be at least 24 URL-safe characters");
   }
-  if (!/^CGS-INSTITUTIONAL-RC1-[A-Z0-9-]+$/.test(requiredEnvironment.recordId)) {
+  if (!isInstitutionalRc1Record(requiredEnvironment.recordId)) {
     throw new Error("Institutional Route RC1 record ID is malformed");
   }
 
