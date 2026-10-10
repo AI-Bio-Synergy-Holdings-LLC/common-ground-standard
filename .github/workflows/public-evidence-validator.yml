@@ -6,6 +6,16 @@ on:
     paths:
       - "evidence-validator/**"
       - "package.json"
+      - "site.js"
+      - "styles.css"
+      - "institutional-confirmation.mjs"
+      - "institutional-alignment.html"
+      - "institutional-thank-you.html"
+      - "institutional-rc1-config.js"
+      - "diagnostics/**"
+      - "render.yaml"
+      - "scripts/prepare-render-site.mjs"
+      - "test/**"
       - ".gitattributes"
       - ".github/workflows/public-evidence-validator.yml"
   push:
@@ -13,6 +23,16 @@ on:
     paths:
       - "evidence-validator/**"
       - "package.json"
+      - "site.js"
+      - "styles.css"
+      - "institutional-confirmation.mjs"
+      - "institutional-alignment.html"
+      - "institutional-thank-you.html"
+      - "institutional-rc1-config.js"
+      - "diagnostics/**"
+      - "render.yaml"
+      - "scripts/prepare-render-site.mjs"
+      - "test/**"
       - ".gitattributes"
       - ".github/workflows/public-evidence-validator.yml"
   workflow_dispatch:

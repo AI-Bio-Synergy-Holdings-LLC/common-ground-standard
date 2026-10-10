@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import { promisify } from "node:util";
 
@@ -12,8 +12,51 @@ const publicRecaptchaSiteKey = "6Le28TctAAAAAM9iexmAPszMLNAS8iGSqJrcGxfA";
 const runBuild = (environment = {}) =>
   execFileAsync(process.execPath, ["scripts/prepare-render-site.mjs"], {
     cwd: repoRoot,
-    env: { ...process.env, ...environment },
+    env: {
+      ...process.env,
+      CGS_INSTITUTIONAL_RC1_ENABLED: "false",
+      CGS_INSTITUTIONAL_DIAGNOSTIC_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_CANDIDATE_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_VERIFICATION_ENABLED: "false",
+      CGS_INSTITUTIONAL_PRODUCTION_LIVE_ENABLED: "false",
+      ...environment,
+    },
   });
+
+const assertCurrentAuthorityNotice = (html) => {
+  const notice = html.match(/<span\s+data-rc1-notice-copy>([\s\S]*?)<\/span>/)?.[1];
+  assert.ok(notice, "the default intake authority notice is present");
+  const copy = notice.replace(/\s+/g, " ").trim();
+
+  assert.equal(
+    /Final activation authority has been issued/i.test(html),
+    false,
+    "the default intake must not imply previously issued current activation authority",
+  );
+  assert.match(
+    copy,
+    /Interim intake owner: AI-Bio Synergy Holdings LLC, acting as current founder steward and temporary incubator\./,
+  );
+  assert.match(copy, /Live intake remains disabled\./);
+  assert.match(
+    copy,
+    /Activation requires separate exact-commit authorization, completed production verification, and the enable-last controls\./,
+  );
+};
+
+test("the default institutional notice does not imply current activation authority", async () => {
+  assertCurrentAuthorityNotice(await read("institutional-alignment.html"));
+});
+
+test("the default institutional notice remains neutral in the non-transmitting artifact", async () => {
+  await runBuild();
+  const html = await read("dist-render/institutional-alignment.html");
+  assertCurrentAuthorityNotice(html);
+  assert.match(await read("dist-render/institutional-rc1-config.js"), /window\.__CGS_INSTITUTIONAL_RC1__\s*=\s*null/);
+  assert.match(html, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
+  assert.doesNotMatch(html.match(/<form[\s\S]*?>/)?.[0] || "", /\s(?:action|method)=/i);
+  assert.doesNotMatch(html, /recaptcha\/api\.js|formspree\.io\/f\//i);
+});
 
 test("the committed institutional form remains structurally fail-closed", async () => {
   const html = await read("institutional-alignment.html");
@@ -23,10 +66,12 @@ test("the committed institutional form remains structurally fail-closed", async 
   assert.doesNotMatch(form.match(/<form[\s\S]*?>/)?.[0] || "", /\saction=/i);
   assert.match(form, /<fieldset[^>]*data-test-form-guard[^>]*disabled/);
   assert.match(form, /<button[^>]*type="button"[^>]*data-fs-submit-btn/);
+  assert.match(
+    form,
+    /<input\s+type="hidden"\s+name="g-recaptcha-response"\s+data-recaptcha-response\s+\/>/,
+  );
   assert.doesNotMatch(html, /recaptcha\/api\.js/i);
   assert.doesNotMatch(html, /formspree\.io\/f\//i);
-  assert.match(html, /Final activation authority has been issued/);
-  assert.match(html, /production verification and the enable-last controls pass/);
 });
 
 test("the committed RC1 configuration is inert", async () => {
@@ -94,6 +139,22 @@ test("the staging build requires a complete non-production configuration", async
   assert.match(site, /allowedOrigin\.origin !== window\.location\.origin/);
   assert.match(site, /formEndpoint\.origin !== "https:\/\/formspree\.io"/);
   assert.doesNotMatch(site, /\/f\/mykqwozd/);
+});
+
+test("the controlled integration route exercises the in-form reCAPTCHA token field", async () => {
+  const site = await read("site.js");
+
+  assert.match(
+    site,
+    /const tokenInput = form\.querySelector\('input\[name="g-recaptcha-response"\]'\)/,
+  );
+  assert.match(site, /!\(tokenInput instanceof HTMLInputElement\)/);
+  assert.match(site, /tokenInput\.value = token/);
+  assert.match(
+    site,
+    /payload\.append\("g-recaptcha-response", tokenInput\.value\)/,
+  );
+  assert.match(site, /Verification configuration is unavailable\. No information was sent\./);
 });
 
 test("the production candidate is exact-destination and structurally non-transmitting", async () => {
@@ -228,9 +289,9 @@ test("production live mode publishes current processing disclosure", async () =>
   );
 });
 
-test("the integration thank-you route distinguishes a synthetic transmission from local validation", async () => {
+test("the confirmation route never uses a URL as synthetic receipt or local-validation evidence", async () => {
   const html = await read("institutional-thank-you.html");
-  const site = await read("site.js");
+  const site = await read("institutional-confirmation.mjs");
 
   for (const hook of [
     "data-institutional-result-title",
@@ -244,17 +305,71 @@ test("the integration thank-you route distinguishes a synthetic transmission fro
     assert.match(html, new RegExp(hook));
   }
 
-  assert.match(site, /mode !== "integration-success"/);
-  assert.match(site, /One synthetic test record/);
-  assert.match(site, /does not confirm inbox delivery or final classification/);
-  assert.match(site, /Live institutional intake remains disabled/);
+  assert.doesNotMatch(site, /URLSearchParams|window\.location|location\.search|One synthetic test record|None — local-only test mode/);
+  assert.match(site, /Confirmation URL parameters alone cannot establish receipt, non-transmission, or live activation/);
+  assert.match(site, /Result not verified\./);
 });
 
-test("the institutional confirmation route distinguishes a live receipt", async () => {
-  const site = await read("site.js");
+test("the institutional confirmation route leaves live receipt and activation unverified", async () => {
+  const site = await read("institutional-confirmation.mjs");
+  const html = await read("institutional-thank-you.html");
 
-  assert.match(site, /mode === "live"/);
-  assert.match(site, /Your review note was received\./);
-  assert.match(site, /Receipt does not create an institutional role or public association\./);
-  assert.match(site, /Submitted privately through Formspree/);
+  assert.doesNotMatch(site, /mode === "live"|Your review note was received\.|Submitted privately through Formspree|Active under published operating controls/);
+  assert.match(html, /data-institutional-result-title>Result not verified\./);
+  assert.match(html, /data-institutional-result-transmission>Not established by this page/);
+  assert.match(html, /data-institutional-result-live>Not established by this page/);
+  assert.match(html, /It will not create[\s\S]*endorsement, partnership, membership, accreditation, certification/);
+});
+
+test("the staging builder and confirmation renderer share the same record contract", async () => {
+  const { isInstitutionalRc1Record } = await import("../institutional-confirmation.mjs");
+  const environment = {
+    CGS_INSTITUTIONAL_RC1_ENABLED: "true",
+    CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard-institutional.onrender.com",
+    CGS_INSTITUTIONAL_RC1_FORM_ENDPOINT: "https://formspree.io/f/offline_test",
+    CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY: "offline_public_site_key_1234567890",
+    CGS_INSTITUTIONAL_RC1_AUTHORIZATION_CODE: "offline_selector_1234567890123456",
+  };
+  try {
+    for (const record of ["CGS-INSTITUTIONAL-RC1-2026-10-08", "CGS-INSTITUTIONAL-RC1-20261008-7CB67E4-RECEIPT"]) {
+      assert.equal(isInstitutionalRc1Record(record), true);
+      await runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_RECORD_ID: record });
+      assert.match(await read("dist-render/institutional-rc1-config.js"), new RegExp(record));
+      assert.equal(await read("dist-render/institutional-confirmation.mjs"), await read("institutional-confirmation.mjs"));
+    }
+    for (const record of ["bad", "CGS-INSTITUTIONAL-RC1--RECEIPT", "CGS-INSTITUTIONAL-RC1-lowercase", "CGS-INSTITUTIONAL-RC1-20261008\n", "CGS-INSTITUTIONAL-RC1-" + "A".repeat(107)]) {
+      assert.equal(isInstitutionalRc1Record(record), false);
+      await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_RECORD_ID: record }), /record ID is malformed/);
+    }
+  } finally {
+    await runBuild();
+  }
+  assert.match(await read("dist-render/institutional-rc1-config.js"), /window\.__CGS_INSTITUTIONAL_RC1__\s*=\s*null/);
+  assert.doesNotMatch(await read("site.js"), /const initInstitutionalThankYou/);
+});
+
+test("diagnostic staging excludes form submission and is unavailable in the default artifact", async () => {
+  const environment = {
+    CGS_INSTITUTIONAL_DIAGNOSTIC_ENABLED: "true",
+    CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard-institutional.onrender.com",
+    CGS_INSTITUTIONAL_RC1_RECAPTCHA_SITE_KEY: "test_staging_site_key_1234567890",
+  };
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://common-ground-standard.org" }), /exact institutional staging hostname/);
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ALLOWED_ORIGIN: "https://other.onrender.com" }), /exact institutional staging hostname/);
+  await assert.rejects(runBuild({ ...environment, CGS_INSTITUTIONAL_RC1_ENABLED: "true" }), /Only one/);
+  await runBuild(environment);
+  const config = await read("dist-render/institutional-rc1-config.js");
+  const html = await read("dist-render/institutional-alignment.html");
+  const script = await read("dist-render/recaptcha-diagnostic.mjs");
+  assert.match(config, /"mode":"recaptcha-diagnostic"/);
+  assert.doesNotMatch(config, /formEndpoint|secretKey|formspree/);
+  assert.doesNotMatch(html, /<form\b|<input\b|<textarea\b|site\.js|formspree\.io/i);
+  assert.match(html, /form-action 'none'/);
+  assert.match(html, /type="button" disabled data-run/);
+  assert.match(html, /noindex, nofollow, noarchive/);
+  assert.doesNotMatch(script, /FormData|fetch\(|sendBeacon|localStorage|sessionStorage|console\./);
+  assert.match(html, /institutional-rc1-config\.js\?v=[a-f0-9]{16}/);
+  await runBuild();
+  await assert.rejects(access(new URL("../dist-render/recaptcha-diagnostic.mjs", import.meta.url)), /ENOENT/);
+  assert.doesNotMatch(await read("dist-render/institutional-alignment.html"), /recaptcha-diagnostic\.mjs/);
 });

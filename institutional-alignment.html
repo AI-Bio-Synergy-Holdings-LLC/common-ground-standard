@@ -461,8 +461,8 @@
               <strong data-rc1-notice-title>Test mode — no form-field data will be transmitted.</strong>
               <span data-rc1-notice-copy>
                 Interim intake owner: AI-Bio Synergy Holdings LLC, acting as current founder steward
-                and temporary incubator. Final activation authority has been issued, but live intake
-                remains disabled until production verification and the enable-last controls pass.
+                and temporary incubator. Live intake remains disabled. Activation requires separate
+                exact-commit authorization, completed production verification, and the enable-last controls.
               </span>
             </div>
 
@@ -502,6 +502,11 @@
                   value="AI-Bio Synergy Holdings LLC"
                 />
                 <input type="hidden" name="intake_mode" value="test" />
+                <input
+                  type="hidden"
+                  name="g-recaptcha-response"
+                  data-recaptcha-response
+                />
                 <label class="form-honeypot">
                   Leave this field empty
                   <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
