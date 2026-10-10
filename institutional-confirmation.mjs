@@ -1,65 +1,40 @@
-// The builder and confirmation renderer share this bounded, URL-safe marker contract.
+// Builder marker syntax only: a well-formed marker is not receipt or authorization evidence.
 export const isInstitutionalRc1Record = (record) => {
   if (typeof record !== "string" || record.length > 128) return false;
   const match = /^CGS-INSTITUTIONAL-RC1-[A-Z0-9]+(?:-[A-Z0-9]+)*$/.exec(record);
   return match?.[0] === record;
 };
 
-export const initInstitutionalThankYou = (document, location) => {
+export const initInstitutionalThankYou = (document) => {
   if (!document.querySelector("[data-institutional-result-title]")) return;
 
-  const params = new URLSearchParams(location.search);
-  if (params.getAll("mode").length !== 1 || params.getAll("record").length > 1) return;
-  const mode = params.get("mode");
-  const record = params.get("record") || "";
   const setText = (selector, value) => {
     const element = document.querySelector(selector);
     if (element) element.textContent = value;
   };
 
-  if (mode === "test" && !params.has("record")) {
-    document.title = "Institutional Intake Test Complete | Common Ground Standard";
-    setText("[data-institutional-result-label]", "Institutional intake test");
-    setText("[data-institutional-result-title]", "Validation complete.");
-    setText(
-      "[data-institutional-result-summary]",
-      "The local test flow reported successful form validation. This local-only mode does not send institutional form-field data to Formspree, reCAPTCHA, the current steward, or any other recipient.",
-    );
-    setText("[data-institutional-result-status]", "Local validation result");
-    setText("[data-institutional-result-transmission]", "None — local-only test mode");
-    setText("[data-institutional-result-live]", "Held pending remaining activation controls");
-    setText("[data-institutional-result-notice-title]", "This was not an institutional submission.");
-    setText(
-      "[data-institutional-result-notice-copy]",
-      "The operating charter is approved. Live intake remains disabled until the remaining activation controls and separate final launch authorization are complete.",
-    );
-    return;
-  }
-
-  // URL parameters cannot authenticate a live receipt or operational activation.
-  // Live-result URLs retain the neutral static template instead of asserting either.
-  if (mode !== "integration-success" || !isInstitutionalRc1Record(record)) return;
-
-  document.title = "Institutional Routing Test Accepted | Common Ground Standard";
-  setText("[data-institutional-result-label]", "Controlled institutional routing test");
-  setText("[data-institutional-result-title]", "Routing response accepted.");
+  // Never read URL parameters or infer a completed flow from client presentation.
+  // Restore the same neutral copy as the raw/no-JavaScript template for every result URL.
+  document.title = "Institutional Review Result | Common Ground Standard";
+  setText("[data-institutional-result-label]", "Institutional review result");
+  setText("[data-institutional-result-title]", "Result not verified.");
   setText(
     "[data-institutional-result-summary]",
-    "The routing flow reported Formspree acceptance of one staging-only synthetic record. This page does not confirm inbox delivery or final classification; the receipt must be verified in Formspree before the gate can close.",
+    "This page has not established a valid routing result. It does not prove that data was sent or that nothing was sent. Check the authorized verification record before taking any next step; do not submit again from this page.",
   );
-  setText("[data-institutional-result-status]", "Formspree response accepted");
-  setText("[data-institutional-result-transmission]", "One synthetic test record");
-  setText("[data-institutional-result-live]", "Disabled — no live intake opened");
+  setText("[data-institutional-result-status]", "Not verified");
+  setText("[data-institutional-result-transmission]", "Not established by this page");
+  setText("[data-institutional-result-live]", "Not established by this page");
   setText(
     "[data-institutional-result-notice-title]",
-    "This was a synthetic routing verification, not an institutional submission.",
+    "Verify the result before closing the gate.",
   );
   setText(
     "[data-institutional-result-notice-copy]",
-    `Receipt ${record} must be checked for delivery status and deleted after verification. Live institutional intake remains disabled pending separate final authorization.`,
+    "Confirmation URL parameters alone cannot establish receipt, non-transmission, or live activation. Receipt verification, deletion, and any activation require their separate operating controls.",
   );
 };
 
-if (typeof document !== "undefined" && typeof window !== "undefined") {
-  initInstitutionalThankYou(document, window.location);
+if (typeof document !== "undefined") {
+  initInstitutionalThankYou(document);
 }

@@ -39,28 +39,30 @@ const render = (search, origin = "https://common-ground-standard-institutional.o
   return result;
 };
 
+const assertNeutralResult = (result, context = "") => {
+  const baseline = fixture();
+  assert.equal(result.document.title, baseline.document.title, context);
+  for (const name of ["label", "title", "summary", "status", "transmission", "live", "notice-title", "notice-copy"]) {
+    assert.equal(result.text(name), baseline.text(name), `${context}: ${name}`);
+  }
+};
+
 test("the shared record contract accepts legacy and extended markers with a 128-character bound", () => {
   for (const record of validRecords) assert.equal(isInstitutionalRc1Record(record), true, record);
   for (const record of invalidRecords) assert.equal(isInstitutionalRc1Record(record), false, String(record));
 });
 
-test("the accepted extended staging marker renders a transmitted synthetic receipt", () => {
+test("a historical extended marker does not authenticate a synthetic receipt", () => {
   const marker = "CGS-INSTITUTIONAL-RC1-20261008-7CB67E4-RECEIPT";
   const result = render(new URLSearchParams({ mode: "integration-success", record: marker }).toString());
-  assert.equal(result.text("title"), "Routing response accepted.");
-  assert.equal(result.text("transmission"), "One synthetic test record");
-  assert.match(result.text("notice-copy"), new RegExp(marker));
-  assert.match(result.text("summary"), /reported Formspree acceptance/);
-  assert.match(result.text("summary"), /does not confirm inbox delivery or final classification/);
-  assert.match(result.text("live"), /Disabled/);
-  assert.equal(result.document.title, "Institutional Routing Test Accepted | Common Ground Standard");
+  assertNeutralResult(result, marker);
+  assert.doesNotMatch(result.text("notice-copy"), new RegExp(marker));
 });
 
-test("every accepted marker renders a synthetic result without the local-only fallback", () => {
-  for (const record of validRecords) {
+test("syntactically valid and fabricated markers remain unverified", () => {
+  for (const record of [...validRecords, "CGS-INSTITUTIONAL-RC1-FABRICATED"]) {
     const result = render(new URLSearchParams({ mode: "integration-success", record }).toString());
-    assert.equal(result.text("transmission"), "One synthetic test record", record);
-    assert.doesNotMatch(result.text("summary"), /No institutional form-field data|local form validation/);
+    assertNeutralResult(result, record);
   }
 });
 
@@ -87,21 +89,27 @@ test("missing, unknown and duplicate result parameters stay unverified", () => {
   }
 });
 
-test("the explicit local-only result remains distinct from an accepted synthetic receipt", () => {
+test("a local-test URL cannot establish validation or non-transmission", () => {
   const result = render("mode=test");
-  assert.equal(result.text("title"), "Validation complete.");
-  assert.equal(result.text("transmission"), "None — local-only test mode");
-  assert.match(result.text("summary"), /local test flow reported/);
-  assert.doesNotMatch(result.text("summary"), /Formspree acceptance/);
+  assertNeutralResult(result);
 });
 
 for (const origin of [
   "https://common-ground-standard.org",
   "https://common-ground-standard-institutional.onrender.com",
 ]) {
-  test(`live-result URLs remain neutral on ${origin}`, () => {
-    const baseline = fixture();
+  test(`all URL-only result claims remain neutral on ${origin}`, () => {
     for (const search of [
+      "", "mode=test", "mode=test&success=true&transmission=none&intake=disabled",
+      "mode=test&mode=test", "mode=test&record=", "mode=integration-success",
+      `mode=integration-success&record=${validRecords[1]}`,
+      "mode=integration-success&record=CGS-INSTITUTIONAL-RC1-FABRICATED",
+      `mode=integration-success&record=${validRecords[2]}`,
+      `mode=integration-success&record=${validRecords[0]}&record=${validRecords[1]}`,
+      `mode=integration-success&mode=test&record=${validRecords[1]}`,
+      "mode=integration-success&record=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E",
+      "%6dode=integration-success&record=CGS-INSTITUTIONAL-RC1-FABRICATED",
+      "mode=unknown&success=true&receipt=123&transmission=none",
       "mode=live",
       `mode=live&record=${validRecords[1]}`,
       "mode=live&record=invalid",
@@ -110,27 +118,38 @@ for (const origin of [
       "mode=live&success=true&authorized=true&receipt=123&intake=active",
     ]) {
       const result = render(search, origin);
-      assert.equal(result.document.title, baseline.document.title, search);
-      for (const name of ["label", "title", "summary", "status", "transmission", "live", "notice-title", "notice-copy"]) {
-        assert.equal(result.text(name), baseline.text(name), `${search}: ${name}`);
-      }
-      assert.equal(result.text("title"), "Result not verified.", search);
-      assert.equal(result.text("transmission"), "Not established by this page", search);
-      assert.equal(result.text("live"), "Not established by this page", search);
+      assertNeutralResult(result, search);
     }
   });
 }
 
-test("the confirmation route cannot assert live receipt or activation from client presentation", async () => {
+test("the confirmation renderer does not read URL or ambient activation state", () => {
+  const result = fixture();
+  const untrustedLocation = { get search() { throw new Error("URL state must not be read"); } };
+  assert.doesNotThrow(() => initInstitutionalThankYou(result.document, untrustedLocation));
+  assertNeutralResult(result);
+});
+
+test("initialization restores neutral copy instead of retaining a prior client claim", () => {
+  const result = fixture();
+  result.document.title = "Institutional Routing Test Accepted";
+  for (const name of ["title", "status", "transmission", "live"]) {
+    result.document.querySelector(`[data-institutional-result-${name}]`).textContent = "Unverified prior client claim";
+  }
+  initInstitutionalThankYou(result.document, { search: "mode=live" });
+  assertNeutralResult(result);
+});
+
+test("the confirmation route cannot assert receipt, non-transmission or activation from client presentation", async () => {
   const module = await readFile(new URL("../institutional-confirmation.mjs", import.meta.url), "utf8");
   for (const source of [module, html]) {
-    assert.doesNotMatch(source, /Your review note was received|Received for bounded fit assessment|Submitted privately through Formspree|Active under published operating controls/);
+    assert.doesNotMatch(source, /Your review note was received|Received for bounded fit assessment|Submitted privately through Formspree|Active under published operating controls|Formspree response accepted|One synthetic test record|Validation complete\.|None — local-only test mode|Disabled — no live intake opened|This was not an institutional submission/);
   }
 });
 
 test("the corrected confirmation module has a new cache identity", () => {
-  assert.match(html, /institutional-confirmation\.mjs\?v=20261008-live-result-neutral/);
-  assert.doesNotMatch(html, /institutional-confirmation\.mjs\?v=20261008-confirmation-contract/);
+  assert.match(html, /institutional-confirmation\.mjs\?v=20261010-all-results-neutral/);
+  assert.doesNotMatch(html, /institutional-confirmation\.mjs\?v=20261008-(?:confirmation-contract|live-result-neutral)/);
 });
 
 test("static and JavaScript-disabled results are neutral and do not offer resubmission", () => {

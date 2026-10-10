@@ -289,7 +289,7 @@ test("production live mode publishes current processing disclosure", async () =>
   );
 });
 
-test("the integration thank-you route distinguishes a synthetic transmission from local validation", async () => {
+test("the confirmation route never uses a URL as synthetic receipt or local-validation evidence", async () => {
   const html = await read("institutional-thank-you.html");
   const site = await read("institutional-confirmation.mjs");
 
@@ -305,10 +305,9 @@ test("the integration thank-you route distinguishes a synthetic transmission fro
     assert.match(html, new RegExp(hook));
   }
 
-  assert.match(site, /mode !== "integration-success"/);
-  assert.match(site, /One synthetic test record/);
-  assert.match(site, /does not confirm inbox delivery or final classification/);
-  assert.match(site, /Live institutional intake remains disabled/);
+  assert.doesNotMatch(site, /URLSearchParams|window\.location|location\.search|One synthetic test record|None — local-only test mode/);
+  assert.match(site, /Confirmation URL parameters alone cannot establish receipt, non-transmission, or live activation/);
+  assert.match(site, /Result not verified\./);
 });
 
 test("the institutional confirmation route leaves live receipt and activation unverified", async () => {
