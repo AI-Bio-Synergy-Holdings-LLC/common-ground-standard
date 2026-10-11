@@ -14,8 +14,8 @@
     "node": ">=24"
   },
   "scripts": {
-    "check": "node --check evidence-validator/lib/public-evidence.mjs && node --check evidence-validator/bin/cgs-evidence.mjs && node --check site.js && node --check scripts/prepare-render-site.mjs && node --test evidence-validator/test/public-evidence.test.mjs test/institutional-rc1.test.mjs",
-    "test": "node --test evidence-validator/test/public-evidence.test.mjs test/institutional-rc1.test.mjs",
+    "check": "node --check evidence-validator/lib/public-evidence.mjs && node --check evidence-validator/bin/cgs-evidence.mjs && node --check site.js && node --check scripts/prepare-render-site.mjs && node --check diagnostics/recaptcha.mjs && node --check institutional-confirmation.mjs && node --test evidence-validator/test/public-evidence.test.mjs test/institutional-rc1.test.mjs test/recaptcha-diagnostic.test.mjs test/institutional-confirmation.test.mjs",
+    "test": "node --test evidence-validator/test/public-evidence.test.mjs test/institutional-rc1.test.mjs test/recaptcha-diagnostic.test.mjs test/institutional-confirmation.test.mjs",
     "validate:example": "node evidence-validator/bin/cgs-evidence.mjs verify evidence-validator/examples/golden evidence-validator/examples/golden/receipt.json"
   },
   "license": "SEE LICENSE IN LICENSE"

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; connect-src https://www.google.com/recaptcha/; frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/" />
+    <title>Staging reCAPTCHA diagnostic | Common Ground Standard</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="diagnostic.css" />
+    <script defer src="institutional-rc1-config.js"></script>
+    <script type="module" src="recaptcha-diagnostic.mjs"></script>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Common Ground Standard · staging diagnostics</p>
+      <h1>Verify token issuance.</h1>
+      <p>This diagnostic checks Google reCAPTCHA without collecting institutional information or sending a submission.</p>
+      <aside>
+        <strong>No form or submission endpoint is present.</strong>
+        <p>Running this check contacts Google, which processes browser signals under its privacy policy. The result shows token length only; the token is discarded. No Formspree receipt is created.</p>
+        <p>Production intake remains closed. Successful token issuance alone does not prove server validation, secret-key pairing, or receipt delivery.</p>
+      </aside>
+      <dl>
+        <dt>Host</dt><dd data-host>Awaiting configuration</dd>
+        <dt>API</dt><dd>reCAPTCHA v3 · api.js · grecaptcha.execute</dd>
+        <dt>Action</dt><dd>institutional_rc1_test</dd>
+      </dl>
+      <button type="button" disabled data-run>Run token diagnostic</button>
+      <p role="status" aria-live="polite" data-status>JavaScript and the exact staging hostname are required.</p>
+      <noscript><p>The diagnostic is unavailable with JavaScript disabled. This page cannot submit information.</p></noscript>
+      <section aria-labelledby="result-title">
+        <h2 id="result-title">Diagnostic evidence</h2>
+        <pre data-result aria-label="Redacted diagnostic result">No diagnostic has run.</pre>
+      </section>
+    </main>
+  </body>
+</html>

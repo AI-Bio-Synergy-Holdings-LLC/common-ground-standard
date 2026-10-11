@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Institutional Intake Test Complete | Common Ground Standard</title>
+    <title>Institutional Review Result | Common Ground Standard</title>
     <meta
       name="description"
-      content="Confirmation page for the Common Ground Standard institutional review intake test."
+      content="Institutional review routing result. Confirm any receipt in the provider before closing verification."
     />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="author" content="Common Ground Standard" />
@@ -21,11 +21,11 @@
     <meta property="og:site_name" content="Common Ground Standard" />
     <meta
       property="og:title"
-      content="Institutional Intake Test Complete | Common Ground Standard"
+      content="Institutional Review Result | Common Ground Standard"
     />
     <meta
       property="og:description"
-      content="Confirmation page for the Common Ground Standard institutional review intake test."
+      content="Institutional review routing result. Confirm any receipt in the provider before closing verification."
     />
     <meta property="og:type" content="website" />
     <meta
@@ -39,18 +39,19 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Institutional Intake Test Complete | Common Ground Standard"
+      content="Institutional Review Result | Common Ground Standard"
     />
     <meta
       name="twitter:description"
-      content="The institutional review intake completed local validation without transmitting data."
+      content="Institutional review routing result. This page alone does not verify a receipt."
     />
     <meta
       name="twitter:image"
       content="https://common-ground-standard.org/assets/social-preview-20260713-v2.png"
     />
-    <link rel="stylesheet" href="styles.css?v=20260729-institutional-test-guard" />
-    <script defer src="site.js?v=20261004-production-candidate-a80fda7"></script>
+    <link rel="stylesheet" href="styles.css?v=20261008-confirmation-contract" />
+    <script defer src="site.js?v=20261008-confirmation-contract"></script>
+    <script type="module" src="institutional-confirmation.mjs?v=20261010-all-results-neutral"></script>
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -76,19 +77,20 @@
     <main id="content" tabindex="-1">
       <section class="page-hero document-hero">
         <div>
-          <p class="eyebrow" data-institutional-result-label>Institutional intake test</p>
-          <h1 data-institutional-result-title>Validation complete.</h1>
+          <p class="eyebrow" data-institutional-result-label>Institutional review result</p>
+          <h1 data-institutional-result-title>Result not verified.</h1>
           <p data-institutional-result-summary>
-            The institutional review note passed local form validation. No institutional form-field
-            data was sent to Formspree, reCAPTCHA, the current steward, or any other recipient.
+            This page has not established a valid routing result. It does not prove that data was
+            sent or that nothing was sent. Check the authorized verification record before taking
+            any next step; do not submit again from this page.
           </p>
-          <dl class="page-meta" aria-label="Test submission status">
-            <div><dt>Status</dt><dd data-institutional-result-status>Test completed</dd></div>
-            <div><dt>Data transmission</dt><dd data-institutional-result-transmission>None</dd></div>
+          <dl class="page-meta" aria-label="Institutional routing result status">
+            <div><dt>Status</dt><dd data-institutional-result-status>Not verified</dd></div>
+            <div><dt>Data transmission</dt><dd data-institutional-result-transmission>Not established by this page</dd></div>
             <div><dt>Interim intake owner</dt><dd>AI-Bio Synergy Holdings LLC</dd></div>
             <div>
               <dt>Live intake</dt>
-              <dd data-institutional-result-live>Held pending remaining activation controls</dd>
+              <dd data-institutional-result-live>Not established by this page</dd>
             </div>
           </dl>
         </div>
@@ -98,12 +100,16 @@
         <div class="notice-mark" aria-hidden="true">!</div>
         <div>
           <h2 id="institutional-test-title" data-institutional-result-notice-title>
-            This was not an institutional submission.
+            Verify the result before closing the gate.
           </h2>
           <p data-institutional-result-notice-copy>
-            The operating charter is approved. Live intake remains disabled until the remaining
-            activation controls and separate final launch authorization are complete.
+            Confirmation URL parameters alone cannot establish receipt, non-transmission, or live activation.
+            Receipt verification, deletion, and any activation require their separate operating controls.
           </p>
+          <noscript>
+            <p>JavaScript is unavailable. No routing result can be verified here. Check the authorized
+              verification record without sending another submission.</p>
+          </noscript>
           <p>
             A future live submission will begin a fit assessment only. It will not create
             endorsement, partnership, membership, accreditation, certification, adoption, funding
