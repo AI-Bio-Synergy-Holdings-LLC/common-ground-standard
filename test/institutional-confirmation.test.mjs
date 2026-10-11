@@ -10,7 +10,8 @@ const moduleSource = await readFile(new URL("../institutional-confirmation.mjs",
 // run in a fresh offline context. No URL, initialization or renderer logic is rewritten.
 const browserSource = moduleSource.replace(/^export (?=const )/gm, "");
 const browserScript = new Script(browserSource, { filename: "institutional-confirmation.mjs" });
-const browserRunOptions = { timeout: 1000, codeGeneration: { strings: false, wasm: false } };
+// A regression fixture for repository-owned code, not a security sandbox for untrusted code.
+const browserRunOptions = { timeout: 1000, contextCodeGeneration: { strings: false, wasm: false } };
 // Count reads and assert afterward: VM global getter exceptions can be masked.
 // These are fabricated offline values, never provider or activation credentials.
 const trackAmbientReads = `
@@ -201,6 +202,21 @@ test("the offline browser harness detects URL-trust and skipped-initialization r
       read,
     );
   }
+});
+
+test("the offline browser harness blocks string and WebAssembly code generation", () => {
+  for (const source of ["eval('1 + 1')", "Function('return 2')()"]) {
+    assert.throws(
+      () => new Script(source).runInNewContext({}, browserRunOptions),
+      { name: "EvalError" },
+      source,
+    );
+  }
+  assert.throws(
+    () => new Script("new WebAssembly.Module(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]))")
+      .runInNewContext({}, browserRunOptions),
+    { name: "CompileError" },
+  );
 });
 
 test("initialization restores neutral copy instead of retaining a prior client claim", () => {
