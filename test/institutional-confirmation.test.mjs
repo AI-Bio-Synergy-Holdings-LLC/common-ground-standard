@@ -1,9 +1,35 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { Script } from "node:vm";
 import { initInstitutionalThankYou, isInstitutionalRc1Record } from "../institutional-confirmation.mjs";
 
 const html = await readFile(new URL("../institutional-thank-you.html", import.meta.url), "utf8");
+const moduleSource = await readFile(new URL("../institutional-confirmation.mjs", import.meta.url), "utf8");
+// Remove only export declaration prefixes so the unchanged browser entry point can
+// run in a fresh offline context. No URL, initialization or renderer logic is rewritten.
+const browserSource = moduleSource.replace(/^export (?=const )/gm, "");
+const browserScript = new Script(browserSource, { filename: "institutional-confirmation.mjs" });
+const browserRunOptions = { timeout: 1000, codeGeneration: { strings: false, wasm: false } };
+// Count reads and assert afterward: VM global getter exceptions can be masked.
+// These are fabricated offline values, never provider or activation credentials.
+const trackAmbientReads = `
+  const ambientReads = [];
+  const initialLocation = location;
+  const recordRead = (name, value) => () => { ambientReads.push(name); return value; };
+  Object.defineProperty(globalThis, "location", { get: recordRead("location", initialLocation) });
+  Object.defineProperty(globalThis, "__CGS_INSTITUTIONAL_RC1__", {
+    get: recordRead("activation", { enabled: true, mode: "production-live" }),
+  });
+  for (const [name, value] of [
+    ["location", initialLocation], ["URL", initialLocation.href], ["documentURI", initialLocation.href],
+  ]) {
+    Object.defineProperty(document, name, { get: recordRead("document." + name, value) });
+  }
+`;
+const assertNoAmbientReads = `
+  if (ambientReads.length) throw new Error("URL or activation state read detected: " + ambientReads.join(", "));
+`;
 const validRecords = [
   "CGS-INSTITUTIONAL-RC1-2026-10-08",
   "CGS-INSTITUTIONAL-RC1-20261008-7CB67E4-RECEIPT",
@@ -33,9 +59,28 @@ const fixture = () => {
   return { document, text: (name) => fields.get(`[data-institutional-result-${name}]`).textContent };
 };
 
+const browserContext = (document, location) => {
+  const context = { document, location, URL, URLSearchParams };
+  context.window = context;
+  context.self = context;
+  document.location = location;
+  return context;
+};
+
+const seedPriorClientClaim = (result) => {
+  result.document.title = "Unverified prior client title";
+  for (const name of ["label", "title", "summary", "status", "transmission", "live", "notice-title", "notice-copy"]) {
+    result.document.querySelector(`[data-institutional-result-${name}]`).textContent = "Unverified prior client claim";
+  }
+};
+
 const render = (search, origin = "https://common-ground-standard-institutional.onrender.com") => {
   const result = fixture();
-  initInstitutionalThankYou(result.document, new URL(`institutional-thank-you.html?${search}`, origin));
+  const location = new URL(`institutional-thank-you.html?${search}`, origin);
+  result.document.URL = location.href;
+  result.document.documentURI = location.href;
+  seedPriorClientClaim(result);
+  browserScript.runInNewContext(browserContext(result.document, location), browserRunOptions);
   return result;
 };
 
@@ -125,9 +170,37 @@ for (const origin of [
 
 test("the confirmation renderer does not read URL or ambient activation state", () => {
   const result = fixture();
-  const untrustedLocation = { get search() { throw new Error("URL state must not be read"); } };
-  assert.doesNotThrow(() => initInstitutionalThankYou(result.document, untrustedLocation));
+  const location = new URL("https://common-ground-standard.org/institutional-thank-you.html?mode=live&authorized=true");
+  const context = browserContext(result.document, location);
+  const guardedBrowserScript = new Script(`${trackAmbientReads}\n${browserSource}\n${assertNoAmbientReads}`);
+  seedPriorClientClaim(result);
+  assert.doesNotThrow(() => guardedBrowserScript.runInNewContext(context, browserRunOptions));
   assertNeutralResult(result);
+});
+
+test("the offline browser harness detects URL-trust and skipped-initialization regressions", () => {
+  const location = new URL("https://common-ground-standard.org/institutional-thank-you.html?mode=live&authorized=true");
+  const mutations = [
+    new Script("void 0;"),
+    new Script(`${browserSource}\nif (window.location.search.includes("mode=live")) document.querySelector("[data-institutional-result-live]").textContent = "Active from an untrusted URL";`),
+  ];
+  for (const mutation of mutations) {
+    const result = fixture();
+    seedPriorClientClaim(result);
+    mutation.runInNewContext(browserContext(result.document, location), browserRunOptions);
+    assert.throws(() => assertNeutralResult(result), { code: "ERR_ASSERTION" });
+  }
+  for (const read of [
+    "location.search", "window.location.search", "self.location.search", "globalThis.location.search",
+    "document.location.search", "document.URL", "document.documentURI", "window.__CGS_INSTITUTIONAL_RC1__",
+  ]) {
+    const ambientRead = new Script(`${trackAmbientReads}\n${browserSource}\nvoid ${read};\n${assertNoAmbientReads}`);
+    assert.throws(
+      () => ambientRead.runInNewContext(browserContext(fixture().document, location), browserRunOptions),
+      /URL or activation state read detected/,
+      read,
+    );
+  }
 });
 
 test("initialization restores neutral copy instead of retaining a prior client claim", () => {
@@ -136,7 +209,7 @@ test("initialization restores neutral copy instead of retaining a prior client c
   for (const name of ["title", "status", "transmission", "live"]) {
     result.document.querySelector(`[data-institutional-result-${name}]`).textContent = "Unverified prior client claim";
   }
-  initInstitutionalThankYou(result.document, { search: "mode=live" });
+  initInstitutionalThankYou(result.document);
   assertNeutralResult(result);
 });
 
@@ -165,7 +238,7 @@ test("static and JavaScript-disabled results are neutral and do not offer resubm
 test("confirmation rendering has no submission, token, storage or HTML-injection mechanism", async () => {
   const module = await readFile(new URL("../institutional-confirmation.mjs", import.meta.url), "utf8");
   assert.doesNotMatch(module, /fetch\(|FormData|sendBeacon|grecaptcha|localStorage|sessionStorage|innerHTML|requestSubmit/);
-  assert.doesNotThrow(() => initInstitutionalThankYou({ querySelector: () => null }, { search: "mode=test" }));
+  assert.doesNotThrow(() => initInstitutionalThankYou({ querySelector: () => null }));
 });
 
 test("long receipt markers have wrapping scoped to the confirmation notice", async () => {
