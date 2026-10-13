@@ -82,7 +82,7 @@ test("the committed RC1 configuration is inert", async () => {
   assert.doesNotMatch(config, /recaptchaSiteKey\s*:/i);
 });
 
-test("the institutional runtime config cannot remain cached across activation modes", async () => {
+test("the builder assigns distinct config fingerprints to verification and live artifacts", async () => {
   const build = await read("scripts/prepare-render-site.mjs");
   const render = await read("render.yaml");
 

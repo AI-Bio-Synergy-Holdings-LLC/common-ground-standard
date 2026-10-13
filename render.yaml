@@ -4,12 +4,17 @@ services:
     runtime: static
     repo: https://github.com/AI-Bio-Synergy-Holdings-LLC/common-ground-standard
     branch: main
-    autoDeployTrigger: commit
+    # Source hold only. Do not sync the paused Blueprint or deploy without
+    # separate exact-commit authorization. Service PR previews stay omitted.
+    autoDeployTrigger: off
     buildCommand: node scripts/prepare-render-site.mjs
     staticPublishPath: dist-render
     domains:
       - common-ground-standard.org
     headers:
+      - path: /institutional-alignment.html
+        name: Cache-Control
+        value: no-store, no-cache, must-revalidate, max-age=0
       - path: /institutional-rc1-config.js
         name: Cache-Control
         value: no-store, no-cache, must-revalidate, max-age=0
@@ -34,4 +39,4 @@ services:
         value: DENY
 
 previews:
-  generation: automatic
+  generation: off
