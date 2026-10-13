@@ -224,7 +224,7 @@ export async function qualifyInertTransition(page, { screenshotDirectory } = {})
     page.off("response", responseListener);
     page.off("pageerror", errorListener);
     page.off("console", consoleListener);
-    if (cdp) await cdp.detach();
-    await fixture.close();
+    try { if (cdp) await cdp.detach(); }
+    finally { await fixture.close(); }
   }
 }

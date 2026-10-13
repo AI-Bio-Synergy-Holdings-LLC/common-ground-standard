@@ -4,6 +4,7 @@ import test from "node:test";
 import { assertFreshConfig, configUrl, evaluateConfig, fingerprint, modeFlags } from "./helpers/deployment-safety.mjs";
 import { inertFixture, assertInertFixture, fixtureResponse, startInertFixtureServer,
   fixturePath, noStore, fixtureCsp, historyDisposition } from "./helpers/inert-config-transition.mjs";
+import { qualifyInertTransition } from "./browser/inert-config-transition.mjs";
 
 test("C-04 A/B fixtures change bytes/fingerprints, not the null intake config or false flags", () => {
   const a = inertFixture("A");
@@ -98,4 +99,21 @@ test("C-04 harness is test-only and not copied by the unchanged public builder",
   assert.doesNotMatch(harness, /\.route\(|setCacheDisabled|setExtraHTTPHeaders|cache_bust=/);
   assert.match(harness, /about:blank/);
   assert.match(harness, /stale BFCache restoration is a real HOLD/);
+});
+
+test("C-04 server closes even when diagnostic-session detach fails after a navigation failure", async () => {
+  let attemptedUrl;
+  const session = {
+    async send(method) { return method === "Browser.getBrowserCommandLine" ? { arguments: [] } : {}; },
+    on() {},
+    async detach() { throw new Error("synthetic detach failure"); },
+  };
+  const page = {
+    context() { return { pages: () => [page], newCDPSession: async () => session }; },
+    url: () => "about:blank", on() {}, off() {},
+    async goto(url) { attemptedUrl = url; throw new Error("synthetic navigation failure"); },
+  };
+  await assert.rejects(qualifyInertTransition(page), /synthetic detach failure/);
+  assert.equal(new URL(attemptedUrl).hostname, "127.0.0.1");
+  await assert.rejects(fetch(attemptedUrl, { redirect: "error", signal: AbortSignal.timeout(1000) }));
 });
