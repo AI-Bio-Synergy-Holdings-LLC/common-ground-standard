@@ -5,7 +5,7 @@ import { Script } from "node:vm";
 import { actualFixture, actualResponse, startActualClientFixture, publicHashes, digest,
   restorationDisposition, blockedAction, localCsp } from "./helpers/actual-client-lifecycle.mjs";
 
-test("C04 actual source resources remain exactly the approved public baseline", async () => {
+test("C04 actual candidate resources match explicit hashes from authorized remediation", async () => {
   for (const file of Object.keys(publicHashes)) {
     const source = (await readFile(new URL(`../${file}`, import.meta.url), "utf8")).replaceAll("\r\n", "\n");
     assert.equal(digest(source), publicHashes[file]);
@@ -23,7 +23,7 @@ test("C04 actual HTML transformation changes only its config reference; config r
   assert.throws(() => actualFixture(html.replace('data-intake-mode="test"', 'data-intake-mode="live"'), "A"));
 });
 
-test("C04 current pageshow callback updates visual classes without clearing seeded form state", async () => {
+test("C04 visual pageshow callback stays separate from the institutional lifecycle controller", async () => {
   const source = await readFile(new URL("../site.js", import.meta.url), "utf8");
   const callback = source.match(/const markLoaded = \(\) => \{[\s\S]*?\n  \};/)[0];
   const state = { guardDisabled: false, action: blockedAction, tokenLength: 31 };
@@ -34,6 +34,7 @@ test("C04 current pageshow callback updates visual classes without clearing seed
   assert.deepEqual(mutations, [["add", "is-loaded"], ["remove", "is-leaving"]]);
   assert.deepEqual(state, { guardDisabled: false, action: blockedAction, tokenLength: 31 });
   assert.match(source, /window\.addEventListener\("pageshow", markLoaded\)/);
+  assert.match(source, /window\.addEventListener\("pageshow", \(event\) => \{ if \(event\.persisted\) lock\(\); \}\)/);
   assert.match(source, /DOMContentLoaded", initRecaptchaForms, \{ once: true \}/);
 });
 
@@ -65,7 +66,7 @@ test("C04 actual fixture HTTP policy rejects all transport/control/file paths", 
 test("C04 actual loopback server exposes unchanged client bytes and operator-only generation changes", async () => {
   const server = await startActualClientFixture();
   try {
-    const response = await fetch(server.origin + "/site.js?v=20261004-production-candidate-a80fda7", { redirect: "error" });
+    const response = await fetch(server.origin + "/site.js?v=20261013-c04-lifecycle-1", { redirect: "error" });
     assert.equal(digest(await response.text()), publicHashes["site.js"]);
     assert.equal(response.headers.get("cache-control"), "no-cache");
     const htmlResponse = await fetch(server.origin + "/institutional-alignment.html", { redirect: "error" });

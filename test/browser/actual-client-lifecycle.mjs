@@ -5,10 +5,14 @@ import { modeFlags } from "../helpers/deployment-safety.mjs";
 import { startActualClientFixture, observeActualClient, restorationDisposition, publicHashes,
   publicBaseline, noStore, localAssetCache, localCsp, sentinel, blockedAction, digest } from "../helpers/actual-client-lifecycle.mjs";
 
-// Actual unchanged site.js + HTML. Null config throughout. The seeded case
+// Actual candidate site.js + HTML. Null config throughout. The seeded case
 // changes only inert DOM attributes/hidden sentinels, NOT runtime modes or APIs.
-export async function assessActualClientLifecycle(page, { seeded = false, formScrolled = false, screenshotDirectory } = {}) {
+export async function assessActualClientLifecycle(page, { seeded = false, formScrolled = false,
+  qualifyRemediation = false, startGeneration = "A", screenshotDirectory } = {}) {
   const server = await startActualClientFixture();
+  assert.ok(["A", "B"].includes(startGeneration));
+  server.activate(startGeneration);
+  const targetGeneration = startGeneration === "A" ? "B" : "A";
   const requests = [];
   const nativeResponses = [];
   const errors = [];
@@ -20,6 +24,7 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
   let browser;
   const responseListener = (response) => {
     const observedPhase = phase;
+    if (phase === "actual-client-explicit-reload") return;
     const pathname = new URL(response.url()).pathname;
     if (!["/site.js", "/institutional-alignment.html", "/institutional-rc1-config.js"].includes(pathname)) return;
     const expected = server.snapshot();
@@ -54,6 +59,7 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
     assert.equal(commandLine.arguments.filter((argument) => /cache|back.forward/i.test(argument)).length, 0);
     cdp.on("Network.requestWillBeSent", (event) => requests.push({ phase, url: event.request.url, method: event.request.method }));
     cdp.on("Network.responseReceived", (event) => nativeResponses.push({ phase, url: event.response.url,
+      requestId: event.requestId, headers: event.response.headers,
       status: event.response.status, fromDiskCache: event.response.fromDiskCache === true,
       fromServiceWorker: event.response.fromServiceWorker === true, fromPrefetchCache: event.response.fromPrefetchCache === true }));
     page.on("response", responseListener);
@@ -67,7 +73,7 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
       ["/institutional-alignment.html", "/institutional-rc1-config.js", "/site.js"].sort(), "actual initial resource byte observations missing");
     const initial = await page.evaluate(observeActualClient);
     assert.equal(initial.title, "Institutional Alignment Pathway | Common Ground Standard");
-    assert.equal(initial.generation, "A");
+    assert.equal(initial.generation, startGeneration);
     assert.equal(initial.configNull, true);
     assert.deepEqual(Object.keys(initial.flags).sort(), [...modeFlags].sort());
     assert.ok(Object.values(initial.flags).every((flag) => flag === false));
@@ -106,7 +112,7 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
     if (screenshotDirectory) await page.screenshot({ path: path.join(screenshotDirectory, "actual-client-before.png") });
     phase = "actual-client-away";
     await page.goto(server.origin + "/c04-away.html", { waitUntil: "load" });
-    const expected = server.activate("B");
+    const expected = server.activate(targetGeneration);
     phase = "actual-client-native-history-return";
     const history = await cdp.send("Page.getNavigationHistory");
     const previous = history.entries[history.currentIndex - 1];
@@ -120,12 +126,12 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
       restored = result.result.value;
       if (restored?.state.url === previous.url && restored.state.ready === "complete" &&
         (restored.events.some((event) => event.type === "pageshow" && event.persisted) ||
-          (restored.state.generation === "B" && historyReasons.length))) break;
+          (restored.state.generation === targetGeneration && historyReasons.length))) break;
       await new Promise((resolve) => setTimeout(resolve, 50));
     }
     assert.equal(restored?.state.url, previous.url, "restored observation unavailable");
     const persisted = restored.events.some((event) => event.type === "pageshow" && event.persisted);
-    assert.ok(persisted || (restored.state.generation === "B" && historyReasons.length),
+    assert.ok(persisted || (restored.state.generation === targetGeneration && historyReasons.length),
       "neither restored nor fresh history lifecycle observed; assessment incomplete");
     await Promise.all(pending);
     assert.equal(restored.state.configNull, true);
@@ -141,16 +147,87 @@ export async function assessActualClientLifecycle(page, { seeded = false, formSc
     }
     const disposition = persisted ? restorationDisposition(restored.state, expected) :
       { status: "HOLD", reasons: ["native_bfcache_not_observed"] };
-    return { assessmentComplete: true, lifecycleQualification: disposition.status, reasons: disposition.reasons,
+    const historyHtmlConfigResponses = nativeResponses.filter((response) => response.phase === phase &&
+      ["/institutional-alignment.html", "/institutional-rc1-config.js"].includes(new URL(response.url).pathname)).length;
+    let recovered;
+    if (qualifyRemediation && persisted) {
+      const assertHeld = (state) => {
+        assert.ok(state.guardDisabled && state.buttonEffectiveDisabled && state.tokenEmpty);
+        assert.equal(state.tokenReady, null);
+        assert.equal(state.action, null);
+        assert.equal(state.method, null);
+        assert.equal(state.lifecycle, "held");
+        assert.equal(state.mode, "lifecycle-held");
+        assert.equal(state.intakeMetadata, "");
+        assert.equal(state.versionMetadata, "");
+        assert.ok(state.reloadAvailable && /Reloading clears unsent entries/.test(state.lifecycleStatus));
+      };
+      assertHeld(restored.state);
+      const departure = restored.events.find((event) => event.type === "pagehide");
+      assert.ok(departure?.persisted, "departure lock was not observed natively");
+      assertHeld(departure.state);
+      assert.equal(restored.state.generation, startGeneration);
+      assert.equal(historyHtmlConfigResponses, 0);
+      // Keyboard recovery is explicit, never automatic resubmission. Keep using
+      // native CDP after BFCache; Playwright Page history/reload is unsupported.
+      phase = "actual-client-explicit-reload";
+      await cdp.send("Runtime.evaluate", { expression: "document.querySelector('[data-intake-reload]').focus()" });
+      if (screenshotDirectory) {
+        const screenshot = await cdp.send("Page.captureScreenshot", { format: "png" });
+        await writeFile(path.join(screenshotDirectory, "actual-client-held-recovery.png"), Buffer.from(screenshot.data, "base64"));
+      }
+      await cdp.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+      await cdp.send("Input.dispatchKeyEvent", { type: "char", key: "Enter", code: "Enter", text: "\r", windowsVirtualKeyCode: 13 });
+      await cdp.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
+      const reloadDeadline = Date.now() + 5000;
+      while (Date.now() < reloadDeadline) {
+        const result = await cdp.send("Runtime.evaluate", { expression, returnByValue: true });
+        recovered = result.result.value?.state;
+        if (recovered?.ready === "complete" && recovered.generation === targetGeneration && recovered.lifecycle === "ready") break;
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      assert.equal(recovered?.generation, targetGeneration);
+      assert.equal(recovered.fingerprint, expected.version);
+      assert.equal(recovered.lifecycle, "ready");
+      assert.equal(recovered.mode, "test");
+      assert.equal(recovered.action, null);
+      assert.equal(recovered.method, null);
+      assert.ok(recovered.tokenEmpty && recovered.visibleFieldsEmpty && recovered.googleApiAbsent &&
+        !recovered.guardDisabled && !recovered.reloadAvailable && !recovered.overflow && !recovered.overlay);
+      assert.ok(Object.values(recovered.flags).every((flag) => flag === false));
+      const fresh = nativeResponses.filter((response) => response.phase === phase &&
+        ["/institutional-alignment.html", "/institutional-rc1-config.js", "/site.js"].includes(new URL(response.url).pathname));
+      assert.equal(fresh.length, 3, "current HTML/config/client must be fetched after explicit recovery");
+      for (const response of fresh) {
+        assert.equal(response.status, 200);
+        assert.ok(!response.fromDiskCache && !response.fromServiceWorker && !response.fromPrefetchCache);
+        const pathname = new URL(response.url).pathname;
+        const headers = Object.fromEntries(Object.entries(response.headers).map(([key, value]) => [key.toLowerCase(), value]));
+        assert.equal(headers["cache-control"], pathname === "/site.js" ? localAssetCache : noStore);
+        assert.equal(headers["content-security-policy"], localCsp);
+        const body = await cdp.send("Network.getResponseBody", { requestId: response.requestId });
+        const bytes = body.base64Encoded ? Buffer.from(body.body, "base64").toString("utf8") : body.body;
+        const expectedHash = pathname === "/site.js" ? publicHashes["site.js"] : digest(pathname === "/institutional-alignment.html" ? expected.html : expected.config);
+        assert.equal(digest(bytes), expectedHash);
+        byteChecks.push({ phase, path: pathname, sha256: expectedHash });
+      }
+      boundary();
+      if (screenshotDirectory) {
+        const screenshot = await cdp.send("Page.captureScreenshot", { format: "png" });
+        await writeFile(path.join(screenshotDirectory, "actual-client-recovered.png"), Buffer.from(screenshot.data, "base64"));
+      }
+    }
+    return { assessmentComplete: true, lifecycleQualification: recovered ? "PASS-BOUNDED" : disposition.status,
+      historyFreshnessWhileHeld: disposition, restorationLock: recovered ? "PASS-BOUNDED" : "NOT-QUALIFIED",
+      recovery: recovered, fullC04Status: "HOLD", startGeneration, targetGeneration, reasons: recovered ? [] : disposition.reasons,
       seeded, formScrolled, browser, publicBaseline, publicHashes, initial, beforeDeparture, restored,
       persisted, historyReasons,
       expectedGeneration: expected.generation, expectedFingerprint: expected.version,
-      nativeHistoryResponses: nativeResponses.filter((response) => response.phase === phase).length,
-      nativeHistoryHtmlConfigResponses: nativeResponses.filter((response) => response.phase === phase &&
-        ["/institutional-alignment.html", "/institutional-rc1-config.js"].includes(new URL(response.url).pathname)).length,
+      nativeHistoryResponses: nativeResponses.filter((response) => response.phase === "actual-client-native-history-return").length,
+      nativeHistoryHtmlConfigResponses: historyHtmlConfigResponses,
       requests, serverRequests: server.requests, nativeResponses, byteChecks, errors,
       externalOrTransmittingRequests: 0,
-      limitations: "Actual unchanged client executed in local null-config mode only. Seeded DOM is not live-mode execution, a Google token or provider behavior. No submission or current production defect/activation conclusion. HTML/config use declared Blueprint no-store policy; other local assets use no-cache, not a hosted-CDN claim. Local CSP is stricter than hosted CSP; no request interception/cache disabling. Final CDP BFCache probe is separate from unsupported Playwright history navigation." };
+      limitations: "Actual candidate client executed in local null-config mode only. Seeds are not live-mode execution, tokens or provider behavior. Local lock + explicit keyboard reload are bounded evidence, not full C04/hosted/old-client/activation clearance. HTML/config use declared Blueprint no-store policy; local other assets revalidate, not a CDN claim. Strict local CSP; no interception or cache disabling. CDP is used exclusively after BFCache because Playwright Page history is unsupported." };
   } catch (error) {
     error.assessmentEvidence = { assessmentComplete: false, phase, message: error.message, seeded,
       browser, requests, serverRequests: server.requests, errors, historyReasons, formScrolled };

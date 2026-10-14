@@ -4,10 +4,10 @@ import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { inertFixture } from "./inert-config-transition.mjs";
 
-export const publicBaseline = "3e60394319a38ef28a2188f3f0b7d469c07bc0ee";
+export const publicBaseline = "0cc4ea8ecd6f06abaceaff3d2cd69c0b79c1cbff";
 export const publicHashes = Object.freeze({
-  "site.js": "f8bafbea4019714604ed060b295809ba061108521955755008da897843bee01a",
-  "institutional-alignment.html": "52d3095df3ee56b179ed375da1153c30bba07dfc9fec90588c3828a3936645fd",
+  "site.js": "31a0724a84cccede59c7851e12fcebb8bb5a2333494e29c9f4931710417232c8",
+  "institutional-alignment.html": "8bdbcebd0d35809fe5518d7dc52ed59f785ec2c41d6f750d6f5c9847b8f5c72b",
   "styles.css": "04e8ad9f65dbe6ee9c345bc39497c186cb3c511816e738164617fce4e4bb39ef",
 });
 export const sentinel = "C04-INERT-NOT-A-GOOGLE-TOKEN";
@@ -20,7 +20,7 @@ export const localCsp = "default-src 'none'; script-src 'self'; style-src 'self'
 export const digest = (source) => createHash("sha256").update(source).digest("hex");
 
 export function actualFixture(html, generation) {
-  assert.equal(digest(html), publicHashes["institutional-alignment.html"], "approved public HTML must remain unchanged");
+  assert.equal(digest(html), publicHashes["institutional-alignment.html"], "candidate public HTML must match its recorded hash");
   const config = inertFixture(generation);
   const reference = /institutional-rc1-config\.js(?:\?[^"']*)?/g;
   assert.equal((html.match(reference) || []).length, 1);
@@ -31,7 +31,7 @@ export function actualFixture(html, generation) {
   assert.doesNotMatch(form, /\b(?:action|method)\s*=/);
   assert.match(fixtureHtml, /<fieldset[^>]*data-test-form-guard[^>]*\bdisabled\b/);
   const scripts = [...fixtureHtml.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)].map((match) => match[1]);
-  assert.deepEqual(scripts, [`institutional-rc1-config.js?v=${config.version}`, "site.js?v=20261004-production-candidate-a80fda7"]);
+  assert.deepEqual(scripts, [`institutional-rc1-config.js?v=${config.version}`, "site.js?v=20261013-c04-lifecycle-1"]);
   return Object.freeze({ generation, version: config.version, config: config.config, html: fixtureHtml });
 }
 
@@ -74,6 +74,9 @@ export function observeActualClient() {
     meaningful: document.querySelector("main")?.textContent.length > 500,
     loadedClass: document.body.classList.contains("is-loaded"),
     submitEvents: window.__C04_SUBMIT_EVENTS__ || 0,
+    lifecycle: form?.dataset.intakeLifecycle,
+    lifecycleStatus: form?.querySelector("[data-intake-lifecycle-status]")?.textContent,
+    reloadAvailable: form?.querySelector("[data-intake-recovery]")?.hidden === false && !form?.querySelector("[data-intake-reload]")?.disabled,
   };
 }
 
@@ -96,7 +99,8 @@ export function actualResponse({ method, rawUrl, host, expectedHost, current, re
   return { status: 200, headers: { ...headers, "Content-Type": resource.type }, body: method === "HEAD" ? "" : resource.body };
 }
 
-export async function startActualClientFixture() {
+export async function startActualClientFixture({ scriptBlocked = false, configFault = null } = {}) {
+  assert.ok([null, "missing", "malformed"].includes(configFault));
   const sources = {};
   for (const file of Object.keys(publicHashes)) {
     const source = (await readFile(new URL(`../../${file}`, import.meta.url), "utf8")).replaceAll("\r\n", "\n");
@@ -105,7 +109,7 @@ export async function startActualClientFixture() {
   }
   assert.doesNotMatch(sources["styles.css"], /@import|url\(/i, "new CSS resources need a separately reviewed allowlist");
   const resources = new Map([
-    ["/site.js?v=20261004-production-candidate-a80fda7", { body: sources["site.js"], type: "text/javascript; charset=utf-8" }],
+    ["/site.js?v=20261013-c04-lifecycle-1", { body: sources["site.js"], type: "text/javascript; charset=utf-8" }],
     ["/styles.css?v=20261004-institutional-rc1", { body: sources["styles.css"], type: "text/css; charset=utf-8" }],
     ["/c04-away.html", { body: "<!doctype html><html lang=\"en\"><head><title>C04 local away checkpoint</title></head><body><h1>Local history checkpoint</h1></body></html>", type: "text/html; charset=utf-8" }],
   ]);
@@ -116,8 +120,11 @@ export async function startActualClientFixture() {
   let origin;
   const requests = [];
   const server = createServer((request, response) => {
+    const served = configFault ? { ...current, config: configFault === "missing" ? "// C04 missing configuration fixture.\n" :
+      current.config.replace("Object.freeze(null)", 'Object.freeze("C04-INERT-MALFORMED-CONFIG")') } : current;
     const result = actualResponse({ method: request.method, rawUrl: request.url, host: request.headers.host,
-      expectedHost: new URL(origin).host, current, resources });
+      expectedHost: new URL(origin).host, current: served, resources });
+    if (scriptBlocked) result.headers["Content-Security-Policy"] = localCsp.replace("script-src 'self'", "script-src 'none'");
     requests.push({ method: request.method, path: request.url, generation: current.generation, status: result.status });
     response.writeHead(result.status, result.headers);
     response.end(result.body);
