@@ -161,9 +161,31 @@ test("C04 late synthetic result callback cannot set token state or request submi
   assertHeld(f);
 });
 
+test("C04 invalidation between fresh-check resolution and callback continuation cannot revive hidden state", async () => {
+  const f = activate();
+  const ticket = f.controller.ticket();
+  let requests = 0;
+  const tokenInput = { value: "" };
+  const callback = clientSource.match(/\.then\(async \(token\) => \{([^]*?)\n                \}\)/)[1];
+  const lifecycle = { accepts: f.controller.accepts, async verify() {
+    f.windowEvents.get("pagehide")({ persisted: true });
+    return true; // Controlled stale async success, not a real resource/provider.
+  } };
+  const fn = new Script(`(async (token) => {${callback}\n})`).runInNewContext({
+    lifecycle, ticket, tokenInput, tokenTicket: null,
+    form: { dataset: {}, requestSubmit() { requests += 1; } }, handOffBusyState() { throw new Error("Stale handoff"); },
+  }, { timeout: 1000, contextCodeGeneration: { strings: false, wasm: false } });
+  await fn("C04-INERT-NOT-A-GOOGLE-TOKEN");
+  assert.equal(tokenInput.value, "");
+  assert.equal(requests, 0);
+  assertHeld(f);
+});
+
 test("C04 async guards cover integration retries and native handoff ownership without changing provider destinations", () => {
   assert.match(clientSource, /const submitIntegrationRecord = async[\s\S]*await lifecycle\.verify\(ticket\)[\s\S]*grecaptcha\.execute[\s\S]*await lifecycle\.verify\(ticket\)[\s\S]*window\.fetch\(institutionalRc1\.formEndpoint/);
   assert.match(clientSource, /signal: lifecycle\?\.signal/);
+  assert.equal((clientSource.match(/!await lifecycle\.verify\(ticket\) \|\| !lifecycle\.accepts\(ticket\)/g) || []).length, 4,
+    "all verification await boundaries check the epoch again before continuing");
   assert.match(clientSource, /tokenTicket !== ticket \|\| !isProductionLive/);
   assert.match(clientSource, /form\.action !== institutionalProduction\.formEndpoint/);
   assert.match(clientSource, /lifecycle && submitButton\?\.disabled/);

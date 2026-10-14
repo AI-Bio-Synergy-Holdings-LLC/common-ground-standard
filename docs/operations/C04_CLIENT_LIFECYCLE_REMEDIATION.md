@@ -65,7 +65,7 @@ natural and inert hidden-state seeds, and top/form-scrolled departure.
 | Offline asynchronous/static-read regressions | Timeouts, changed references, off-origin/missing/duplicate/tampered config, departure, retry cancellation and late synthetic result suppression pass |
 | Request and rendering boundary | Loopback GET only; no form submission, external/mutating request, unexpected console failure, overlay or document overflow |
 
-There are 96 dependency-free regressions, including eleven new lifecycle cases.
+There are 97 dependency-free regressions, including twelve new lifecycle cases.
 Existing adversarial coverage is retained. The actual-client fixture records new
 explicit candidate resource hashes; earlier hashes/results remain in the
 historical assessment and its exact-head evidence. The original inert-fixture

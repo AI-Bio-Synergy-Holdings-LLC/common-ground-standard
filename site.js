@@ -430,9 +430,9 @@
                   lifecycle ? lifecycle.delay(650 * attempt) :
                     new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
                 const submitIntegrationRecord = async (attempt = 0) => {
-                  if (lifecycle && !await lifecycle.verify(ticket)) throw new Error("Intake held");
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
                   const token = await window.grecaptcha.execute(siteKey, { action });
-                  if (lifecycle && !await lifecycle.verify(ticket)) throw new Error("Intake held");
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
                   tokenInput.value = token;
                   const payload = new FormData();
                   Object.entries(syntheticRecord).forEach(([name, value]) => {
@@ -579,11 +579,11 @@
               if (lifecycle && !lifecycle.accepts(ticket)) return;
               Promise.resolve()
                 .then(async () => {
-                  if (lifecycle && !await lifecycle.verify(ticket)) throw new Error("Intake held");
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
                   return window.grecaptcha.execute(siteKey, { action });
                 })
                 .then(async (token) => {
-                  if (lifecycle && !await lifecycle.verify(ticket)) return;
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) return;
                   tokenTicket = ticket;
                   tokenInput.value = token;
                   form.dataset.recaptchaTokenReady = "true";

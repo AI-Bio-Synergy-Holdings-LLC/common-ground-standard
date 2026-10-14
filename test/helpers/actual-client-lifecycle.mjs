@@ -6,7 +6,7 @@ import { inertFixture } from "./inert-config-transition.mjs";
 
 export const publicBaseline = "0cc4ea8ecd6f06abaceaff3d2cd69c0b79c1cbff";
 export const publicHashes = Object.freeze({
-  "site.js": "31a0724a84cccede59c7851e12fcebb8bb5a2333494e29c9f4931710417232c8",
+  "site.js": "f025d109ffeab27f68bdba45578e9cdb930eb6c6a9e1154ba00cb386b3176471",
   "institutional-alignment.html": "8bdbcebd0d35809fe5518d7dc52ed59f785ec2c41d6f750d6f5c9847b8f5c72b",
   "styles.css": "04e8ad9f65dbe6ee9c345bc39497c186cb3c511816e738164617fce4e4bb39ef",
 });
