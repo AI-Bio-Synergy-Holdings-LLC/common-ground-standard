@@ -68,6 +68,131 @@
 
   window.addEventListener("pageshow", markLoaded);
 
+  // Institutional state never survives a lifecycle boundary as authority.
+  // A held document can only recover through a new HTML/configuration load.
+  const createInstitutionalLifecycle = (form) => {
+    const guard = form.querySelector("[data-test-form-guard]");
+    const button = form.querySelector("[data-fs-submit-btn]");
+    const status = form.querySelector("[data-intake-lifecycle-status]");
+    const reload = form.querySelector("[data-intake-reload]");
+    const recovery = form.querySelector("[data-intake-recovery]");
+    const timers = new Set();
+    const controller = new AbortController();
+    let epoch = 0;
+    let ready = false;
+    let identity;
+    const reference = (name, html = null) => {
+      const sources = html === null ? [...document.scripts].map((script) => script.src) :
+        [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi)].map((match) => match[1]);
+      const matches = sources.filter((src) => src && new URL(src, window.location.href).pathname.endsWith(`/${name}`));
+      if (matches.length !== 1) throw new Error("Ambiguous runtime reference");
+      const url = new URL(matches[0], window.location.href);
+      if (url.origin !== window.location.origin || url.pathname !== new URL(name, window.location.href).pathname ||
+        url.hash || url.searchParams.getAll("v").length !== 1 || [...url.searchParams.keys()].some((key) => key !== "v")) {
+        throw new Error("Invalid runtime reference");
+      }
+      return url;
+    };
+    let configReference;
+    let clientReference;
+    try { configReference = reference("institutional-rc1-config.js"); clientReference = reference("site.js"); } catch { /* Remain locked. */ }
+    const lock = () => {
+      ready = false;
+      epoch += 1;
+      controller.abort();
+      timers.forEach((timer) => window.clearTimeout(timer));
+      timers.clear();
+      if (guard) guard.disabled = true;
+      if (button) { button.disabled = true; button.type = "button"; button.removeAttribute("aria-busy"); }
+      form.removeAttribute("action");
+      form.removeAttribute("method");
+      delete form.dataset.recaptchaTokenReady;
+      delete form.dataset.testGuardReady;
+      delete form.dataset.recaptchaAction;
+      form.dataset.intakeMode = "lifecycle-held";
+      form.dataset.intakeLifecycle = "held";
+      for (const name of ["g-recaptcha-response", "intake_mode", "public_version", "intake_owner", "source_page", "subject"]) {
+        const field = form.elements.namedItem(name);
+        if (field instanceof HTMLInputElement) field.value = "";
+      }
+      const notice = form.parentElement?.querySelector("[data-rc1-notice-title]");
+      if (notice) notice.textContent = "Institutional intake paused — reload required.";
+      if (status) status.textContent = "This page is held after a lifecycle or configuration change. Reload the current intake page before continuing. Reloading clears unsent entries.";
+      if (reload) { reload.hidden = false; reload.disabled = false; }
+      if (recovery) recovery.hidden = false;
+    };
+    const current = (ticket = epoch) => ready && ticket === epoch && !controller.signal.aborted &&
+      JSON.stringify(window.__CGS_INSTITUTIONAL_RC1__) === identity &&
+      reference("institutional-rc1-config.js").href === configReference?.href && reference("site.js").href === clientReference?.href;
+    const accepts = (ticket = epoch) => {
+      try { if (current(ticket)) return true; } catch { /* Fail closed. */ }
+      lock();
+      return false;
+    };
+    const schedule = (callback, delay) => {
+      const ticket = epoch;
+      const timer = window.setTimeout(() => { timers.delete(timer); if (accepts(ticket)) callback(); }, delay);
+      timers.add(timer);
+      return timer;
+    };
+    const verify = async (ticket) => {
+      if (!accepts(ticket)) return false;
+      const timeout = schedule(lock, 5000);
+      try {
+        // Read only static public resources. Never include form fields, cookies,
+        // selector query parameters or provider credentials in these requests.
+        const read = async (url, maximum) => {
+          const response = await window.fetch(url, { method: "GET", cache: "no-store", credentials: "omit",
+            redirect: "error", signal: controller.signal });
+          if (!response.ok || response.redirected || response.url !== url ||
+            !/(?:^|,)\s*no-store\s*(?:,|$)/i.test(response.headers.get("Cache-Control") || "")) throw new Error("Fresh resource unavailable");
+          const text = await response.text();
+          if (text.length > maximum || !accepts(ticket)) throw new Error("Invalid resource or lifecycle");
+          return text;
+        };
+        const html = await read(new URL(window.location.pathname, window.location.origin).href, 262144);
+        if (reference("institutional-rc1-config.js", html).href !== configReference.href ||
+          reference("site.js", html).href !== clientReference.href) throw new Error("Current artifact changed");
+        const source = await read(configReference.href, 16384);
+        const fingerprint = configReference.searchParams.get("v");
+        if (!/^[a-f0-9]{16}$/.test(fingerprint)) throw new Error("Missing artifact fingerprint");
+        const bytes = await window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(source));
+        const hash = [...new Uint8Array(bytes)].map((value) => value.toString(16).padStart(2, "0")).join("");
+        const match = source.match(/^window\.__CGS_INSTITUTIONAL_RC1__ = Object\.freeze\((\{[^]*\})\);\s*$/);
+        if (hash.slice(0, 16) !== fingerprint || !match || JSON.stringify(JSON.parse(match[1])) !== identity) throw new Error("Configuration mismatch");
+        return accepts(ticket);
+      } catch { lock(); return false; }
+      finally { window.clearTimeout(timeout); timers.delete(timeout); }
+    };
+    if (guard) guard.disabled = true;
+    if (button) button.disabled = true;
+    form.dataset.intakeLifecycle = "initializing";
+    form.addEventListener("submit", (event) => {
+      if (!accepts()) { event.preventDefault(); event.stopImmediatePropagation(); }
+    }, true);
+    window.addEventListener("pagehide", lock);
+    window.addEventListener("pageshow", (event) => { if (event.persisted) lock(); });
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") lock(); });
+    if (reload) reload.addEventListener("click", () => { lock(); window.location.reload(); });
+    return { lock, accepts, schedule, verify, signal: controller.signal, ticket: () => epoch,
+      delay(milliseconds) {
+        return new Promise((resolve, reject) => {
+          if (!accepts()) { reject(new Error("Intake held")); return; }
+          const aborted = () => reject(new Error("Intake held"));
+          controller.signal.addEventListener("abort", aborted, { once: true });
+          schedule(() => { controller.signal.removeEventListener("abort", aborted); resolve(); }, milliseconds);
+        });
+      },
+      activate() {
+        if (!guard || !button || !status || !reload || !recovery || !configReference || !clientReference || controller.signal.aborted) { lock(); return false; }
+        identity = JSON.stringify(window.__CGS_INSTITUTIONAL_RC1__);
+        ready = true;
+        form.dataset.intakeLifecycle = "ready";
+        return true;
+      } };
+  };
+  // End institutional lifecycle controller.
+
   const getInstitutionalRc1Config = (form) => {
     if (!(form instanceof HTMLFormElement) || form.id !== "institutional-review-form") {
       return null;
@@ -193,6 +318,12 @@
           !isProductionCandidate &&
           !isProductionVerification &&
           !isProductionLive;
+        const lifecycle = form.id === "institutional-review-form" ? createInstitutionalLifecycle(form) : null;
+        if (lifecycle && window.__CGS_INSTITUTIONAL_RC1__ !== null && !isIntegrationTest &&
+          !isProductionCandidate && !isProductionVerification && !isProductionLive) {
+          lifecycle.lock();
+          return;
+        }
         const testGuard = form.querySelector("[data-test-form-guard]");
         const siteKey =
           institutionalRc1?.recaptchaSiteKey ||
@@ -206,6 +337,7 @@
         const tokenInput = form.querySelector('input[name="g-recaptcha-response"]');
         const submitButton = form.querySelector("[data-fs-submit-btn]");
         const formError = form.querySelector(".form-feedback[data-fs-error]");
+        let tokenTicket = null;
 
         const showError = (message) => {
           if (formError) formError.textContent = message;
@@ -217,6 +349,7 @@
 
         const setBusy = (busy) => {
           if (!submitButton) return;
+          if (lifecycle && !lifecycle.accepts()) return;
           submitButton.disabled = busy;
           if (busy) {
             submitButton.setAttribute("aria-busy", "true");
@@ -232,6 +365,17 @@
         form.addEventListener(
           "submit",
           (event) => {
+            if (lifecycle && !lifecycle.accepts()) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              return;
+            }
+            const ticket = lifecycle?.ticket();
+            if (lifecycle && submitButton?.disabled && form.dataset.recaptchaTokenReady !== "true") {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              return;
+            }
             if (isProductionCandidate) {
               event.preventDefault();
               event.stopImmediatePropagation();
@@ -281,10 +425,14 @@
 
               setBusy(true);
               window.grecaptcha.ready(() => {
+                if (lifecycle && !lifecycle.accepts(ticket)) return;
                 const retryDelay = (attempt) =>
-                  new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
+                  lifecycle ? lifecycle.delay(650 * attempt) :
+                    new Promise((resolve) => window.setTimeout(resolve, 650 * attempt));
                 const submitIntegrationRecord = async (attempt = 0) => {
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
                   const token = await window.grecaptcha.execute(siteKey, { action });
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
                   tokenInput.value = token;
                   const payload = new FormData();
                   Object.entries(syntheticRecord).forEach(([name, value]) => {
@@ -296,7 +444,9 @@
                     method: "POST",
                     headers: { Accept: "application/json" },
                     body: payload,
+                    signal: lifecycle?.signal,
                   });
+                  if (lifecycle && !lifecycle.accepts(ticket)) throw new Error("Intake held");
 
                   if (response.ok) return;
 
@@ -321,6 +471,7 @@
 
                 submitIntegrationRecord()
                   .then(() => {
+                    if (lifecycle && !lifecycle.accepts(ticket)) return;
                     const destination = new URL(
                       "institutional-thank-you.html",
                       window.location.href,
@@ -330,6 +481,7 @@
                     window.location.assign(destination.href);
                   })
                   .catch(() => {
+                    if (lifecycle && !lifecycle.accepts(ticket)) return;
                     showError(
                       "The controlled integration verification could not be completed. No live intake was opened.",
                     );
@@ -374,19 +526,27 @@
               }
               setBusy(true);
 
-              window.setTimeout(() => {
+              (lifecycle?.schedule || window.setTimeout)(() => {
                 window.location.assign(destinationUrl);
               }, 450);
               return;
             }
 
             if (form.dataset.recaptchaTokenReady === "true") {
+              if (lifecycle && (tokenTicket !== ticket || !isProductionLive ||
+                form.action !== institutionalProduction.formEndpoint || form.method !== "post")) {
+                lifecycle.lock();
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+              }
               form.dataset.recaptchaTokenReady = "submitting";
-              window.setTimeout(() => {
+              (lifecycle?.schedule || window.setTimeout)(() => {
                 if (form.dataset.recaptchaTokenReady === "submitting") {
                   delete form.dataset.recaptchaTokenReady;
                 }
                 if (tokenInput) tokenInput.value = "";
+                tokenTicket = null;
               }, 5000);
               return;
             }
@@ -416,15 +576,22 @@
 
             setBusy(true);
             window.grecaptcha.ready(() => {
+              if (lifecycle && !lifecycle.accepts(ticket)) return;
               Promise.resolve()
-                .then(() => window.grecaptcha.execute(siteKey, { action }))
-                .then((token) => {
+                .then(async () => {
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) throw new Error("Intake held");
+                  return window.grecaptcha.execute(siteKey, { action });
+                })
+                .then(async (token) => {
+                  if (lifecycle && (!await lifecycle.verify(ticket) || !lifecycle.accepts(ticket))) return;
+                  tokenTicket = ticket;
                   tokenInput.value = token;
                   form.dataset.recaptchaTokenReady = "true";
                   form.requestSubmit();
                   handOffBusyState();
                 })
                 .catch(() => {
+                  if (lifecycle && !lifecycle.accepts(ticket)) return;
                   showError(
                     "Verification could not be completed. Please reload the page and try again.",
                   );
@@ -435,12 +602,15 @@
           true,
         );
 
+        if (lifecycle && !lifecycle.activate()) return;
+
         if (isIntegrationTest) {
           if (
             !(testGuard instanceof HTMLFieldSetElement) ||
             !submitButton ||
             !(tokenInput instanceof HTMLInputElement)
           ) {
+            lifecycle?.lock();
             showError(
               "The controlled integration form could not be enabled safely. No information can be submitted.",
             );
@@ -481,6 +651,7 @@
           const boundary = form.elements.namedItem("participation_boundary");
 
           if (!fieldsReady || !(boundary instanceof HTMLInputElement)) {
+            lifecycle?.lock();
             showError(
               "The synthetic test record could not be prepared safely. No information can be submitted.",
             );
@@ -531,6 +702,7 @@
 
         if (isProductionCandidate) {
           if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            lifecycle?.lock();
             showError(
               "The production candidate could not be locked safely. No information can be submitted.",
             );
@@ -578,6 +750,7 @@
 
         if (isProductionVerification) {
           if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            lifecycle?.lock();
             showError(
               "The production verification route could not be locked safely. No information can be submitted.",
             );
@@ -625,6 +798,7 @@
 
         if (isProductionLive) {
           if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            lifecycle?.lock();
             showError(
               "The institutional intake could not be enabled safely. No information can be submitted.",
             );
@@ -634,6 +808,7 @@
           const intakeMode = form.elements.namedItem("intake_mode");
           const publicVersion = form.elements.namedItem("public_version");
           if (!(intakeMode instanceof HTMLInputElement) || !(publicVersion instanceof HTMLInputElement)) {
+            lifecycle?.lock();
             showError(
               "The institutional intake metadata is incomplete. No information can be submitted.",
             );
@@ -689,6 +864,7 @@
 
         if (isTestMode) {
           if (!(testGuard instanceof HTMLFieldSetElement) || !submitButton) {
+            lifecycle?.lock();
             showError(
               "The test form could not be enabled safely. No information can be submitted.",
             );
