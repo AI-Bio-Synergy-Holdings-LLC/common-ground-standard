@@ -14,8 +14,8 @@ institutional build-mode flag must remain false until separately authorized.
   action requiring its own authorization; source edits cannot enforce those
   provider controls by themselves.
 - `.node-version`, `package.json` and the offline-validator workflow select the
-  same exact Node version, 24.21.0. The workflow checks out the PR head SHA, not
-  a generated merge ref. A provider `NODE_VERSION` environment variable has
+  same exact Node version, 24.22.1 (the October 21 security release). The workflow
+  checks out the PR head SHA, not a generated merge ref. A provider `NODE_VERSION` environment variable has
   higher precedence than the file and must be checked before a later authorized
   build. No provider environment changes are included here.
 - Both `/institutional-alignment.html` and `/institutional-rc1-config.js` declare

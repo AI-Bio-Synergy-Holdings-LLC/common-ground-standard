@@ -98,6 +98,29 @@ test("canonical JSON is independent of object insertion order", () => {
   assert.equal(canonicalizeJson({ z: 1, a: { y: 2, b: 3 } }), '{"a":{"b":3,"y":2},"z":1}');
 });
 
+test("JSON nesting limits reject hostile inputs without exhausting the stack", () => {
+  const atLimit = "[".repeat(64) + "0" + "]".repeat(64);
+  assert.equal(canonicalizeJson(parseStrictJson(atLimit)), atLimit);
+  for (const depth of [65, 10_000]) {
+    const nested = "[".repeat(depth) + "0" + "]".repeat(depth);
+    assert.throws(() => parseStrictJson(nested),
+      (error) => error instanceof PublicEvidenceValidationError && error.code === "JSON_DEPTH");
+  }
+  let value = 0;
+  for (let depth = 0; depth < 65; depth += 1) value = { nested: value };
+  assert.throws(() => canonicalizeJson(value),
+    (error) => error instanceof PublicEvidenceValidationError && error.code === "JSON_DEPTH");
+  const cycle = [];
+  cycle.push(cycle);
+  assert.throws(() => canonicalizeJson(cycle),
+    (error) => error instanceof PublicEvidenceValidationError && error.code === "JSON_DEPTH");
+});
+
+test("strict JSON applies a byte bound before parsing", () => {
+  assert.throws(() => parseStrictJson(JSON.stringify("x".repeat(1_048_576))),
+    (error) => error instanceof PublicEvidenceValidationError && error.code === "JSON_SIZE");
+});
+
 test("published schema is valid JSON and fixes the v0.1 boundary", async () => {
   const schema = JSON.parse(
     await readFile(new URL("../schema/common-ground-public-evidence.v0.1.schema.json", import.meta.url), "utf8"),
@@ -244,6 +267,22 @@ test("case-insensitive path collisions are rejected", async () => {
 test("platform device paths are rejected", async () => {
   const { root } = await makePackage({ mutate: ({ manifest }) => (manifest.files[0].path = "evidence/CON.txt") });
   await expectFailure(inspectEvidencePackage(root), "UNSAFE_PATH");
+});
+
+test("Windows trailing-dot aliases are rejected before file access", async () => {
+  for (const unsafePath of ["evidence/summary.txt.", "evidence./summary.txt", "evidence/..."]) {
+    const { root } = await makePackage({ mutate: ({ manifest }) => (manifest.files[0].path = unsafePath) });
+    await expectFailure(inspectEvidencePackage(root), "UNSAFE_PATH");
+  }
+});
+
+test("source dates must be real Gregorian calendar dates", async () => {
+  for (const date of ["2026-02-29", "2026-04-31", "2026-00-01", "2026-13-01"]) {
+    const { root } = await makePackage({ mutate: ({ manifest }) => (manifest.sources[0].retrievedOn = date) });
+    await expectFailure(inspectEvidencePackage(root), "SOURCE_DATE");
+  }
+  const { root } = await makePackage({ mutate: ({ manifest }) => (manifest.sources[0].retrievedOn = "2024-02-29") });
+  await inspectEvidencePackage(root);
 });
 
 test("tampered canonical receipts are rejected", async () => {

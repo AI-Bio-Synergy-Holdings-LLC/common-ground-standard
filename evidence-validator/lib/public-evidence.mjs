@@ -9,6 +9,7 @@ export const CLAIM_BOUNDARY =
   "Structural validity and byte-level integrity do not establish truth, evidence sufficiency, independence, review, alignment, endorsement, certification, compliance, partnership, pilot status, public benefit, or authority.";
 
 const MAX_MANIFEST_BYTES = 1_048_576;
+const MAX_JSON_DEPTH = 64;
 const MAX_FILES = 1_000;
 const MAX_PACKAGE_BYTES = 104_857_600;
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
@@ -56,6 +57,9 @@ function isPlainObject(value) {
 export function parseStrictJson(text, location = "json") {
   if (typeof text !== "string") {
     fail("JSON_INPUT_TYPE", location, "JSON input must be text");
+  }
+  if (Buffer.byteLength(text, "utf8") > MAX_MANIFEST_BYTES) {
+    fail("JSON_SIZE", location, `JSON must not exceed ${MAX_MANIFEST_BYTES} bytes`);
   }
   if (text.charCodeAt(0) === 0xfeff) {
     fail("JSON_BOM", location, "a byte-order mark is not permitted");
@@ -114,7 +118,7 @@ export function parseStrictJson(text, location = "json") {
     return value;
   }
 
-  function parseArray() {
+  function parseArray(depth) {
     const values = [];
     cursor += 1;
     skipWhitespace();
@@ -123,7 +127,7 @@ export function parseStrictJson(text, location = "json") {
       return values;
     }
     while (cursor < text.length) {
-      values.push(parseValue());
+      values.push(parseValue(depth + 1));
       skipWhitespace();
       if (text[cursor] === "]") {
         cursor += 1;
@@ -138,7 +142,7 @@ export function parseStrictJson(text, location = "json") {
     fail("JSON_ARRAY", location, "unterminated array");
   }
 
-  function parseObject() {
+  function parseObject(depth) {
     const value = Object.create(null);
     const keys = new Set();
     cursor += 1;
@@ -161,7 +165,7 @@ export function parseStrictJson(text, location = "json") {
         fail("JSON_OBJECT", location, "expected ':' after object key");
       }
       cursor += 1;
-      value[key] = parseValue();
+      value[key] = parseValue(depth + 1);
       skipWhitespace();
       if (text[cursor] === "}") {
         cursor += 1;
@@ -176,12 +180,15 @@ export function parseStrictJson(text, location = "json") {
     fail("JSON_OBJECT", location, "unterminated object");
   }
 
-  function parseValue() {
+  function parseValue(depth = 0) {
     skipWhitespace();
     const character = text[cursor];
+    if ((character === "{" || character === "[") && depth >= MAX_JSON_DEPTH) {
+      fail("JSON_DEPTH", location, `JSON must not exceed ${MAX_JSON_DEPTH} nested containers`);
+    }
     if (character === '"') return parseString();
-    if (character === "{") return parseObject();
-    if (character === "[") return parseArray();
+    if (character === "{") return parseObject(depth);
+    if (character === "[") return parseArray(depth);
     if (character === "-" || /\d/u.test(character ?? "")) return parseNumber();
     for (const [token, value] of [
       ["true", true],
@@ -205,6 +212,10 @@ export function parseStrictJson(text, location = "json") {
 }
 
 export function canonicalizeJson(value, location = "json") {
+  return encodeCanonicalJson(value, location, 0);
+}
+
+function encodeCanonicalJson(value, location, depth) {
   if (value === null || typeof value === "boolean" || typeof value === "string") {
     return JSON.stringify(value);
   }
@@ -215,12 +226,14 @@ export function canonicalizeJson(value, location = "json") {
     return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    return `[${value.map((item, index) => canonicalizeJson(item, `${location}[${index}]`)).join(",")}]`;
+    if (depth >= MAX_JSON_DEPTH) fail("JSON_DEPTH", location, "JSON nesting limit exceeded");
+    return `[${value.map((item, index) => encodeCanonicalJson(item, `${location}[${index}]`, depth + 1)).join(",")}]`;
   }
   if (isPlainObject(value)) {
+    if (depth >= MAX_JSON_DEPTH) fail("JSON_DEPTH", location, "JSON nesting limit exceeded");
     return `{${Object.keys(value)
       .sort()
-      .map((key) => `${JSON.stringify(key)}:${canonicalizeJson(value[key], `${location}.${key}`)}`)
+      .map((key) => `${JSON.stringify(key)}:${encodeCanonicalJson(value[key], `${location}.${key}`, depth + 1)}`)
       .join(",")}}`;
   }
   fail("NON_CANONICAL_VALUE", location, "value is not valid canonical JSON");
@@ -308,6 +321,9 @@ function assertSafeRelativePath(value, location) {
   const segments = value.split("/");
   if (segments.some((segment) => segment === "." || segment === ".." || segment.length === 0)) {
     fail("UNSAFE_PATH", location, "dot and empty path segments are not permitted");
+  }
+  if (segments.some((segment) => segment.endsWith("."))) {
+    fail("UNSAFE_PATH", location, "trailing-dot path segments are not portable");
   }
   if (
     segments.some((segment) =>
@@ -465,6 +481,11 @@ function validateManifest(manifest) {
     assertString(source.title, `${location}.title`, { max: 300 });
     assertHttpsUri(source.uri, `${location}.uri`);
     assertString(source.retrievedOn, `${location}.retrievedOn`, { pattern: DATE_PATTERN });
+    const retrievedTime = Date.parse(`${source.retrievedOn}T00:00:00.000Z`);
+    if (!Number.isFinite(retrievedTime) ||
+        new Date(retrievedTime).toISOString().slice(0, 10) !== source.retrievedOn) {
+      fail("SOURCE_DATE", `${location}.retrievedOn`, "must be a real Gregorian calendar date");
+    }
   });
   assertSortedUnique(manifest.sources, (source) => source.id, "manifest.sources");
   const sourceIds = new Set(manifest.sources.map((source) => source.id));

@@ -22,6 +22,11 @@ and exactly one trailing LF. Arrays whose ordering affects the receipt are
 also required to be sorted by their documented identifier or path. Duplicate
 JSON keys, unsafe or case-colliding paths, symlinks, missing or undeclared
 files, and byte-count or SHA-256 mismatches are rejected.
+Trailing-dot file or directory segments are rejected to avoid Windows path
+aliases. Source retrieval dates must be real Gregorian calendar dates.
+JSON input is limited to 1 MiB and 64 nested object/array containers; both
+parsing and canonicalization fail with a validation error on excess nesting
+instead of exhausting the JavaScript stack.
 
 `assetRegistryId` is either `null` or an authorized registry identifier in
 the form `IP-<digits>`. Repository names, development names, project titles,
@@ -53,8 +58,8 @@ partnership, pilot status, public benefit, or authority.
 
 ## Commands
 
-Node.js 24 or later is required. No package installation or network access is
-needed.
+Use the repository's pinned Node.js 24.22.1 runtime for checks and builds.
+No package installation or network access is needed to run the validator.
 
 ```text
 node evidence-validator/bin/cgs-evidence.mjs validate <package-directory>
