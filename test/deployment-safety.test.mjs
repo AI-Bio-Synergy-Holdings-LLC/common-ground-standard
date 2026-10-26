@@ -32,18 +32,19 @@ test("hold-policy negative controls reject omissions, legacy fields and nested p
 
 test("Render and exact-head CI share the same exact Node pin without a competing selector", async () => {
   const pin = (await read(".node-version")).trim();
-  assert.equal(pin, "24.21.0");
+  assert.equal(pin, "24.22.1");
   const manifest = JSON.parse(await read("package.json"));
   assert.equal(manifest.engines.node, pin);
   assert.equal(Object.keys(manifest.dependencies || {}).length, 0);
   assert.equal(Object.keys(manifest.devDependencies || {}).length, 0);
   const workflow = await read(".github/workflows/public-evidence-validator.yml");
-  assert.equal((workflow.match(/- "\.node-version"/g) || []).length, 2,
-    "both push and PR filters must notice runtime changes");
+  assert.doesNotMatch(workflow, /^\s+paths(?:-ignore)?:/m,
+    "required checks must run for runtime changes and documentation-only PRs alike");
   assert.match(workflow, /node-version-file: "\.node-version"/);
   assert.doesNotMatch(workflow, /^\s+node-version:/m);
   assert.match(workflow, /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.sha \}\}/);
   assert.match(workflow, /package-manager-cache: false/);
+  assert.match(workflow, /persist-credentials: false/);
   const render = await read("render.yaml");
   assert.doesNotMatch(render, /(?:key:\s*NODE_VERSION|NODE_VERSION:)/);
 });
